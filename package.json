@@ -1,28 +1,28 @@
 {
-  "name": "floe-frontend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "parcel src/index.html"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "prettier": {
-    "tabWidth": 4,
-    "semi": false,
-    "singleQuote": true,
-    "printWidth": 100,
-    "trailingComma": "es5"
-  },
-  "dependencies": {
-    "parcel-bundler": "^1.10.3",
-    "quark-web": "^1.0.21-beta.2",
-    "react": "^16.7.0-alpha.0",
-    "react-dom": "^16.7.0-alpha.0"
-  },
-  "devDependencies": {
-    "prettier": "^1.14.3"
-  }
+    "name": "floe-frontend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "parcel src/index.html"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 100,
+        "trailingComma": "es5"
+    },
+    "dependencies": {
+        "parcel-bundler": "^1.10.3",
+        "quark-web": "^2.0.2",
+        "react": "^16.7.0-alpha.0",
+        "react-dom": "^16.7.0-alpha.0"
+    },
+    "devDependencies": {
+        "prettier": "^1.14.3"
+    }
 }
