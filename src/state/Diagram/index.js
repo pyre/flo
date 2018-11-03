@@ -32,8 +32,10 @@ export const DiagramProvider = ({
         },
         pan({ x = 0, y = 0 }) {
             setState(state => ({
-                x: state.x + x,
-                y: state.y + y,
+                pan: {
+                    x: state.pan.x + x,
+                    y: state.pan.y + y,
+                },
             }))
         },
         setZoom(zoomLevel) {

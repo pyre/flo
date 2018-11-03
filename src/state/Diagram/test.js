@@ -68,7 +68,38 @@ test('can zoom in and out but not passed bounds', () => {
     expect(parseFloat(currentZoom.textContent)).toEqual(minZoom)
 })
 
-// test('can pan the diagram')
+test('can pan the diagram', () => {
+    // the component to exercise zoom tests
+    const component = (
+        <DiagramProvider>
+            <DiagramContext.Consumer>
+                {({ diagram, pan }) => (
+                    <React.Fragment>
+                        <div onClick={() => pan({ x: 10, y: 10 })} data-testid="pan" />
+                        <div data-testid="current-pan">
+                            {diagram.pan.x},{diagram.pan.y}
+                        </div>
+                    </React.Fragment>
+                )}
+            </DiagramContext.Consumer>
+        </DiagramProvider>
+    )
+
+    // render the component
+    const { getByTestId } = render(component)
+
+    // get the element with the current pan
+    const currentPan = getByTestId('current-pan')
+
+    // make sure the current pan matches expectations
+    expect(currentPan).toHaveTextContent('0,0')
+
+    // pan the diagram
+    fireEvent.click(getByTestId('pan'))
+
+    // make sure we updated the diagram state
+    expect(currentPan).toHaveTextContent('10,10')
+})
 
 // test('can toggle the grid')
 
