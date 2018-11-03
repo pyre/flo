@@ -1,12 +1,19 @@
 // external imports
 import ReactDOM from 'react-dom'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { PrimaryButton } from 'quark-web'
+// local imports
+import { DiagramContext, DiagramProvider } from '~/state'
 
 const HelloWorld = () => {
-    const [state, setState] = useState(0)
-
-    return <PrimaryButton onClick={() => setState(state + 1)}>{state}</PrimaryButton>
+    const { diagram, zoomIn } = useContext(DiagramContext)
+    console.log(diagram.zoomLevel)
+    return <PrimaryButton onClick={zoomIn}>{diagram.zoomLevel}</PrimaryButton>
 }
 
-ReactDOM.render(<HelloWorld />, document.getElementById('app'))
+ReactDOM.render(
+    <DiagramProvider>
+        <HelloWorld />
+    </DiagramProvider>,
+    document.getElementById('app')
+)
