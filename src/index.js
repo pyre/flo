@@ -7,7 +7,7 @@ import { DiagramContext, DiagramProvider } from '~/state'
 
 const HelloWorld = () => {
     const { diagram, zoomIn } = useContext(DiagramContext)
-    console.log(diagram.zoomLevel)
+
     return <PrimaryButton onClick={zoomIn}>{diagram.zoomLevel}</PrimaryButton>
 }
 

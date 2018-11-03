@@ -4,13 +4,20 @@ import React, { createContext, useState } from 'react'
 export const DiagramContext = createContext()
 
 // a provider with the specified state
-export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, children }) => {
+export const DiagramProvider = ({
+    maxZoom = 2,
+    minZoom = 0.5,
+    zoomStep = 0.1,
+    children,
+    ...initialState
+}) => {
     // the initial state of the diagram
     const [diagram, setState] = useState({
         showGrid: true,
         gridSize: 50,
         pan: { x: 0, y: 0 },
         zoomLevel: 1,
+        ...initialState,
     })
 
     // the ways to manipulate the diagram
@@ -34,12 +41,12 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, children }) => {
         },
         zoomIn() {
             setState(state => ({
-                zoomLevel: Math.min(state.zoomLevel + 0.1, maxZoom),
+                zoomLevel: Math.min(state.zoomLevel + zoomStep, maxZoom),
             }))
         },
         zoomOut() {
             setState(state => ({
-                zoomLevel: Math.max(state.zoomLevel - 0.1, minZoom),
+                zoomLevel: Math.max(state.zoomLevel - zoomStep, minZoom),
             }))
         },
     }
