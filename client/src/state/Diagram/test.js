@@ -69,7 +69,7 @@ test('can zoom in and out but not passed bounds', () => {
 })
 
 test('can pan the diagram', () => {
-    // the component to exercise zoom tests
+    // the component to exercise pan tests
     const component = (
         <DiagramProvider>
             <DiagramContext.Consumer>
@@ -101,6 +101,36 @@ test('can pan the diagram', () => {
     expect(currentPan).toHaveTextContent('10,10')
 })
 
-// test('can toggle the grid')
+test('can toggle the grid', () => {
+    // the component to exercise grid tests
+    const component = (
+        <DiagramProvider>
+            <DiagramContext.Consumer>
+                {({ diagram, toggleGrid }) => (
+                    <React.Fragment>
+                        <div onClick={toggleGrid} data-testid="toggle" />
+                        <div data-testid="current">{diagram.showGrid ? 'yes' : 'no'}</div>
+                    </React.Fragment>
+                )}
+            </DiagramContext.Consumer>
+        </DiagramProvider>
+    )
+
+    // render the component
+    const { getByTestId } = render(component)
+
+    // the elements to test
+    const toggle = getByTestId('toggle')
+    const state = getByTestId('current')
+
+    // the initial state
+    const initialState = state.textContent === 'yes'
+
+    // call the toggle
+    fireEvent.click(toggle)
+
+    // make sure we inverted the state
+    expect(state.textContent === 'yes').toEqual(!initialState)
+})
 
 // test('can set the grid size')
