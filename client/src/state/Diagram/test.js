@@ -15,7 +15,7 @@ test('can zoom in and out but not passed bounds', () => {
     const zoomLevel = 1
 
     // the component to exercise zoom tests
-    const component = (
+    const { getByTestId } = render(
         <DiagramProvider
             maxZoom={maxZoom}
             minZoom={minZoom}
@@ -33,9 +33,6 @@ test('can zoom in and out but not passed bounds', () => {
             </DiagramContext.Consumer>
         </DiagramProvider>
     )
-
-    // render the component
-    const { getByTestId } = render(component)
 
     // get the current state of the zoom level
     const currentZoom = getByTestId('zoom-level')
@@ -70,7 +67,7 @@ test('can zoom in and out but not passed bounds', () => {
 
 test('can pan the diagram', () => {
     // the component to exercise pan tests
-    const component = (
+    const { getByTestId } = render(
         <DiagramProvider>
             <DiagramContext.Consumer>
                 {({ diagram, pan }) => (
@@ -84,9 +81,6 @@ test('can pan the diagram', () => {
             </DiagramContext.Consumer>
         </DiagramProvider>
     )
-
-    // render the component
-    const { getByTestId } = render(component)
 
     // get the element with the current pan
     const currentPan = getByTestId('current-pan')
@@ -102,8 +96,8 @@ test('can pan the diagram', () => {
 })
 
 test('can toggle the grid', () => {
-    // the component to exercise grid tests
-    const component = (
+    // render the component
+    const { getByTestId } = render(
         <DiagramProvider>
             <DiagramContext.Consumer>
                 {({ diagram, toggleGrid }) => (
@@ -115,9 +109,6 @@ test('can toggle the grid', () => {
             </DiagramContext.Consumer>
         </DiagramProvider>
     )
-
-    // render the component
-    const { getByTestId } = render(component)
 
     // the elements to test
     const toggle = getByTestId('toggle')
@@ -133,4 +124,31 @@ test('can toggle the grid', () => {
     expect(state.textContent === 'yes').toEqual(!initialState)
 })
 
-// test('can set the grid size')
+test('can set the grid size', () => {
+    // render the component
+    const { getByTestId } = render(
+        <DiagramProvider gridSize={5}>
+            <DiagramContext.Consumer>
+                {({ diagram, setGridSize }) => (
+                    <React.Fragment>
+                        <div onClick={() => setGridSize(10)} data-testid="set-size" />
+                        <div data-testid="current">{diagram.gridSize}</div>
+                    </React.Fragment>
+                )}
+            </DiagramContext.Consumer>
+        </DiagramProvider>
+    )
+
+    // the elements to use in tests
+    const setSize = getByTestId('set-size')
+    const state = getByTestId('current')
+
+    // make sure we followed the initial state
+    expect(state.textContent).toEqual('5')
+
+    // update the state
+    fireEvent.click(setSize)
+
+    // make sure we updated the state
+    expect(state.textContent).toEqual('10')
+})
