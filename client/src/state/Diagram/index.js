@@ -1,3 +1,4 @@
+// external imports
 import React, { createContext, useState } from 'react'
 
 // a context for diagram state
