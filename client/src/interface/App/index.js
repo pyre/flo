@@ -1,15 +1,14 @@
 // external imports
 import React, { useContext } from 'react'
-import { PrimaryButton, App as AppContainer } from 'quark-web'
+import { App as AppContainer } from 'quark-web'
 // local imports
-import { DiagramProvider, DiagramContext } from '~/state'
+import { DiagramProvider } from '~/state'
+import { Diagram } from '~/interface'
 
 const App = () => {
-    const { diagram, zoomIn } = useContext(DiagramContext)
-
     return (
         <AppContainer>
-            <PrimaryButton onClick={zoomIn}>{diagram.zoomLevel}</PrimaryButton>
+            <Diagram />
         </AppContainer>
     )
 }
