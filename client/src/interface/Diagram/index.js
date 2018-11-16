@@ -1,5 +1,6 @@
 // external imports
 import React, { useRef, useEffect, useContext } from 'react'
+import SvgMatrix from 'svg-matrix'
 // local imports
 import { useKeyPress, useMouseDrag } from '~/hooks'
 import { DiagramContext } from '~/state'
@@ -15,6 +16,7 @@ export default () => {
     // track the movement of the mouse
     const mouseDrag = useMouseDrag(elementRef.current, [spacePressed])
 
+    // grab the info and actions we need from the diagram
     const { pan, diagram } = useContext(DiagramContext)
 
     // the keyboard interactions have all sorts of effects
@@ -30,9 +32,16 @@ export default () => {
         [spacePressed, mouseDrag && mouseDrag.delta.x, mouseDrag && mouseDrag.delta.y]
     )
 
+    // compute the transform string for the diagram
+    const { transformString } = SvgMatrix()
+        .translate(diagram.pan.x, diagram.pan.y)
+        .scale(diagram.zoomLevel)
+
     return (
         <svg style={styles.container} ref={elementRef}>
-            <Grid />
+            <g transform={transformString}>
+                <Grid />
+            </g>
         </svg>
     )
 }

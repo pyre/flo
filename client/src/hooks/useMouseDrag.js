@@ -22,6 +22,7 @@ export default (targetElement, trackers = []) => {
             origin: location,
             lastLocation: location,
             delta: { x: 0, y: 0 },
+            init: true,
         }
 
         // if there is a target element
@@ -47,6 +48,7 @@ export default (targetElement, trackers = []) => {
                 delta: { x: 0, y: 0 },
                 origin: false,
                 lastLocation: false,
+                init: false,
             }))
         }
     }
@@ -60,15 +62,13 @@ export default (targetElement, trackers = []) => {
                 x: evt.clientX,
                 y: evt.clientY,
             }
-            console.log('delta', {
-                x: state.lastLocation.x - location.x,
-                y: state.lastLocation.y - location.y,
-            })
+
+            // update the drag state
             setState(state => ({
                 ...state,
                 delta: {
-                    x: state.lastLocation.x - location.x,
-                    y: state.lastLocation.y - location.y,
+                    x: location.x - state.lastLocation.x,
+                    y: location.y - state.lastLocation.y,
                 },
                 lastLocation: location,
             }))
@@ -77,16 +77,15 @@ export default (targetElement, trackers = []) => {
 
     // invoke the handler when the mouse moves
     useEvent('mousemove', moveHandler, [
-        state.origin.x,
-        state.origin.y,
+        state.init,
         state.lastLocation.x,
         state.lastLocation.y,
         ...trackers,
     ])
     // add event listeners
     useEvent('mousedown', downHandler, [targetElement])
-    useEvent('mouseup', upHandler, [state.origin, targetElement])
+    useEvent('mouseup', upHandler, [state.init, targetElement])
 
     // return the delta to the caller
-    return state.origin.x && state
+    return state.init && state
 }

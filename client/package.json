@@ -24,7 +24,8 @@
         "quark-web": "^2.0.2",
         "react": "^16.7.0-alpha.0",
         "react-dom": "^16.7.0-alpha.0",
-        "react-testing-library": "^5.2.3"
+        "react-testing-library": "^5.2.3",
+        "svg-matrix": "0.0.8"
     },
     "devDependencies": {
         "@babel/core": "^7.1.2",
