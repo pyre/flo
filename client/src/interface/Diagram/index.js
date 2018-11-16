@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useContext } from 'react'
 import SvgMatrix from 'svg-matrix'
 // local imports
-import { useKeyPress, useMouseDrag } from '~/hooks'
+import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import { DiagramContext } from '~/state'
 import Grid from './Grid'
 import * as styles from './styles'
@@ -17,20 +17,37 @@ export default () => {
     const mouseDrag = useMouseDrag(elementRef.current, [spacePressed])
 
     // grab the info and actions we need from the diagram
-    const { pan, diagram } = useContext(DiagramContext)
+    const { pan, zoomIn, zoomOut, diagram } = useContext(DiagramContext)
 
     // the keyboard interactions have all sorts of effects
     useEffect(
         () => {
             // if the space bar is pressed and the mouse is being moved
             if (spacePressed && mouseDrag) {
-                console.log('dragging', mouseDrag.delta)
                 // pan the diagram
                 pan(mouseDrag.delta)
             }
         },
         [spacePressed, mouseDrag && mouseDrag.delta.x, mouseDrag && mouseDrag.delta.y]
     )
+
+    // when the wheel scrolls
+    useEvent('mousewheel', event => {
+        // make sure that the scrolling only happens on the diagram
+        if (event.target !== elementRef.current) {
+            return
+        }
+
+        // if the user scrolled up
+        if (event.wheelDelta / 120 > 0) {
+            // zoom in
+            zoomIn()
+            // otherwise we scrolled down
+        } else {
+            // zoom the diagram out
+            zoomOut()
+        }
+    })
 
     // compute the transform string for the diagram
     const { transformString } = SvgMatrix()

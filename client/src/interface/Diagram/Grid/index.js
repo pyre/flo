@@ -26,7 +26,7 @@ export default ({ style }) => {
     // render the grid
     return (
         <g {...{ ...styles.container, ...style }}>
-            {range(nVertical + 1).map(i => {
+            {range(nVertical + 2).map(i => {
                 // the shared x coordinate of the vertical lines
                 const x = round(leftEdge + i * diagram.gridSize, diagram.gridSize)
                 // render the line
@@ -38,7 +38,7 @@ export default ({ style }) => {
                     />
                 )
             })}
-            {range(nHorizontal + 1).map(i => {
+            {range(nHorizontal + 2).map(i => {
                 // the shared y coordinate of the horizontal lines
                 const y = round(bottomEdge + i * diagram.gridSize, diagram.gridSize)
                 // render the line

@@ -45,15 +45,20 @@ export const DiagramProvider = ({
             }))
         },
         setZoom(zoomLevel) {
-            setState({ zoomLevel })
+            setState(state => ({
+                ...state,
+                zoomLevel,
+            }))
         },
         zoomIn() {
             setState(state => ({
+                ...state,
                 zoomLevel: Math.min(state.zoomLevel + zoomStep, maxZoom),
             }))
         },
         zoomOut() {
             setState(state => ({
+                ...state,
                 zoomLevel: Math.max(state.zoomLevel - zoomStep, minZoom),
             }))
         },
