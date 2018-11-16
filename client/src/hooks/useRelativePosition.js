@@ -10,6 +10,8 @@ export default location => {
         // it stays null
         return location
     }
+
+    // get the current state of the diagram
     const { diagram } = useContext(DiagramContext)
 
     // for now, just incorporate the sidebar
