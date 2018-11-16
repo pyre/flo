@@ -9,25 +9,16 @@ import SelectionRectangle from './SelectionRectangle'
 import * as styles from './styles'
 
 export default () => {
-    // grab the info and actions we need from the diagram
-    const { diagram } = useContext(DiagramContext)
-
-    // we need a ref to track if the mouse is clicked on the element
+    // we need a ref to track interactions with the diagram
     const elementRef = useRef(null)
-
-    // we care if the space bar is pressed
-    const spacePressed = useKeyPress(' ')
-
-    // track the movement of the mouse
-    const mouseDrag = useMouseDrag(elementRef.current, [spacePressed])
 
     // enable the zoom behavior
     useZoomBehavior(elementRef)
     // and the drag behavior
-    useDragBehavior({ spacePressed, mouseDrag })
+    const rectangle = useDragBehavior(elementRef)
 
-    // wether or not we're panning the diagram
-    const panning = spacePressed && mouseDrag
+    // grab the info and actions we need from the diagram
+    const { diagram } = useContext(DiagramContext)
 
     // compute the transform string for the diagram
     const { transformString } = SvgMatrix()
@@ -38,20 +29,19 @@ export default () => {
         <svg style={styles.container} ref={elementRef}>
             <g transform={transformString}>
                 <Grid />
-                {!panning &&
-                    mouseDrag.origin && (
-                        <SelectionRectangle
-                            point1={mouseDrag.origin}
-                            point2={mouseDrag.currentLocation}
-                        />
-                    )}
+                {rectangle && <SelectionRectangle {...rectangle} />}
             </g>
         </svg>
     )
 }
 
-const useDragBehavior = ({ mouseDrag, spacePressed }) => {
+const useDragBehavior = elementRef => {
     const { pan } = useContext(DiagramContext)
+    // we care if the space bar is pressed
+    const spacePressed = useKeyPress(' ')
+
+    // track the movement of the mouse
+    const mouseDrag = useMouseDrag(elementRef.current, [spacePressed])
 
     // the keyboard interactions have all sorts of effects
     useEffect(
@@ -63,6 +53,15 @@ const useDragBehavior = ({ mouseDrag, spacePressed }) => {
             }
         },
         [spacePressed, mouseDrag && mouseDrag.delta.x, mouseDrag && mouseDrag.delta.y]
+    )
+
+    // this hook returns wether or not to show the selection rectangle while dragging
+    return (
+        mouseDrag &&
+        !spacePressed && {
+            point1: mouseDrag.origin,
+            point2: mouseDrag.currentLocation,
+        }
     )
 }
 
