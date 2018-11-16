@@ -5,6 +5,7 @@ import SvgMatrix from 'svg-matrix'
 import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import { DiagramContext } from '~/state'
 import Grid from './Grid'
+import SelectionRectangle from './SelectionRectangle'
 import * as styles from './styles'
 
 export default () => {
@@ -18,6 +19,9 @@ export default () => {
 
     // grab the info and actions we need from the diagram
     const { pan, zoomIn, zoomOut, diagram } = useContext(DiagramContext)
+
+    // wether or not we're panning the diagram
+    const panning = spacePressed && mouseDrag
 
     // the keyboard interactions have all sorts of effects
     useEffect(
@@ -58,6 +62,13 @@ export default () => {
         <svg style={styles.container} ref={elementRef}>
             <g transform={transformString}>
                 <Grid />
+                {!panning &&
+                    mouseDrag.origin && (
+                        <SelectionRectangle
+                            point1={mouseDrag.origin}
+                            point2={mouseDrag.currentLocation}
+                        />
+                    )}
             </g>
         </svg>
     )

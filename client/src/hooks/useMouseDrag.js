@@ -7,7 +7,7 @@ export default (targetElement, trackers = []) => {
     const [state, setState] = useState({
         init: false,
         origin: null,
-        lastLocation: {},
+        currentLocation: {},
         delta: { x: 0, y: 0 },
     })
 
@@ -20,7 +20,7 @@ export default (targetElement, trackers = []) => {
         // the new state
         const newState = {
             origin: location,
-            lastLocation: location,
+            currentLocation: location,
             delta: { x: 0, y: 0 },
             init: true,
         }
@@ -47,7 +47,7 @@ export default (targetElement, trackers = []) => {
             setState(state => ({
                 delta: { x: 0, y: 0 },
                 origin: false,
-                lastLocation: false,
+                currentLocation: false,
                 init: false,
             }))
         }
@@ -67,10 +67,10 @@ export default (targetElement, trackers = []) => {
             setState(state => ({
                 ...state,
                 delta: {
-                    x: location.x - state.lastLocation.x,
-                    y: location.y - state.lastLocation.y,
+                    x: location.x - state.currentLocation.x,
+                    y: location.y - state.currentLocation.y,
                 },
-                lastLocation: location,
+                currentLocation: location,
             }))
         }
     }
@@ -78,8 +78,8 @@ export default (targetElement, trackers = []) => {
     // invoke the handler when the mouse moves
     useEvent('mousemove', moveHandler, [
         state.init,
-        state.lastLocation.x,
-        state.lastLocation.y,
+        state.currentLocation.x,
+        state.currentLocation.y,
         ...trackers,
     ])
     // add event listeners
