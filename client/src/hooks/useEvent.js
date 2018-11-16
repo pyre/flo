@@ -1,7 +1,7 @@
 // external imports
 import { useState, useEffect } from 'react'
 
-export default (event, handler) => {
+export default (event, handler, trackers = []) => {
     // create an effect to track the event
     useEffect(() => {
         // pass the listener
@@ -12,5 +12,5 @@ export default (event, handler) => {
             // clear the listener
             window.removeEventListener(event, handler)
         }
-    })
+    }, trackers)
 }

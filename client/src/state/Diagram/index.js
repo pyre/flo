@@ -25,14 +25,19 @@ export const DiagramProvider = ({
     const actions = {
         toggleGrid() {
             setState(state => ({
+                ...state,
                 showGrid: !state.showGrid,
             }))
         },
         setGridSize(gridSize) {
-            setState({ gridSize })
+            setState(state => ({
+                ...state,
+                gridSize,
+            }))
         },
         pan({ x = 0, y = 0 }) {
             setState(state => ({
+                ...state,
                 pan: {
                     x: state.pan.x + x,
                     y: state.pan.y + y,

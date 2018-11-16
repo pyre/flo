@@ -1,2 +1,5 @@
 export useBrowserSize from './useBrowserSize'
 export useEvent from './useEvent'
+export useKeyPress from './useKeyPress'
+export useMouseDown from './useMouseDown'
+export useMouseDrag from './useMouseDrag'
