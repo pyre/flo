@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "build": "parcel build src/index.html",
+        "build:schema": "get-graphql-schema http://localhost:5000/graphql > schema.graphql",
         "dev": "parcel src/index.html",
+        "relay": "relay-compiler --src ./src --schema ./schema.graphql",
         "test": "jest",
         "test:watch": "npm run test -- --watch"
     },
@@ -24,7 +26,9 @@
         "quark-web": "^2.0.2",
         "react": "^16.7.0-alpha.0",
         "react-dom": "^16.7.0-alpha.0",
+        "react-relay": "^1.7.0",
         "react-testing-library": "^5.2.3",
+        "relay-runtime": "^1.7.0",
         "svg-matrix": "0.0.8"
     },
     "devDependencies": {
@@ -34,10 +38,16 @@
         "@babel/preset-react": "^7.0.0",
         "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^23.6.0",
+        "babel-plugin-fast-async": "^6.1.2",
+        "babel-plugin-relay": "^1.7.0",
         "babel-plugin-root-import": "^6.1.0",
+        "fast-async": "^6.3.8",
+        "get-graphql-schema": "^2.1.2",
+        "graphql": "^14.0.2",
         "jest": "^23.6.0",
         "jest-dom": "^2.1.0",
         "prettier": "^1.14.3",
-        "regenerator-runtime": "^0.12.1"
+        "regenerator-runtime": "^0.12.1",
+        "relay-compiler": "^1.7.0"
     }
 }

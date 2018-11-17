@@ -1,9 +1,12 @@
 // external imports
+import { graphql } from 'react-relay'
 import React, { useRef, useEffect, useContext } from 'react'
 import SvgMatrix from 'svg-matrix'
 // local imports
-import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
+import { Query } from '~/components'
+import { Flo } from '~/interface'
 import { DiagramContext } from '~/state'
+import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import Grid from './Grid'
 import SelectionRectangle from './SelectionRectangle'
 import * as styles from './styles'
@@ -15,7 +18,7 @@ export default () => {
     // enable the zoom behavior
     useZoomBehavior(elementRef)
     // and the drag behavior
-    const rectangle = useDragBehavior(elementRef)
+    useDragBehavior(elementRef)
 
     // grab the info and actions we need from the diagram
     const { diagram } = useContext(DiagramContext)
@@ -28,12 +31,27 @@ export default () => {
     return (
         <svg style={styles.container} ref={elementRef}>
             <g transform={transformString}>
+                {/* make sure the diagram sits above the grid */}
+                <Query query={floQuery} variables={{ id: '1' }} loadingState={null}>
+                    {({ node }) => <Flo flo={node} />}
+                </Query>
+
                 <Grid />
-                {rectangle && <SelectionRectangle {...rectangle} />}
             </g>
         </svg>
     )
 }
+
+// the query for the flo we're looking at
+const floQuery = graphql`
+    query DiagramQuery($id: ID!) {
+        node(id: $id) {
+            ... on Flo {
+                ...Flo_flo
+            }
+        }
+    }
+`
 
 const useDragBehavior = elementRef => {
     const { pan } = useContext(DiagramContext)

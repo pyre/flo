@@ -1,5 +1,6 @@
 # externals
 from flask import Flask
+from flask_cors import CORS
 from flask_graphql import GraphQLView
 import graphene
 import base64
@@ -13,10 +14,6 @@ class Node(graphene.Interface):
     """ An interface for objects that can be looked up by a globally unique ID"""
 
     id = graphene.ID(required=True)
-
-
-class Flo(graphene.ObjectType):
-    fixed = graphene.Boolean()
 
 
 class Position(graphene.ObjectType):
@@ -82,7 +79,19 @@ class Factory(graphene.ObjectType):
     position = graphene.NonNull(Position)
 
     def resolve_id(self, info):
-        return id_field(typeName="Product", id=self.id)
+        return id_field(typeName="Factory", id=self.id)
+
+
+class Flo(graphene.ObjectType):
+    class Meta:
+        interfaces = (Node,)
+
+    id = graphene.NonNull(graphene.ID)
+    fixed = graphene.Boolean()
+    factories = graphene.NonNull(graphene.List(graphene.NonNull(Factory)))
+
+    def resolve_id(self, info):
+        return id_field(typeName="Flo", id=self.id)
 
 
 class BindingAssignment(graphene.InputObjectType):
@@ -111,37 +120,37 @@ class AssignInputs(graphene.Mutation):
 
 
 class Query(graphene.ObjectType):
-    factories = graphene.NonNull(graphene.List(Factory))
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
-    def resolve_factories(self, info):
-        return [Factory(id="123")]
-
     def resolve_node(self, info, id):
-        return factory
+
+        factory = Factory(
+            id="2",
+            inputs=[Binding(id=1, name="hello", protocol="File")],
+            position=Position(x=250, y=250),
+        )
+
+        factory.outputs = [
+            Result(name="Hello", product=Product(id="2", source=factory))
+        ]
+
+        return Flo(id="2", fixed=True, factories=[factory])
 
 
 class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
 
 
-# create the demo flo
-factory = Factory(
-    id="1",
-    inputs=[Binding(id=1, name="hello", protocol="File")],
-    position=Position(x=500, y=500),
-)
-factory.outputs = [
-    Result(name="output 1", product=Product(id="1", source=factory)),
-    Result(name="output 2", product=Product(id="2", source=factory)),
-]
-
 # create a lightweight app to run
 app = Flask(__name__)
+CORS(app)
+
 # add the graphql endpoint
 app.add_url_rule(
     "/graphql",
     view_func=GraphQLView.as_view(
-        "graphql", schema=graphene.Schema(query=Query, mutation=Mutation), graphiql=True
+        "graphql",
+        schema=graphene.Schema(query=Query, mutation=Mutation, types=[Flo]),
+        graphiql=True,
     ),
 )
