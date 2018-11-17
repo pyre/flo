@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 const Flo = ({ flo }) => (
     <>
         {flo.factories.map(factory => (
-            <circle cx={factory.position.x} cy={factory.position.y} r={2} />
+            <circle cx={factory.position.x} cy={factory.position.y} r={2} stroke="red" fill="red" />
         ))}
     </>
 )

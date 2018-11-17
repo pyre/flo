@@ -31,12 +31,12 @@ export default () => {
     return (
         <svg style={styles.container} ref={elementRef}>
             <g transform={transformString}>
+                <Grid />
+
                 {/* make sure the diagram sits above the grid */}
                 <Query query={floQuery} variables={{ id: '1' }} loadingState={null}>
                     {({ node }) => <Flo flo={node} />}
                 </Query>
-
-                <Grid />
             </g>
         </svg>
     )
