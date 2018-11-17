@@ -15,7 +15,7 @@ class Node(graphene.Interface):
     id = graphene.ID(required=True)
 
 
-class Floe(graphene.ObjectType):
+class Flo(graphene.ObjectType):
     fixed = graphene.Boolean()
 
 
@@ -118,12 +118,23 @@ class Query(graphene.ObjectType):
         return [Factory(id="123")]
 
     def resolve_node(self, info, id):
-        return Factory(id=id, name="foo")
+        return factory
 
 
 class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
 
+
+# create the demo flo
+factory = Factory(
+    id="1",
+    inputs=[Binding(id=1, name="hello", protocol="File")],
+    position=Position(x=500, y=500),
+)
+factory.outputs = [
+    Result(name="output 1", product=Product(id="1", source=factory)),
+    Result(name="output 2", product=Product(id="2", source=factory)),
+]
 
 # create a lightweight app to run
 app = Flask(__name__)
