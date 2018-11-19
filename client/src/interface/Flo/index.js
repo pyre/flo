@@ -1,11 +1,13 @@
 // external imports
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
+// local imports
+import Factory from './Factory'
 
 const Flo = ({ flo }) => (
     <>
         {flo.factories.map(factory => (
-            <circle cx={factory.position.x} cy={factory.position.y} r={2} stroke="red" fill="red" />
+            <Factory key={factory.id} factory={factory} />
         ))}
     </>
 )
@@ -15,10 +17,8 @@ export default createFragmentContainer(
     graphql`
         fragment Flo_flo on Flo {
             factories {
-                position {
-                    x
-                    y
-                }
+                id
+                ...Factory_factory
             }
         }
     `

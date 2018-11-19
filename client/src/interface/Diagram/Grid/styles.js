@@ -1,8 +1,8 @@
-import { grey } from '~/colors'
+import { gridStroke } from '~/colors'
 
 export default {
     container: {},
     gridLine: {
-        stroke: grey,
+        stroke: gridStroke,
     },
 }

@@ -5,7 +5,7 @@ import { triggerAlert } from 'quark-web'
 // local imports
 import environment from '~/environment'
 
-export default ({ children, query, variables, loadingState }) => (
+export default ({ children, query, variables, loadingState, onError }) => (
     <QueryRenderer
         query={query}
         variables={variables}
@@ -13,13 +13,20 @@ export default ({ children, query, variables, loadingState }) => (
         render={({ error, props, ...rest }) => {
             // if something went wrong
             if (error) {
-                // bubble the error up
-                // throw new Error(error)
-                triggerAlert({
-                    message: error,
-                    type: 'warning',
-                })
-                return null
+                // if there is an error handler
+                if (onError) {
+                    // return the result of the error handler
+                    return onError(error)
+                } else {
+                    // trigger an alert with the error
+                    triggerAlert({
+                        message: error,
+                        type: 'warning',
+                    })
+
+                    // dont render anything
+                    return null
+                }
             }
             // if we are still loading
             if (!props) {
