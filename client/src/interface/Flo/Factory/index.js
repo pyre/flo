@@ -13,7 +13,7 @@ const Factory = ({
     },
 }) => (
     <>
-        // the center of a factory is the daimond used as the target for clicks
+        // the center of a factory is the diamond used as the target for clicks
         <polygon
             fill={factoryPrimary}
             stroke={elementOutline}
