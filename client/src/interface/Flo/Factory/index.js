@@ -5,9 +5,9 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { elementOutline, factoryPrimary } from '~/colors'
 
 // the primary length for the central daimon
-const diamondLength = 15
+const diamondLength = 10
 // the primary length for the squares that define the in and out point
-const squareLength = 5
+const squareLength = 3
 
 // the distance from the central diamond to the square
 const armLength = 50
@@ -21,7 +21,7 @@ const Factory = ({
         // there is a line going from one square to the other
         <line
             stroke={elementOutline}
-            strokeWidth={2}
+            strokeWidth={1}
             x1={x + armLength}
             y1={y}
             y2={y}
@@ -31,7 +31,7 @@ const Factory = ({
         <polygon
             fill={factoryPrimary}
             stroke={elementOutline}
-            strokeWidth={2}
+            strokeWidth={1}
             strokeLinejoin="round"
             points={`${x - diamondLength},${y} ${x},${y + diamondLength} ${x +
                 diamondLength},${y} ${x},${y - diamondLength}`}
@@ -40,7 +40,7 @@ const Factory = ({
         <rect
             fill={factoryPrimary}
             stroke={elementOutline}
-            strokeWidth={2}
+            strokeWidth={1}
             strokeLinejoin="round"
             x={x - armLength - squareLength}
             y={y - squareLength}
@@ -50,7 +50,7 @@ const Factory = ({
         <rect
             fill={factoryPrimary}
             stroke={elementOutline}
-            strokeWidth={2}
+            strokeWidth={1}
             strokeLinejoin="round"
             x={x + armLength - squareLength}
             y={y - squareLength}

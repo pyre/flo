@@ -29,6 +29,7 @@ class Product(graphene.ObjectType):
 
     id = graphene.NonNull(graphene.ID)
     source = graphene.Field(lambda: Factory)
+    position = graphene.NonNull(Position)
 
     def resolve_id(self, info):
         return id_field(typeName="Product", id=self.id)
@@ -124,17 +125,23 @@ class Query(graphene.ObjectType):
 
     def resolve_node(self, info, id):
 
-        factory = Factory(
-            id="2",
+        # each factory of the canonical diagram
+        factory1 = Factory(
+            id="1",
             inputs=[Binding(id=1, name="hello", protocol="File")],
-            position=Position(x=250, y=250),
+            position=Position(x=250, y=150),
         )
+        factory2 = Factory(id="2", inputs=[], position=Position(x=450, y=100))
+        factory3 = Factory(id="3", position=Position(x=350, y=250))
+        factory4 = Factory(id="4", position=Position(x=500, y=300))
+        factory5 = Factory(id="5", position=Position(x=350, y=400))
+        factory6 = Factory(id="6", position=Position(x=500, y=200))
 
-        factory.outputs = [
-            Result(name="Hello", product=Product(id="2", source=factory))
-        ]
-
-        return Flo(id="2", fixed=True, factories=[factory])
+        return Flo(
+            id="2",
+            fixed=True,
+            factories=[factory1, factory2, factory3, factory4, factory5, factory6],
+        )
 
 
 class Mutation(graphene.ObjectType):
