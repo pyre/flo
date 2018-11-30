@@ -30,6 +30,7 @@ class Product(graphene.ObjectType):
     id = graphene.NonNull(graphene.ID)
     source = graphene.Field(lambda: Factory)
     position = graphene.NonNull(Position)
+    progress = graphene.NonNull(graphene.Float)
 
     def resolve_id(self, info):
         return id_field(typeName="Product", id=self.id)
@@ -90,6 +91,7 @@ class Flo(graphene.ObjectType):
     id = graphene.NonNull(graphene.ID)
     fixed = graphene.Boolean()
     factories = graphene.NonNull(graphene.List(graphene.NonNull(Factory)))
+    products = graphene.NonNull(graphene.List(graphene.NonNull(Product)))
 
     def resolve_id(self, info):
         return id_field(typeName="Flo", id=self.id)
@@ -125,22 +127,71 @@ class Query(graphene.ObjectType):
 
     def resolve_node(self, info, id):
 
-        # each factory of the canonical diagram
-        factory1 = Factory(
-            id="1",
-            inputs=[Binding(id=1, name="hello", protocol="File")],
-            position=Position(x=250, y=150),
-        )
-        factory2 = Factory(id="2", inputs=[], position=Position(x=450, y=100))
-        factory3 = Factory(id="3", position=Position(x=350, y=250))
-        factory4 = Factory(id="4", position=Position(x=500, y=300))
-        factory5 = Factory(id="5", position=Position(x=350, y=400))
-        factory6 = Factory(id="6", position=Position(x=500, y=200))
+        # each factory of the canonical diagram (from top to bottom, left to right)
+        factory1 = Factory(id="1", position=Position(x=450, y=100))
+        factory2 = Factory(id="2", position=Position(x=250, y=150))
+        factory3 = Factory(id="3", position=Position(x=500, y=200))
+        factory4 = Factory(id="4", position=Position(x=350, y=250))
+        factory5 = Factory(id="5", position=Position(x=500, y=300))
+        factory6 = Factory(id="6", position=Position(x=350, y=400))
+        factory7 = Factory(id="7", position=Position(x=550, y=400))
+
+        # each product of the diagram
+        product1 = Product(id="1", source=factory2, position=Position(x=350, y=100))
+        product2 = Product(id="2", source=factory1, position=Position(x=500, y=100))
+        product3 = Product(id="3", source=factory2, position=Position(x=400, y=150))
+        product4 = Product(id="4", source=factory7, position=Position(x=550, y=200))
+        product5 = Product(id="5", source=factory2, position=Position(x=300, y=250))
+        product6 = Product(id="6", source=factory4, position=Position(x=400, y=250))
+        product7 = Product(id="7", source=factory5, position=Position(x=550, y=300))
+        product8 = Product(id="8", source=factory6, position=Position(x=450, y=350))
+        product9 = Product(id="9", source=factory6, position=Position(x=550, y=400))
+        product10 = Product(id="10", source=factory7, position=Position(x=650, y=400))
+
+        # bind the inputs to each factory
+        factory1.inputs = [Binding(product=product1)]
+        factory3.inputs = [Binding(product=product3), Binding(product=product5)]
+        factory4.inputs = [Binding(product=product2)]
+        factory5.inputs = [Binding(product=product5), Binding(product=product8)]
+        factory7.inputs = [Binding(product=product9)]
+
+        # bind factory outputs
+        factory1.outputs = [Result(product=product2)]
+        factory2.outputs = [
+            Result(product=product1),
+            Result(product=product3),
+            Result(product=product5),
+        ]
+        factory3.outputs = [Result(product=product4)]
+        factory4.outputs = [Result(product=product6)]
+        factory5.outputs = [Result(product=product7)]
+        factory6.outputs = [Result(product=product8), Result(product=product9)]
+        factory7.outputs = [Result(product=product10)]
 
         return Flo(
             id="2",
             fixed=True,
-            factories=[factory1, factory2, factory3, factory4, factory5, factory6],
+            factories=[
+                factory1,
+                factory2,
+                factory3,
+                factory4,
+                factory5,
+                factory6,
+                factory7,
+            ],
+            products=[
+                product1,
+                product2,
+                product3,
+                product4,
+                product5,
+                product6,
+                product7,
+                product8,
+                product9,
+                product10,
+            ],
         )
 
 
