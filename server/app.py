@@ -52,6 +52,7 @@ class Binding(graphene.ObjectType):
     id = graphene.NonNull(graphene.ID)
     name = graphene.NonNull(graphene.String)
     protocol = graphene.NonNull(graphene.String)
+    product = graphene.Field(Product)
 
     def resolve_id(self, info):
         return id_field(typeName="Product", id=self.id)
@@ -134,7 +135,7 @@ class Query(graphene.ObjectType):
         factory4 = Factory(id="4", position=Position(x=350, y=250))
         factory5 = Factory(id="5", position=Position(x=500, y=300))
         factory6 = Factory(id="6", position=Position(x=350, y=400))
-        factory7 = Factory(id="7", position=Position(x=550, y=400))
+        factory7 = Factory(id="7", position=Position(x=600, y=400))
 
         # each product of the diagram
         product1 = Product(id="1", source=factory2, position=Position(x=350, y=100))
@@ -142,7 +143,7 @@ class Query(graphene.ObjectType):
         product3 = Product(id="3", source=factory2, position=Position(x=400, y=150))
         product4 = Product(id="4", source=factory7, position=Position(x=550, y=200))
         product5 = Product(id="5", source=factory2, position=Position(x=300, y=250))
-        product6 = Product(id="6", source=factory4, position=Position(x=400, y=250))
+        product6 = Product(id="6", source=factory4, position=Position(x=450, y=250))
         product7 = Product(id="7", source=factory5, position=Position(x=550, y=300))
         product8 = Product(id="8", source=factory6, position=Position(x=450, y=350))
         product9 = Product(id="9", source=factory6, position=Position(x=550, y=400))
@@ -150,9 +151,11 @@ class Query(graphene.ObjectType):
 
         # bind the inputs to each factory
         factory1.inputs = [Binding(product=product1)]
+        factory2.inputs = []
         factory3.inputs = [Binding(product=product3), Binding(product=product5)]
         factory4.inputs = [Binding(product=product2)]
         factory5.inputs = [Binding(product=product5), Binding(product=product8)]
+        factory6.inputs = []
         factory7.inputs = [Binding(product=product9)]
 
         # bind factory outputs

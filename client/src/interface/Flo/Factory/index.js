@@ -15,6 +15,7 @@ const armLength = 50
 const Factory = ({
     factory: {
         position: { x, y },
+        ...factory
     },
 }) => (
     <>
@@ -36,27 +37,43 @@ const Factory = ({
             points={`${x - diamondLength},${y} ${x},${y + diamondLength} ${x +
                 diamondLength},${y} ${x},${y - diamondLength}`}
         />
-        // the input and output node for a factory is represented by small boxes 50px outerHeight
-        <rect
-            fill={factoryPrimary}
-            stroke={elementOutline}
-            strokeWidth={1}
-            strokeLinejoin="round"
-            x={x - armLength - squareLength}
-            y={y - squareLength}
-            width={2 * squareLength}
-            height={2 * squareLength}
-        />
-        <rect
-            fill={factoryPrimary}
-            stroke={elementOutline}
-            strokeWidth={1}
-            strokeLinejoin="round"
-            x={x + armLength - squareLength}
-            y={y - squareLength}
-            width={2 * squareLength}
-            height={2 * squareLength}
-        />
+        {/*
+            the input and output node for a factory is represented by small boxes 50px outerHeight
+        */}
+        {/*only show the input rectangle if there is more than one product */}
+        {(factory.inputs.length !== 1 ||
+            // or there is only one product */
+            (factory.inputs[0].product &&
+                // and that product is on the same x coordinate
+                factory.inputs[0].product.position.x === x)) && (
+            <rect
+                fill={factoryPrimary}
+                stroke={elementOutline}
+                strokeWidth={1}
+                strokeLinejoin="round"
+                x={x - armLength - squareLength}
+                y={y - squareLength}
+                width={2 * squareLength}
+                height={2 * squareLength}
+            />
+        )}
+        {/*only show the output rectangle if there is more than one result */}
+        {(factory.outputs.length !== 1 ||
+            // or there is only one product */
+            (factory.outputs[0].product &&
+                // and that product is on the same x coordinate
+                factory.outputs[0].product.position.x === x)) && (
+            <rect
+                fill={factoryPrimary}
+                stroke={elementOutline}
+                strokeWidth={1}
+                strokeLinejoin="round"
+                x={x + armLength - squareLength}
+                y={y - squareLength}
+                width={2 * squareLength}
+                height={2 * squareLength}
+            />
+        )}
     </>
 )
 
@@ -67,6 +84,22 @@ export default createFragmentContainer(
             position {
                 x
                 y
+            }
+            inputs {
+                product {
+                    position {
+                        x
+                        y
+                    }
+                }
+            }
+            outputs {
+                product {
+                    position {
+                        x
+                        y
+                    }
+                }
             }
         }
     `
