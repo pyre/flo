@@ -6,12 +6,13 @@ import { Arc } from '~/components'
 import { productColor, background, elementOutline, productFillEmpty } from '~/colors'
 
 // the radius of the inner circle
-const innerRadius = 10
+const innerRadius = 12
 const gutter = 15
 
 const Product = ({ product }) => (
     <>
-        {do {
+        // render the outer circle
+        {/* {do {
             // render a full circle if there are both a source and at least one binding // if there is
             if (product.source && product.bindings.length > 0) {
                 ;<circle
@@ -45,8 +46,9 @@ const Product = ({ product }) => (
                     stroke={elementOutline}
                 />
             }
-        }}
-        <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} />
+        }} */}
+        // render some space between the fillter and the border
+        {/* <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} /> */}
         // the primary fill of the product should designate progress
         <circle
             fill={productFillEmpty}

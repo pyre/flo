@@ -15,7 +15,7 @@ import { elementOutline, factoryPrimary } from '~/colors'
 */
 
 // the primary length for the central daimond
-const diamondLength = 10
+const diamondLength = 12
 // the primary length for the squares that define the in and out point
 const squareLength = 3
 
@@ -99,9 +99,8 @@ const Factory = ({
             // the center of a factory is the diamond used as the target for clicks
             <polygon
                 fill={factoryPrimary}
-                stroke={elementOutline}
+                stroke={'none'}
                 strokeWidth={1}
-                strokeLinejoin="round"
                 points={`${x - diamondLength},${y} ${x},${y + diamondLength} ${x +
                     diamondLength},${y} ${x},${y - diamondLength}`}
             />
@@ -112,10 +111,7 @@ const Factory = ({
                     // and that product is on the same x coordinate
                     factory.inputs[0].product.position.y !== y)) && (
                 <rect
-                    fill={factoryPrimary}
-                    stroke={elementOutline}
-                    strokeWidth={1}
-                    strokeLinejoin="round"
+                    fill={elementOutline}
                     x={leftSquareLocation.x - squareLength}
                     y={leftSquareLocation.y - squareLength}
                     width={2 * squareLength}
@@ -129,10 +125,7 @@ const Factory = ({
                     // and that product is on the same x coordinate
                     factory.outputs[0].product.position.y !== y)) && (
                 <rect
-                    fill={factoryPrimary}
-                    stroke={elementOutline}
-                    strokeWidth={1}
-                    strokeLinejoin="round"
+                    fill={elementOutline}
                     x={rightSquareLocation.x - squareLength}
                     y={rightSquareLocation.y - squareLength}
                     width={2 * squareLength}
