@@ -4,7 +4,7 @@ import React from 'react'
 // a function to compute cartesian coordinates from polar coordinates
 function polarToCartesian({ x, y, r, angle }) {
     // transform the cartesian coordinates to polar
-    const rad = (angle * Math.PI) / 180.0
+    const rad = ((angle - 90) * Math.PI) / 180.0
 
     // return the cartesian coordinates
     return {
@@ -13,18 +13,27 @@ function polarToCartesian({ x, y, r, angle }) {
     }
 }
 
-function computeArc({ x, y, r, theta1, theta2 }) {
-    // compute the bounds of the arc
-    const start = polarToCartesian({ x, y, r, angle: theta2 })
-    const end = polarToCartesian({ x, y, r, angle: theta1 })
+export default ({ x, y, r, theta1, theta2, fill = 'none', ...props }) => do {
+    // if we are supposed to draw a circle
+    if (theta2 === 360) {
+        // do that instead
+        ;<circle cx={x} cy={y} r={r} fill={fill} {...props} />
+    } else {
+        // compute the bounds of the arc
+        const start = polarToCartesian({ x, y, r, angle: theta2 })
+        const end = polarToCartesian({ x, y, r, angle: theta1 })
 
-    // check if we need to go the "other way"
-    const largeArcFlag = theta2 > theta1 <= 180 ? '1' : '0'
+        // check if we need to go the "other way"
+        const largeArcFlag = theta2 - theta1 <= 180 ? '0' : '1'
 
-    // build the path
-    return ['M', start.x, start.y, 'A', r, r, 0, largeArcFlag, 0, end.x, end.y].join(' ')
+        // build the path with at least the arc
+        const path = ['M', start.x, start.y, 'A', r, r, 0, largeArcFlag, 0, end.x, end.y]
+
+        // if we are going to fill the arc then we should add 2 lines that cut it like a pie
+        if (fill !== 'none') {
+            path.push('L', x, y, 'Z')
+        }
+
+        ;<path d={path.join(' ')} fill={fill} {...props} />
+    }
 }
-
-export default ({ x, y, r, theta1, theta2, ...props }) => (
-    <path fill="none" d={computeArc({ x, y, r, theta1, theta2 })} {...props} />
-)

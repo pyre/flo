@@ -196,18 +196,18 @@ class SchemaResolver(GraphQLView):
         factory7 = Factory(id="7", position=Position(x=600, y=400))
 
         # each product of the diagram
-        product1 = Product(id="1", position=Position(x=350, y=100))
-        product2 = Product(id="2", position=Position(x=500, y=100))
-        product3 = Product(id="3", position=Position(x=400, y=150))
-        product4 = Product(id="4", position=Position(x=550, y=200))
-        product5 = Product(id="5", position=Position(x=300, y=250))
-        product6 = Product(id="6", position=Position(x=450, y=250))
-        product7 = Product(id="7", position=Position(x=550, y=300))
-        product8 = Product(id="8", position=Position(x=450, y=350))
-        product9 = Product(id="9", position=Position(x=550, y=400))
-        product10 = Product(id="10", position=Position(x=650, y=400))
-        product11 = Product(id="11", position=Position(x=150, y=150))
-        product12 = Product(id="12", position=Position(x=150, y=550))
+        product1 = Product(id="1", position=Position(x=350, y=100), progress=0.5)
+        product2 = Product(id="2", position=Position(x=500, y=100), progress=0)
+        product3 = Product(id="3", position=Position(x=400, y=150), progress=0.75)
+        product4 = Product(id="4", position=Position(x=550, y=200), progress=0)
+        product5 = Product(id="5", position=Position(x=300, y=250), progress=1)
+        product6 = Product(id="6", position=Position(x=450, y=250), progress=1)
+        product7 = Product(id="7", position=Position(x=550, y=300), progress=0.9)
+        product8 = Product(id="8", position=Position(x=450, y=350), progress=1)
+        product9 = Product(id="9", position=Position(x=550, y=400), progress=1)
+        product10 = Product(id="10", position=Position(x=650, y=400), progress=0.5)
+        product11 = Product(id="11", position=Position(x=150, y=150), progress=1)
+        product12 = Product(id="12", position=Position(x=150, y=550), progress=1)
 
         # bind the inputs to each factory
         factory1.inputs = [Binding(id="1", product=product1)]
