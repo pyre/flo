@@ -12,7 +12,6 @@ const gutter = 15
 const Product = ({ product }) => (
     <>
         {do {
-            console.log(product)
             // render a full circle if there are both a source and at least one binding // if there is
             if (product.source && product.bindings.length > 0) {
                 ;<circle
@@ -41,8 +40,8 @@ const Product = ({ product }) => (
                     r={gutter + 1}
                     x={product.position.x}
                     y={product.position.y}
-                    theta1={215}
-                    theta2={165}
+                    theta1={230}
+                    theta2={140}
                     stroke={elementOutline}
                 />
             }

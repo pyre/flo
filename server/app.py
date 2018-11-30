@@ -206,10 +206,12 @@ class SchemaResolver(GraphQLView):
         product8 = Product(id="8", position=Position(x=450, y=350))
         product9 = Product(id="9", position=Position(x=550, y=400))
         product10 = Product(id="10", position=Position(x=650, y=400))
+        product11 = Product(id="11", position=Position(x=150, y=150))
+        product12 = Product(id="12", position=Position(x=150, y=550))
 
         # bind the inputs to each factory
         factory1.inputs = [Binding(id="1", product=product1)]
-        factory2.inputs = []
+        factory2.inputs = [Binding(id="11", product=product11)]
         factory3.inputs = [
             Binding(id="2", product=product3),
             Binding(id="3", product=product5),
@@ -219,7 +221,7 @@ class SchemaResolver(GraphQLView):
             Binding(id="6", product=product6),
             Binding(id="8", product=product8),
         ]
-        factory6.inputs = []
+        factory6.inputs = [Binding(id="12", product=product12)]
         factory7.inputs = [Binding(id="7", product=product9)]
 
         # bind factory outputs
@@ -250,6 +252,8 @@ class SchemaResolver(GraphQLView):
                 product8,
                 product9,
                 product10,
+                product11,
+                product12,
             ],
             "factories": [
                 factory1,

@@ -52,7 +52,7 @@ const Factory = ({
             />
             // render the lines joining the left square to each of the inputs
             {factory.inputs.map((binding, i) => (
-                <>
+                <React.Fragment key={binding.id}>
                     <line
                         id={binding.id}
                         x1={leftSquareLocation.x}
@@ -71,11 +71,11 @@ const Factory = ({
                         stroke={elementOutline}
                         strokeWidth={1}
                     />
-                </>
+                </React.Fragment>
             ))}
             // render the lines joining the right square to each of its results
             {factory.outputs.map(result => (
-                <>
+                <React.Fragment key={result.id}>
                     <line
                         id={result.id}
                         x1={rightSquareLocation.x}
@@ -94,7 +94,7 @@ const Factory = ({
                         stroke={elementOutline}
                         strokeWidth={1}
                     />
-                </>
+                </React.Fragment>
             ))}
             // the center of a factory is the diamond used as the target for clicks
             <polygon
@@ -110,7 +110,7 @@ const Factory = ({
                 // or there is only one product */
                 (factory.inputs[0].product &&
                     // and that product is on the same x coordinate
-                    factory.inputs[0].product.position.x === x)) && (
+                    factory.inputs[0].product.position.y !== y)) && (
                 <rect
                     fill={factoryPrimary}
                     stroke={elementOutline}
@@ -127,7 +127,7 @@ const Factory = ({
                 // or there is only one product
                 (factory.outputs[0].product &&
                     // and that product is on the same x coordinate
-                    factory.outputs[0].product.position.x === x)) && (
+                    factory.outputs[0].product.position.y !== y)) && (
                 <rect
                     fill={factoryPrimary}
                     stroke={elementOutline}

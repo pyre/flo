@@ -19,7 +19,7 @@ function computeArc({ x, y, r, theta1, theta2 }) {
     const end = polarToCartesian({ x, y, r, angle: theta1 })
 
     // check if we need to go the "other way"
-    const largeArcFlag = theta2 - theta1 <= 180 ? '0' : '1'
+    const largeArcFlag = theta2 > theta1 <= 180 ? '1' : '0'
 
     // build the path
     return ['M', start.x, start.y, 'A', r, r, 0, largeArcFlag, 0, end.x, end.y].join(' ')
