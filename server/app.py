@@ -29,11 +29,44 @@ class Product(graphene.ObjectType):
 
     id = graphene.NonNull(graphene.ID)
     source = graphene.Field(lambda: Factory)
+    bindings = graphene.NonNull(graphene.List(graphene.NonNull(lambda: Binding)))
     position = graphene.NonNull(Position)
     progress = graphene.NonNull(graphene.Float)
 
     def resolve_id(self, info):
         return id_field(typeName="Product", id=self.id)
+
+    def resolve_source(self, info):
+        """
+            the source of a product is defined as that factory with {self} as a product in
+        """
+
+        # we have to check each factory
+        for factory in info.context.get("factories"):
+            # a product could be referenced by any one of factory.outputs
+            for result in factory.outputs:
+                # if the result is this product
+                if result.product and result.product.id == self.id:
+                    # we found our source
+                    return factory
+
+    def resolve_bindings(self, info):
+        """
+            the bindings of a product are the bindings of factories that the
+        """
+        # the list of bindings we are associated with
+        bindings = []
+
+        # we have to check each factory
+        for factory in info.context.get("factories"):
+            # a product could be connected to any input of a product
+            for binding in factory.inputs:
+                # if the binding references the product
+                if binding.product and binding.product.id == self.id:
+                    # add the referencing bindings to the list
+                    bindings.append(binding)
+
+        return bindings
 
 
 class Result(graphene.ObjectType):
@@ -57,6 +90,13 @@ class Binding(graphene.ObjectType):
     name = graphene.NonNull(graphene.String)
     protocol = graphene.NonNull(graphene.String)
     product = graphene.Field(Product)
+    factory = graphene.NonNull(lambda: Factory)
+
+    def resolve_factory(self, info):
+        """
+            The factory of a binding is the back reference of factory.inputs
+        """
+        return None
 
     def resolve_id(self, info):
         return id_field(typeName="Binding", id=self.id)
@@ -131,7 +171,21 @@ class Query(graphene.ObjectType):
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
     def resolve_node(self, info, id):
+        # for now just return a single flo made up of all of the products and factories we know of
+        return Flo(
+            id="2",
+            fixed=True,
+            factories=info.context.get("factories"),
+            products=info.context.get("products"),
+        )
 
+
+class Mutation(graphene.ObjectType):
+    assignInputs = AssignInputs.Field()
+
+
+class SchemaResolver(GraphQLView):
+    def get_context(self):
         # each factory of the canonical diagram (from top to bottom, left to right)
         factory1 = Factory(id="1", position=Position(x=450, y=100))
         factory2 = Factory(id="2", position=Position(x=250, y=150))
@@ -142,16 +196,16 @@ class Query(graphene.ObjectType):
         factory7 = Factory(id="7", position=Position(x=600, y=400))
 
         # each product of the diagram
-        product1 = Product(id="1", source=factory2, position=Position(x=350, y=100))
-        product2 = Product(id="2", source=factory1, position=Position(x=500, y=100))
-        product3 = Product(id="3", source=factory2, position=Position(x=400, y=150))
-        product4 = Product(id="4", source=factory7, position=Position(x=550, y=200))
-        product5 = Product(id="5", source=factory2, position=Position(x=300, y=250))
-        product6 = Product(id="6", source=factory4, position=Position(x=450, y=250))
-        product7 = Product(id="7", source=factory5, position=Position(x=550, y=300))
-        product8 = Product(id="8", source=factory6, position=Position(x=450, y=350))
-        product9 = Product(id="9", source=factory6, position=Position(x=550, y=400))
-        product10 = Product(id="10", source=factory7, position=Position(x=650, y=400))
+        product1 = Product(id="1", position=Position(x=350, y=100))
+        product2 = Product(id="2", position=Position(x=500, y=100))
+        product3 = Product(id="3", position=Position(x=400, y=150))
+        product4 = Product(id="4", position=Position(x=550, y=200))
+        product5 = Product(id="5", position=Position(x=300, y=250))
+        product6 = Product(id="6", position=Position(x=450, y=250))
+        product7 = Product(id="7", position=Position(x=550, y=300))
+        product8 = Product(id="8", position=Position(x=450, y=350))
+        product9 = Product(id="9", position=Position(x=550, y=400))
+        product10 = Product(id="10", position=Position(x=650, y=400))
 
         # bind the inputs to each factory
         factory1.inputs = [Binding(id="1", product=product1)]
@@ -184,19 +238,8 @@ class Query(graphene.ObjectType):
         ]
         factory7.outputs = [Result(id="10", product=product10)]
 
-        return Flo(
-            id="2",
-            fixed=True,
-            factories=[
-                factory1,
-                factory2,
-                factory3,
-                factory4,
-                factory5,
-                factory6,
-                factory7,
-            ],
-            products=[
+        return {
+            "products": [
                 product1,
                 product2,
                 product3,
@@ -208,11 +251,16 @@ class Query(graphene.ObjectType):
                 product9,
                 product10,
             ],
-        )
-
-
-class Mutation(graphene.ObjectType):
-    assignInputs = AssignInputs.Field()
+            "factories": [
+                factory1,
+                factory2,
+                factory3,
+                factory4,
+                factory5,
+                factory6,
+                factory7,
+            ],
+        }
 
 
 # create a lightweight app to run
@@ -222,7 +270,7 @@ CORS(app)
 # add the graphql endpoint
 app.add_url_rule(
     "/graphql",
-    view_func=GraphQLView.as_view(
+    view_func=SchemaResolver.as_view(
         "graphql",
         schema=graphene.Schema(query=Query, mutation=Mutation, types=[Flo]),
         graphiql=True,

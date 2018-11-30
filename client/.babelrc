@@ -4,6 +4,7 @@
         "relay",
         "module:fast-async",
         "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-proposal-do-expressions",
         [
             "babel-plugin-root-import",
             {
