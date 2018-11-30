@@ -41,6 +41,10 @@ class Result(graphene.ObjectType):
 
     name = graphene.NonNull(graphene.String)
     product = graphene.NonNull(Product)
+    id = graphene.NonNull(graphene.ID)
+
+    def resolve_id(self, info):
+        return id_field(typeName="Result", id=self.id)
 
 
 class Binding(graphene.ObjectType):
@@ -55,7 +59,7 @@ class Binding(graphene.ObjectType):
     product = graphene.Field(Product)
 
     def resolve_id(self, info):
-        return id_field(typeName="Product", id=self.id)
+        return id_field(typeName="Binding", id=self.id)
 
 
 class KVPair(graphene.ObjectType):
@@ -150,26 +154,35 @@ class Query(graphene.ObjectType):
         product10 = Product(id="10", source=factory7, position=Position(x=650, y=400))
 
         # bind the inputs to each factory
-        factory1.inputs = [Binding(product=product1)]
+        factory1.inputs = [Binding(id="1", product=product1)]
         factory2.inputs = []
-        factory3.inputs = [Binding(product=product3), Binding(product=product5)]
-        factory4.inputs = [Binding(product=product2)]
-        factory5.inputs = [Binding(product=product5), Binding(product=product8)]
+        factory3.inputs = [
+            Binding(id="2", product=product3),
+            Binding(id="3", product=product5),
+        ]
+        factory4.inputs = [Binding(id="4", product=product5)]
+        factory5.inputs = [
+            Binding(id="6", product=product6),
+            Binding(id="8", product=product8),
+        ]
         factory6.inputs = []
-        factory7.inputs = [Binding(product=product9)]
+        factory7.inputs = [Binding(id="7", product=product9)]
 
         # bind factory outputs
-        factory1.outputs = [Result(product=product2)]
+        factory1.outputs = [Result(id="1", product=product2)]
         factory2.outputs = [
-            Result(product=product1),
-            Result(product=product3),
-            Result(product=product5),
+            Result(id="2", product=product1),
+            Result(id="3", product=product3),
+            Result(id="4", product=product5),
         ]
-        factory3.outputs = [Result(product=product4)]
-        factory4.outputs = [Result(product=product6)]
-        factory5.outputs = [Result(product=product7)]
-        factory6.outputs = [Result(product=product8), Result(product=product9)]
-        factory7.outputs = [Result(product=product10)]
+        factory3.outputs = [Result(id="5", product=product4)]
+        factory4.outputs = [Result(id="6", product=product6)]
+        factory5.outputs = [Result(id="7", product=product7)]
+        factory6.outputs = [
+            Result(id="8", product=product8),
+            Result(id="9", product=product9),
+        ]
+        factory7.outputs = [Result(id="10", product=product10)]
 
         return Flo(
             id="2",
