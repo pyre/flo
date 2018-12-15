@@ -1,18 +1,29 @@
 // external imports
-import React from 'react'
+import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc } from '~/components'
-import { productColor, background, elementOutline, productFillEmpty } from '~/design'
+import {
+    productColor,
+    background,
+    elementOutline,
+    productFillEmpty,
+    productSelectedBorder,
+} from '~/design'
+import { DiagramContext } from '~/state'
 
 // the radius of the inner circle
 const innerRadius = 12
 const gutter = 15
 
-const Product = ({ product }) => (
-    <>
-        // render the outer circle
-        {/* {do {
+const Product = ({ product }) => {
+    // grab the diagram selected state
+    const { diagram, selectElements } = useContext(DiagramContext)
+
+    return (
+        <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
+            // render the outer circle
+            {/* {do {
             // render a full circle if there are both a source and at least one binding // if there is
             if (product.source && product.bindings.length > 0) {
                 ;<circle
@@ -46,31 +57,52 @@ const Product = ({ product }) => (
                     stroke={elementOutline}
                 />
             }
-        }} */}
-        // render some space between the fillter and the border
-        {/* <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} /> */}
-        // the primary fill of the product should designate progress
-        <circle
-            fill={productFillEmpty}
-            cx={product.position.x}
-            cy={product.position.y}
-            r={innerRadius}
-        />
-        <Arc
-            fill={productColor}
-            x={product.position.x}
-            y={product.position.y}
-            r={innerRadius}
-            theta1={0}
-            theta2={360 * product.progress}
-        />
-    </>
-)
+        }}
+            // render some space between the fillter and the border
+             <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} />
+        */}
+            // if this element is selected we should show a visual indicator
+            {diagram.selectedElements.includes(product.id) && (
+                <>
+                    <circle
+                        fill={productSelectedBorder}
+                        cx={product.position.x}
+                        cy={product.position.y}
+                        r={innerRadius + 6}
+                    />
+                    <circle
+                        fill={background}
+                        cx={product.position.x}
+                        cy={product.position.y}
+                        r={innerRadius + 2}
+                    />
+                </>
+            )}
+            // a full circle to designate the zero-progress state
+            <circle
+                fill={productFillEmpty}
+                cx={product.position.x}
+                cy={product.position.y}
+                r={innerRadius}
+            />
+            // the primary fill of the product should designate progress
+            <Arc
+                fill={productColor}
+                x={product.position.x}
+                y={product.position.y}
+                r={innerRadius}
+                theta1={0}
+                theta2={360 * product.progress}
+            />
+        </g>
+    )
+}
 
 export default createFragmentContainer(
     Product,
     graphql`
         fragment Product_product on Product {
+            id
             progress
             position {
                 x

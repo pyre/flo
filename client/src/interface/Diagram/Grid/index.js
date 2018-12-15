@@ -5,12 +5,13 @@ import { DiagramContext } from '~/state'
 import { useBrowserSize } from '~/hooks'
 import { range, round } from '~/utils'
 import styles from './styles'
+import { background } from '~/design'
 
 export default ({ style }) => {
     // get the size of the browser
     const browser = useBrowserSize()
     // and the current state of the diagram
-    const { diagram } = useContext(DiagramContext)
+    const { diagram, selectElements } = useContext(DiagramContext)
 
     // the number of vertical grid lines (plus one to cover the remainder)
     const nVertical = (Math.floor(browser.width / diagram.gridSize) + 1) / diagram.zoomLevel
@@ -25,7 +26,8 @@ export default ({ style }) => {
 
     // render the grid
     return (
-        <g {...{ ...styles.container, ...style }}>
+        <g {...{ ...styles.container, ...style }} onClick={() => selectElements()}>
+            <rect x={0} y={0} width={browser.width} height={browser.height} fill={background} />
             {range(nVertical + 4).map(i => {
                 // the shared x coordinate of the vertical lines
                 const x = round(leftEdge + i * diagram.gridSize, diagram.gridSize)

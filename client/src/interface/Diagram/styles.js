@@ -5,5 +5,4 @@ export const container = {
     flexGrow: 1,
     cursor: 'default',
     zIndex: 1,
-    background,
 }

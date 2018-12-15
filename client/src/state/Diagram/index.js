@@ -18,6 +18,7 @@ export const DiagramProvider = ({
         gridSize: 50,
         pan: { x: 0, y: 0 },
         zoomLevel: 1,
+        selectedElements: [],
         ...initialState,
     })
 
@@ -60,6 +61,12 @@ export const DiagramProvider = ({
             setState(state => ({
                 ...state,
                 zoomLevel: Math.max(state.zoomLevel - zoomStep, minZoom),
+            }))
+        },
+        selectElements(...elements) {
+            setState(state => ({
+                ...state,
+                selectedElements: elements,
             }))
         },
     }
