@@ -23,7 +23,6 @@ export default ({ style }) => {
     const bottomEdge = (-diagram.gridSize - diagram.pan.y) / diagram.zoomLevel
     const leftEdge = (-diagram.gridSize - diagram.pan.x) / diagram.zoomLevel
     const rightEdge = (browser.width + diagram.gridSize - diagram.pan.x) / diagram.zoomLevel
-    console.log(bottomEdge, leftEdge)
 
     // render the grid
     return (
