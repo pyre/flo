@@ -10,6 +10,11 @@ def id_field(typeName, id):
     return base64.b64encode(f"{typeName}:{id}".encode("utf-8")).decode("utf-8")
 
 
+def parse_id(id):
+    decoded = base64.b64decode(id).decode().split(":")
+    return {"id": decoded[1], "type": decoded[0]}
+
+
 class Node(graphene.Interface):
     """ An interface for objects that can be looked up by a globally unique ID"""
 
@@ -171,13 +176,19 @@ class Query(graphene.ObjectType):
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
     def resolve_node(self, info, id):
-        # for now just return a single flo made up of all of the products and factories we know of
-        return Flo(
-            id="2",
-            fixed=True,
-            factories=info.context.get("factories"),
-            products=info.context.get("products"),
-        )
+        # figure out the type and id of the argument
+        node_info = parse_id(id)
+        node_type = node_info["type"]
+        node_id = node_info["id"]
+
+        # the list of objects to look for
+
+        if node_type == "Flo":
+            targets = info.context["flos"]
+        elif node_type == "Product":
+            targets = info.context["products"]
+
+        return [target for target in targets if target.id == node_id][0]
 
 
 class Mutation(graphene.ObjectType):
@@ -240,31 +251,40 @@ class SchemaResolver(GraphQLView):
         ]
         factory7.outputs = [Result(id="10", product=product10)]
 
-        return {
-            "products": [
-                product1,
-                product2,
-                product3,
-                product4,
-                product5,
-                product6,
-                product7,
-                product8,
-                product9,
-                product10,
-                product11,
-                product12,
-            ],
-            "factories": [
-                factory1,
-                factory2,
-                factory3,
-                factory4,
-                factory5,
-                factory6,
-                factory7,
-            ],
-        }
+        # the list of products
+        products = [
+            product1,
+            product2,
+            product3,
+            product4,
+            product5,
+            product6,
+            product7,
+            product8,
+            product9,
+            product10,
+            product11,
+            product12,
+        ]
+
+        # the list of all factories
+        factories = [
+            factory1,
+            factory2,
+            factory3,
+            factory4,
+            factory5,
+            factory6,
+            factory7,
+        ]
+
+        flo1 = Flo(id="1", fixed=True, factories=factories, products=products)
+
+        # the list of all flos
+        flos = [flo1]
+
+        # make all the things available to resolvers
+        return {"products": products, "factories": factories, "flos": flos}
 
 
 # create a lightweight app to run
