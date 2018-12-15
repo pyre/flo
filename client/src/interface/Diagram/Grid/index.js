@@ -11,7 +11,7 @@ export default ({ style }) => {
     // get the size of the browser
     const browser = useBrowserSize()
     // and the current state of the diagram
-    const { diagram, selectElements } = useContext(DiagramContext)
+    const { diagram, clearSelection } = useContext(DiagramContext)
 
     // the number of vertical grid lines (plus one to cover the remainder)
     const nVertical = (Math.floor(browser.width / diagram.gridSize) + 1) / diagram.zoomLevel
@@ -23,11 +23,18 @@ export default ({ style }) => {
     const bottomEdge = (-diagram.gridSize - diagram.pan.y) / diagram.zoomLevel
     const leftEdge = (-diagram.gridSize - diagram.pan.x) / diagram.zoomLevel
     const rightEdge = (browser.width + diagram.gridSize - diagram.pan.x) / diagram.zoomLevel
+    console.log(bottomEdge, leftEdge)
 
     // render the grid
     return (
-        <g {...{ ...styles.container, ...style }} onClick={() => selectElements()}>
-            <rect x={0} y={0} width={browser.width} height={browser.height} fill={background} />
+        <g {...{ ...styles.container, ...style }} onClick={clearSelection}>
+            <rect
+                x={leftEdge}
+                y={bottomEdge}
+                width={browser.width}
+                height={browser.height + 100}
+                fill={background}
+            />
             {range(nVertical + 4).map(i => {
                 // the shared x coordinate of the vertical lines
                 const x = round(leftEdge + i * diagram.gridSize, diagram.gridSize)

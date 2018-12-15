@@ -69,6 +69,12 @@ export const DiagramProvider = ({
                 selectedElements: elements,
             }))
         },
+        clearSelection() {
+            setState(state => ({
+                ...state,
+                selectedElements: [],
+            }))
+        },
     }
 
     // return the children wrapped in a provider
