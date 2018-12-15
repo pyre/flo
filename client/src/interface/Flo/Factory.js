@@ -183,6 +183,7 @@ const Factory = ({
                 stroke={'none'}
                 strokeWidth={1}
                 onClick={() => selectElements(factory.id)}
+                style={{ cursor: 'pointer' }}
                 points={`${leftPoint.x},${leftPoint.y} ${topPoint.x},${topPoint.y} ${rightPoint.x},${rightPoint.y} ${
                     bottomPoint.x
                 },${bottomPoint.y}`}
