@@ -9,6 +9,8 @@ import {
     elementOutline,
     productFillEmpty,
     productSelectedBorder,
+    selectedBorderWidth,
+    selectedBorderGap,
 } from '~/design'
 import { DiagramContext } from '~/state'
 
@@ -68,13 +70,13 @@ const Product = ({ product }) => {
                         fill={productSelectedBorder}
                         cx={product.position.x}
                         cy={product.position.y}
-                        r={innerRadius + 6}
+                        r={innerRadius + selectedBorderWidth + selectedBorderGap}
                     />
                     <circle
                         fill={background}
                         cx={product.position.x}
                         cy={product.position.y}
-                        r={innerRadius + 2}
+                        r={innerRadius + selectedBorderGap}
                     />
                 </>
             )}

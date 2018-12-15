@@ -187,6 +187,8 @@ class Query(graphene.ObjectType):
             targets = info.context["flos"]
         elif node_type == "Product":
             targets = info.context["products"]
+        elif node_type == "Factory":
+            targets = info.context["factories"]
 
         return [target for target in targets if target.id == node_id][0]
 
