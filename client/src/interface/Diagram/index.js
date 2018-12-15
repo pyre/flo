@@ -15,8 +15,8 @@ export default () => {
     // we need a ref to track interactions with the diagram
     const elementRef = useRef(null)
 
-    // enable the zoom behavior
-    useZoomBehavior(elementRef)
+    // enable the mousewheel zoom behavior
+    // useZoomBehavior(elementRef)
     // and the drag behavior
     useDragBehavior(elementRef)
 

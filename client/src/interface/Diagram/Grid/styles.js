@@ -1,4 +1,4 @@
-import { gridStroke, background } from '~/colors'
+import { gridStroke, background } from '~/design'
 
 export default {
     container: {},

@@ -1,3 +1,4 @@
+// colors
 export const elementOutline = '#616161'
 export const factoryPrimary = '#FF9300'
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
-import { elementOutline, factoryPrimary } from '~/colors'
+import { elementOutline, factoryPrimary } from '~/design'
 
 /*
     Every factory component is responsible for rendering the following visual entities:

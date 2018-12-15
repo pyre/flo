@@ -3,7 +3,7 @@ import React from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc } from '~/components'
-import { productColor, background, elementOutline, productFillEmpty } from '~/colors'
+import { productColor, background, elementOutline, productFillEmpty } from '~/design'
 
 // the radius of the inner circle
 const innerRadius = 12

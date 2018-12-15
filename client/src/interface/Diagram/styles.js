@@ -1,4 +1,4 @@
-import { background } from '~/colors'
+import { background } from '~/design'
 
 export const container = {
     display: 'flex',
