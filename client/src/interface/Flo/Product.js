@@ -13,6 +13,7 @@ import {
     selectedBorderGap,
 } from '~/design'
 import { DiagramContext } from '~/state'
+import { moveProduct } from '~/mutations'
 
 // the radius of the inner circle
 const innerRadius = 12
@@ -23,7 +24,14 @@ const Product = ({ product }) => {
     const { diagram, selectElements } = useContext(DiagramContext)
 
     return (
-        <Draggable id={product.id} origin={product.position}>
+        <Draggable
+            id={product.id}
+            origin={product.position}
+            onMove={position => {
+                console.log('moving', product.id, position)
+                moveProduct({ product: product.id, ...position })
+            }}
+        >
             <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
                 // render the outer circle
                 {do {
@@ -33,7 +41,7 @@ const Product = ({ product }) => {
                     }
                     // if there is no source, then there is only bindings
                     else if (product.source) {
-                        // so render the arc tha leaves the gap on the right
+                        // so render the arc that leaves the gap on the right
                         ;<Arc
                             r={gutter + 1}
                             x={product.position.x}

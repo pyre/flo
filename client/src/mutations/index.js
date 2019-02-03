@@ -1,0 +1,1 @@
+export moveProduct from './moveProduct'
