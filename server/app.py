@@ -47,7 +47,7 @@ class Product(graphene.ObjectType):
         """
 
         # we have to check each factory
-        for factory in info.context.get("factories"):
+        for factory in info.context.get("factories").values():
             # a product could be referenced by any one of factory.outputs
             for result in factory.outputs:
                 # if the result is this product
@@ -63,7 +63,7 @@ class Product(graphene.ObjectType):
         bindings = []
 
         # we have to check each factory
-        for factory in info.context.get("factories"):
+        for factory in info.context.get("factories").values():
             # a product could be connected to any input of a product
             for binding in factory.inputs:
                 # if the binding references the product
@@ -146,11 +146,6 @@ class Flo(graphene.ObjectType):
     def resolve_id(self, info):
         return id_field(typeName="Flo", id=self.id)
 
-    def resolve_products(self, info):
-        # look up the products for the flo with id {self.id}
-
-        return [Product(id="1")]
-
 
 class BindingAssignment(graphene.InputObjectType):
     """
@@ -177,6 +172,35 @@ class AssignInputs(graphene.Mutation):
         return Factory()
 
 
+class MoveProduct(graphene.Mutation):
+    """
+    Move the location for a product to a specific x,y coordinate
+    """
+
+    class Arguments:
+        product = graphene.NonNull(graphene.ID)
+        x = graphene.NonNull(graphene.Int)
+        y = graphene.NonNull(graphene.Int)
+
+    product = graphene.Field(Product)
+
+    def mutate(self, info, product, x, y):
+        # find the product with the specific id and update its location
+        product_info = parse_id(product)
+        product_id = product_info["id"]
+
+        # the product we are updating
+        product = info.context["products"][product_id]
+
+        # update its position
+        position = product.position
+        position.x = x
+        position.y = y
+
+        # return the reference to the product
+        return MoveProduct(product=product)
+
+
 class Query(graphene.ObjectType):
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
@@ -195,103 +219,83 @@ class Query(graphene.ObjectType):
         elif node_type == "Factory":
             targets = info.context["factories"]
 
-        return [target for target in targets if target.id == node_id][0]
+        return [target for target in targets.values() if target.id == node_id][0]
 
 
 class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
+    moveProduct = MoveProduct.Field()
 
 
 class SchemaResolver(GraphQLView):
     def get_context(self):
-        # each factory of the canonical diagram (from top to bottom, left to right)
-        factory1 = Factory(id="1", position=Position(x=450, y=100))
-        factory2 = Factory(id="2", position=Position(x=250, y=150))
-        factory3 = Factory(id="3", position=Position(x=500, y=200))
-        factory4 = Factory(id="4", position=Position(x=350, y=250))
-        factory5 = Factory(id="5", position=Position(x=500, y=300))
-        factory6 = Factory(id="6", position=Position(x=350, y=400))
-        factory7 = Factory(id="7", position=Position(x=600, y=400))
-
-        # each product of the diagram
-        product1 = Product(id="1", position=Position(x=350, y=100), progress=0.5)
-        product2 = Product(id="2", position=Position(x=500, y=100), progress=0)
-        product3 = Product(id="3", position=Position(x=400, y=150), progress=0.75)
-        product4 = Product(id="4", position=Position(x=550, y=200), progress=0)
-        product5 = Product(id="5", position=Position(x=300, y=250), progress=1)
-        product6 = Product(id="6", position=Position(x=450, y=250), progress=1)
-        product7 = Product(id="7", position=Position(x=550, y=300), progress=0.9)
-        product8 = Product(id="8", position=Position(x=450, y=350), progress=1)
-        product9 = Product(id="9", position=Position(x=550, y=400), progress=1)
-        product10 = Product(id="10", position=Position(x=650, y=400), progress=0.5)
-        product11 = Product(id="11", position=Position(x=150, y=150), progress=1)
-        product12 = Product(id="12", position=Position(x=150, y=550), progress=1)
-
-        # bind the inputs to each factory
-        factory1.inputs = [Binding(id="1", product=product1)]
-        factory2.inputs = [Binding(id="11", product=product11)]
-        factory3.inputs = [
-            Binding(id="2", product=product3),
-            Binding(id="3", product=product5),
-        ]
-        factory4.inputs = [Binding(id="4", product=product5)]
-        factory5.inputs = [
-            Binding(id="6", product=product6),
-            Binding(id="8", product=product8),
-        ]
-        factory6.inputs = [Binding(id="12", product=product12)]
-        factory7.inputs = [Binding(id="7", product=product9)]
-
-        # bind factory outputs
-        factory1.outputs = [Result(id="1", product=product2)]
-        factory2.outputs = [
-            Result(id="2", product=product1),
-            Result(id="3", product=product3),
-            Result(id="4", product=product5),
-        ]
-        factory3.outputs = [Result(id="5", product=product4)]
-        factory4.outputs = [Result(id="6", product=product6)]
-        factory5.outputs = [Result(id="7", product=product7)]
-        factory6.outputs = [
-            Result(id="8", product=product8),
-            Result(id="9", product=product9),
-        ]
-        factory7.outputs = [Result(id="10", product=product10)]
-
-        # the list of products
-        products = [
-            product1,
-            product2,
-            product3,
-            product4,
-            product5,
-            product6,
-            product7,
-            product8,
-            product9,
-            product10,
-            product11,
-            product12,
-        ]
-
-        # the list of all factories
-        factories = [
-            factory1,
-            factory2,
-            factory3,
-            factory4,
-            factory5,
-            factory6,
-            factory7,
-        ]
-
-        flo1 = Flo(id="1", fixed=True, factories=factories, products=products)
-
-        # the list of all flos
-        flos = [flo1]
 
         # make all the things available to resolvers
         return {"products": products, "factories": factories, "flos": flos}
+
+
+factories = {
+    "1": Factory(id="1", position=Position(x=450, y=100)),
+    "2": Factory(id="2", position=Position(x=250, y=150)),
+    "3": Factory(id="3", position=Position(x=500, y=200)),
+    "4": Factory(id="4", position=Position(x=350, y=250)),
+    "5": Factory(id="5", position=Position(x=500, y=300)),
+    "6": Factory(id="6", position=Position(x=350, y=400)),
+    "7": Factory(id="7", position=Position(x=600, y=400)),
+}
+
+products = {
+    "1": Product(id="1", position=Position(x=350, y=100), progress=0.5),
+    "2": Product(id="2", position=Position(x=500, y=100), progress=0),
+    "3": Product(id="3", position=Position(x=400, y=150), progress=0.75),
+    "4": Product(id="4", position=Position(x=550, y=200), progress=0),
+    "5": Product(id="5", position=Position(x=300, y=250), progress=1),
+    "6": Product(id="6", position=Position(x=450, y=250), progress=1),
+    "7": Product(id="7", position=Position(x=550, y=300), progress=0.9),
+    "8": Product(id="8", position=Position(x=450, y=350), progress=1),
+    "9": Product(id="9", position=Position(x=550, y=400), progress=1),
+    "10": Product(id="10", position=Position(x=650, y=400), progress=0.5),
+    "11": Product(id="11", position=Position(x=150, y=150), progress=1),
+    "12": Product(id="12", position=Position(x=150, y=550), progress=1),
+}
+
+# bind the inputs to each factory
+factories["1"].inputs = [Binding(id="1", product=products["1"])]
+factories["2"].inputs = [Binding(id="11", product=products["11"])]
+factories["3"].inputs = [
+    Binding(id="2", product=products["3"]),
+    Binding(id="3", product=products["5"]),
+]
+factories["4"].inputs = [Binding(id="4", product=products["5"])]
+factories["5"].inputs = [
+    Binding(id="6", product=products["6"]),
+    Binding(id="8", product=products["8"]),
+]
+factories["6"].inputs = [Binding(id="12", product=products["12"])]
+factories["7"].inputs = [Binding(id="7", product=products["9"])]
+
+# bind factory outputs
+factories["1"].outputs = [Result(id="1", product=products["2"])]
+factories["2"].outputs = [
+    Result(id="2", product=products["1"]),
+    Result(id="3", product=products["3"]),
+    Result(id="4", product=products["5"]),
+]
+factories["3"].outputs = [Result(id="5", product=products["4"])]
+factories["4"].outputs = [Result(id="6", product=products["6"])]
+factories["5"].outputs = [Result(id="7", product=products["7"])]
+factories["6"].outputs = [
+    Result(id="8", product=products["8"]),
+    Result(id="9", product=products["9"]),
+]
+factories["7"].outputs = [Result(id="10", product=products["10"])]
+
+# the list of all flos
+flos = {
+    "1": Flo(
+        id="1", fixed=True, factories=factories.values(), products=products.values()
+    )
+}
 
 
 # create a lightweight app to run
