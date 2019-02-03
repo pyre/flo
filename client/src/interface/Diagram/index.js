@@ -1,6 +1,6 @@
 // external imports
 import { graphql } from 'react-relay'
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect, useLayoutEffect, useContext } from 'react'
 import SvgMatrix from 'svg-matrix'
 // local imports
 import { Query } from '~/components'
@@ -59,7 +59,7 @@ const useDragBehavior = elementRef => {
     const spacePressed = useKeyPress(' ')
 
     // track the movement of the mouse
-    const mouseDrag = useMouseDrag(elementRef.current, [spacePressed])
+    const mouseDrag = useMouseDrag(elementRef, [spacePressed])
 
     // the keyboard interactions have all sorts of effects
     useEffect(

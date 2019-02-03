@@ -24,18 +24,12 @@ export default (targetElement, trackers = []) => {
             delta: { x: 0, y: 0 },
             init: true,
         }
-
         // if there is a target element
-        if (targetElement) {
+        if (targetElement && targetElement.current) {
             // only set the state if the clicked element is a child of the one we were given
-            if (targetElement.contains(target)) {
+            if (targetElement.current.contains(target)) {
                 setState(newState)
             }
-        }
-        // if there isn't a target element
-        else {
-            // then we care about global state so set it to tru
-            setState(newState)
         }
     }
 
@@ -76,14 +70,10 @@ export default (targetElement, trackers = []) => {
     }
 
     // invoke the handler when the mouse moves
-    useEvent('mousemove', moveHandler, [
-        state.init,
-        state.currentLocation.x,
-        state.currentLocation.y,
-        ...trackers,
-    ])
+    useEvent('mousemove', moveHandler, [state.init, state.currentLocation.x, state.currentLocation.y, ...trackers])
+
     // add event listeners
-    useEvent('mousedown', downHandler, [targetElement])
+    useEvent('mousedown', downHandler, [state.init, targetElement])
     useEvent('mouseup', upHandler, [state.init, targetElement])
 
     // return the delta to the caller
