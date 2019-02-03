@@ -146,6 +146,11 @@ class Flo(graphene.ObjectType):
     def resolve_id(self, info):
         return id_field(typeName="Flo", id=self.id)
 
+    def resolve_products(self, info):
+        # look up the products for the flo with id {self.id}
+
+        return [Product(id="1")]
+
 
 class BindingAssignment(graphene.InputObjectType):
     """
