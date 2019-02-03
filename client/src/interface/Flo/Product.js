@@ -27,10 +27,7 @@ const Product = ({ product }) => {
         <Draggable
             id={product.id}
             origin={product.position}
-            onMove={position => {
-                console.log('moving', product.id, position)
-                moveProduct({ product: product.id, ...position })
-            }}
+            onMove={position => moveProduct({ product: product.id, ...position })}
         >
             <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
                 // render the outer circle
