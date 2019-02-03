@@ -201,6 +201,35 @@ class MoveProduct(graphene.Mutation):
         return MoveProduct(product=product)
 
 
+class MoveFactory(graphene.Mutation):
+    """
+    Move the location for a product to a specific x,y coordinate
+    """
+
+    class Arguments:
+        factory = graphene.NonNull(graphene.ID)
+        x = graphene.NonNull(graphene.Int)
+        y = graphene.NonNull(graphene.Int)
+
+    factory = graphene.Field(Factory)
+
+    def mutate(self, info, factory, x, y):
+        # find the factory with the specific id and update its location
+        factory_info = parse_id(factory)
+        factory_id = factory_info["id"]
+
+        # the factory we are updating
+        factory = info.context["factories"][factory_id]
+
+        # update its position
+        position = factory.position
+        position.x = x
+        position.y = y
+
+        # return the reference to the factory
+        return MoveFactory(factory=factory)
+
+
 class Query(graphene.ObjectType):
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
@@ -225,6 +254,7 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
     moveProduct = MoveProduct.Field()
+    moveFactory = MoveFactory.Field()
 
 
 class SchemaResolver(GraphQLView):

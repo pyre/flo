@@ -11,6 +11,8 @@ import {
     factorySelectedBorder,
 } from '~/design'
 import { DiagramContext } from '~/state'
+import { Draggable } from '~/components'
+import { moveFactory } from '~/mutations'
 
 /*
     Every factory component is responsible for rendering the following visual entities:
@@ -72,7 +74,11 @@ const Factory = ({
     const [id] = diagram.selectedElements
 
     return (
-        <>
+        <Draggable
+            id={factory.id}
+            origin={{ x, y }}
+            onMove={position => moveFactory({ factory: factory.id, ...position })}
+        >
             // there is a line going from one square to the other
             <line stroke={elementOutline} strokeWidth={1} x1={x + armLength} y1={y} y2={y} x2={x - armLength} />
             // render the lines joining the left square to each of the inputs
@@ -188,7 +194,7 @@ const Factory = ({
                     bottomPoint.x
                 },${bottomPoint.y}`}
             />
-        </>
+        </Draggable>
     )
 }
 
