@@ -26,6 +26,18 @@ class Position(graphene.ObjectType):
     y = graphene.Int()
 
 
+class AttributeKind(graphene.Enum):
+    String = "String"
+    Int = "Int"
+    Float = "Float"
+
+
+class Attribute(graphene.ObjectType):
+    name = graphene.String()
+    value = graphene.String()
+    kind = graphene.Field(AttributeKind)
+
+
 class Product(graphene.ObjectType):
     """ A concrete result of running a specific factory """
 
@@ -37,6 +49,7 @@ class Product(graphene.ObjectType):
     bindings = graphene.NonNull(graphene.List(graphene.NonNull(lambda: Binding)))
     position = graphene.NonNull(Position)
     progress = graphene.NonNull(graphene.Float)
+    attributes = graphene.NonNull(graphene.List(graphene.NonNull(Attribute)))
 
     def resolve_id(self, info):
         return id_field(typeName="Product", id=self.id)
@@ -129,6 +142,7 @@ class Factory(graphene.ObjectType):
     outputs = graphene.NonNull(graphene.List(graphene.NonNull(Result)))
     config = graphene.NonNull(graphene.List(graphene.NonNull(KVPair)))
     position = graphene.NonNull(Position)
+    attributes = graphene.NonNull(graphene.List(graphene.NonNull(Attribute)))
 
     def resolve_id(self, info):
         return id_field(typeName="Factory", id=self.id)
@@ -265,28 +279,154 @@ class SchemaResolver(GraphQLView):
 
 
 factories = {
-    "1": Factory(id="1", position=Position(x=450, y=100)),
-    "2": Factory(id="2", position=Position(x=250, y=150)),
-    "3": Factory(id="3", position=Position(x=500, y=200)),
-    "4": Factory(id="4", position=Position(x=350, y=250)),
-    "5": Factory(id="5", position=Position(x=500, y=300)),
-    "6": Factory(id="6", position=Position(x=350, y=400)),
-    "7": Factory(id="7", position=Position(x=600, y=400)),
+    "1": Factory(
+        id="1",
+        position=Position(x=450, y=100),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "2": Factory(
+        id="2",
+        position=Position(x=250, y=150),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "3": Factory(
+        id="3",
+        position=Position(x=500, y=200),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "4": Factory(
+        id="4",
+        position=Position(x=350, y=250),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "5": Factory(
+        id="5",
+        position=Position(x=500, y=300),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "6": Factory(
+        id="6",
+        position=Position(x=350, y=400),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "7": Factory(
+        id="7",
+        position=Position(x=600, y=400),
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
 }
 
 products = {
-    "1": Product(id="1", position=Position(x=350, y=100), progress=0.5),
-    "2": Product(id="2", position=Position(x=500, y=100), progress=0),
-    "3": Product(id="3", position=Position(x=400, y=150), progress=0.75),
-    "4": Product(id="4", position=Position(x=550, y=200), progress=0),
-    "5": Product(id="5", position=Position(x=300, y=250), progress=1),
-    "6": Product(id="6", position=Position(x=450, y=250), progress=1),
-    "7": Product(id="7", position=Position(x=550, y=300), progress=0.9),
-    "8": Product(id="8", position=Position(x=450, y=350), progress=1),
-    "9": Product(id="9", position=Position(x=550, y=400), progress=1),
-    "10": Product(id="10", position=Position(x=650, y=400), progress=0.5),
-    "11": Product(id="11", position=Position(x=150, y=150), progress=1),
-    "12": Product(id="12", position=Position(x=150, y=550), progress=1),
+    "1": Product(
+        id="1",
+        position=Position(x=350, y=100),
+        progress=0.5,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "2": Product(
+        id="2",
+        position=Position(x=500, y=100),
+        progress=0,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "3": Product(
+        id="3",
+        position=Position(x=400, y=150),
+        progress=0.75,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "4": Product(
+        id="4",
+        position=Position(x=550, y=200),
+        progress=0,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "5": Product(
+        id="5",
+        position=Position(x=300, y=250),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "6": Product(
+        id="6",
+        position=Position(x=450, y=250),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "7": Product(
+        id="7",
+        position=Position(x=550, y=300),
+        progress=0.9,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "8": Product(
+        id="8",
+        position=Position(x=450, y=350),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "9": Product(
+        id="9",
+        position=Position(x=550, y=400),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "10": Product(
+        id="10",
+        position=Position(x=650, y=400),
+        progress=0.5,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "11": Product(
+        id="11",
+        position=Position(x=150, y=150),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
+    "12": Product(
+        id="12",
+        position=Position(x=150, y=550),
+        progress=1,
+        attributes=[
+            Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
+        ],
+    ),
 }
 
 # bind the inputs to each factory
