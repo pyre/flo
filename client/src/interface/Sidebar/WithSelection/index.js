@@ -4,13 +4,14 @@ import { graphql } from 'react-relay'
 // local imports
 import { DiagramContext } from '~/state'
 import { Query } from '~/components'
+import SelectedProduct from './SelectedProduct'
+import SelectedFactory from './SelectedFactory'
 
 const SingleSelectionQuery = graphql`
     query WithSelectionSingleQuery($id: ID!) {
         node(id: $id) {
-            ... on Product {
-                progress
-            }
+            __typename
+            ...SelectedProduct_product
         }
     }
 `
@@ -24,7 +25,13 @@ export default () => {
 
     return (
         <Query query={SingleSelectionQuery} variables={{ id }} loadingState={'loading'}>
-            {({ node }) => <div>progress: {node.progress}</div>}
+            {({ node }) => do {
+                if (node.__typename === 'Product') {
+                    ;<SelectedProduct product={node} />
+                } else if (node.__typename === 'Factory') {
+                    ;<SelectedFactory factory={node} />
+                }
+            }}
         </Query>
     )
 }
