@@ -12,6 +12,7 @@ const SingleSelectionQuery = graphql`
         node(id: $id) {
             __typename
             ...SelectedProduct_product
+            ...SelectedFactory_factory
         }
     }
 `

@@ -7,7 +7,7 @@ const SelectedFactory = ({ factory }) => <div>selected factory</div>
 export default createFragmentContainer(
     SelectedFactory,
     graphql`
-        fragment SelectedFactory_Factory on Factory {
+        fragment SelectedFactory_factory on Factory {
             name
             attributes {
                 value
