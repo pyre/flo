@@ -3,3 +3,4 @@ client/dist/
 client/.cache/
 client/schema.graphql
 **/__generated__/**
+**/__pycache__/**

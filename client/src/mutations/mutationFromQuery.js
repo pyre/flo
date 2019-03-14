@@ -4,6 +4,7 @@ import { commitMutation } from 'react-relay'
 import env from '~/environment'
 
 const mutationFromQuery = query => (variables, config) => {
+    console.log(config)
     // otherwise return promise that can be awaited :)
     return new Promise((resolve, reject) => {
         commitMutation(env, {

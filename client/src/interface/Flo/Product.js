@@ -13,6 +13,7 @@ import {
     selectedBorderGap,
 } from '~/design'
 import { DiagramContext } from '~/state'
+import { mutate } from '~/utils'
 import { moveProduct } from '~/mutations'
 
 // the radius of the inner circle
@@ -27,7 +28,30 @@ const Product = ({ product }) => {
         <Draggable
             id={product.id}
             origin={product.position}
-            onMove={position => moveProduct({ product: product.id, ...position })}
+            onMove={position => mutate({
+                query: graphql`
+                    mutation ProductMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
+                        moveProduct(product: $product, x: $x, y: $y) {
+                            product {
+                                id
+                                position {
+                                    x
+                                    y
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: { product: product.id, ...position },
+                optimisticResponse:  {
+                    moveProduct: {
+                        product: {
+                            id: product.id,
+                            position,
+                        }
+                    }
+                }
+            })}
         >
             <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
                 // render the outer circle
