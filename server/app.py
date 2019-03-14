@@ -273,7 +273,7 @@ class UpdateFactoryConfig(graphene.Mutation):
         factory = info.context["factories"][factory_id]
 
         # find the config object
-        target = [hedgehog for factory.config if hedgehog.key  == config.key][0]
+        target = [hedgehog for hedgehog in factory.config if hedgehog.key  == config.key][0]
 
         # update it
         target.value = config.value
@@ -307,7 +307,7 @@ class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
     moveProduct = MoveProduct.Field()
     moveFactory = MoveFactory.Field()
-    updateFactoryInput = UpdateFactoryInput.Field()
+    updateFactoryInput = UpdateFactoryConfig.Field()
 
 
 class SchemaResolver(GraphQLView):
