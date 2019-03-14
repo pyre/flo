@@ -11,7 +11,7 @@ import {
     factorySelectedBorder,
 } from '~/design'
 import { DiagramContext } from '~/state'
-import { Draggable } from '~/components'
+import { Draggable, FactoryDiamond } from '~/components'
 import { mutate } from '~/utils'
 
 /*
@@ -209,16 +209,7 @@ const Factory = ({
                     }
                 })}
             >
-                <polygon
-                    fill={factoryPrimary}
-                    stroke={'none'}
-                    strokeWidth={1}
-                    onClick={() => selectElements(factory.id)}
-                    style={{ cursor: 'pointer' }}
-                    points={`${leftPoint.x},${leftPoint.y} ${topPoint.x},${topPoint.y} ${rightPoint.x},${rightPoint.y} ${
-                        bottomPoint.x
-                    },${bottomPoint.y}`}
-                />
+                <FactoryDiamond x={x} y={y} center={true}/>
             </Draggable>
         </>
     )

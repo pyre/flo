@@ -125,6 +125,7 @@ class KVPair(graphene.ObjectType):
 
     key = graphene.NonNull(graphene.String)
     value = graphene.NonNull(graphene.String)
+    kind = graphene.NonNull(graphene.String)
 
 
 class KVPairInput(graphene.InputObjectType):
@@ -324,6 +325,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "2": Factory(
         id="2",
@@ -331,6 +337,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "3": Factory(
         id="3",
@@ -338,6 +349,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "4": Factory(
         id="4",
@@ -345,6 +361,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "5": Factory(
         id="5",
@@ -352,6 +373,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "6": Factory(
         id="6",
@@ -359,6 +385,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
     "7": Factory(
         id="7",
@@ -366,6 +397,11 @@ factories = {
         attributes=[
             Attribute(name="favoriteNumber", value="5", kind=AttributeKind.Int)
         ],
+        config=[
+            KVPair(key="size", value="1", kind="int"),
+            KVPair(key="name", value="hello", kind="string"),
+            KVPair(key="hello", value="1", kind="int"),
+        ]
     ),
 }
 

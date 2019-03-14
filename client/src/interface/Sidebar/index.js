@@ -1,6 +1,6 @@
 // external imports
 import React, { useContext } from 'react'
-import { FlexColumn, FlexRow, SecondaryButton } from 'quark-web'
+import { css } from 'glamor'
 // local imports
 import * as styles from './styles'
 import { DiagramContext } from '~/state'
@@ -11,8 +11,8 @@ export default () => {
     const { diagram } = useContext(DiagramContext)
 
     return (
-        <FlexColumn style={styles.container}>
+        <div {...css(styles.container)}>
             {diagram.selectedElements.length === 0 ? <NoSelection /> : <WithSelection />}
-        </FlexColumn>
+        </div>
     )
 }

@@ -1,8 +1,16 @@
 // external imports
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { css } from 'glamor'
+// local imports
+import { FactoryDiamond } from '~/components'
 
-const SelectedFactory = ({ factory }) => <div>selected factory</div>
+const SelectedFactory = ({ factory }) => <div {...css({
+    display: 'flex',
+    flexDirection: 'column',
+})}>
+    <FactoryDiamond/>
+</div>
 
 export default createFragmentContainer(
     SelectedFactory,
