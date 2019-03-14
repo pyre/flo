@@ -127,6 +127,13 @@ class KVPair(graphene.ObjectType):
     value = graphene.NonNull(graphene.String)
 
 
+class KVPairInput(graphene.InputObjectType):
+    """ A generic key/value object to store shapeless meta data and config """
+
+    key = graphene.NonNull(graphene.String)
+    value = graphene.NonNull(graphene.String)
+
+
 class Factory(graphene.ObjectType):
     """
     The primary actor of our flows. Responsible for taking data in that
@@ -244,6 +251,37 @@ class MoveFactory(graphene.Mutation):
         return MoveFactory(factory=factory)
 
 
+class UpdateFactoryConfig(graphene.Mutation):
+    """
+    Update the config of a factory
+    """
+
+    class Arguments:
+        factory = graphene.NonNull(graphene.ID)
+        config = graphene.NonNull(KVPairInput)
+
+    factory = graphene.Field(Factory)
+
+    def mutate(self, info, factory, config):
+        # find the factory with the specific id and update its location
+        factory_info = parse_id(factory)
+        factory_id = factory_info["id"]
+
+        # the validation step ensures that {factory} and {config} aren't None
+
+        # the factory we are updating
+        factory = info.context["factories"][factory_id]
+
+        # find the config object
+        target = [hedgehog for factory.config if hedgehog.key  == config.key][0]
+
+        # update it
+        target.value = config.value
+
+        # return the factory so we resolve against the updated record
+        return UpdateFactoryConfig(factory=factory)
+
+
 class Query(graphene.ObjectType):
     node = graphene.Field(Node, id=graphene.NonNull(graphene.ID))
 
@@ -269,6 +307,7 @@ class Mutation(graphene.ObjectType):
     assignInputs = AssignInputs.Field()
     moveProduct = MoveProduct.Field()
     moveFactory = MoveFactory.Field()
+    updateFactoryInput = UpdateFactoryInput.Field()
 
 
 class SchemaResolver(GraphQLView):
