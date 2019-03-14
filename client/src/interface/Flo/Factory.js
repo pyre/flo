@@ -12,7 +12,7 @@ import {
 } from '~/design'
 import { DiagramContext } from '~/state'
 import { Draggable } from '~/components'
-import { moveFactory } from '~/mutations'
+import { mutate } from '~/utils'
 
 /*
     Every factory component is responsible for rendering the following visual entities:
@@ -77,7 +77,30 @@ const Factory = ({
         <Draggable
             id={factory.id}
             origin={{ x, y }}
-            onMove={position => moveFactory({ factory: factory.id, ...position })}
+            onMove={position => mutate({
+                query: graphql`
+                    mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
+                        moveFactory(factory: $factory, x: $x, y: $y) {
+                            factory {
+                                id
+                                position {
+                                    x
+                                    y
+                                }
+                            }
+                        }
+                    }
+                `,
+                variables: { factory: factory.id, ...position },
+                optimisticResponse:  {
+                    moveFactory: {
+                        factory: {
+                            id: factory.id,
+                            position,
+                        }
+                    }
+                }
+            })}
         >
             // there is a line going from one square to the other
             <line stroke={elementOutline} strokeWidth={1} x1={x + armLength} y1={y} y2={y} x2={x - armLength} />

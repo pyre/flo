@@ -14,7 +14,6 @@ import {
 } from '~/design'
 import { DiagramContext } from '~/state'
 import { mutate } from '~/utils'
-import { moveProduct } from '~/mutations'
 
 // the radius of the inner circle
 const innerRadius = 12
