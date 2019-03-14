@@ -55,7 +55,7 @@ const Product = ({ product }) => {
             <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
                 // render the outer circle
                 {do {
-                    // render a full circle if there are both a source and at least one binding // if there is
+                    // render a full circle if there are both a source and at least one binding
                     if (product.source && product.bindings.length > 0) {
                         ;<circle fill={elementOutline} cx={product.position.x} cy={product.position.y} r={gutter + 1} />
                     }

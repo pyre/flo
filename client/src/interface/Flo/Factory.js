@@ -74,34 +74,7 @@ const Factory = ({
     const [id] = diagram.selectedElements
 
     return (
-        <Draggable
-            id={factory.id}
-            origin={{ x, y }}
-            onMove={position => mutate({
-                query: graphql`
-                    mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
-                        moveFactory(factory: $factory, x: $x, y: $y) {
-                            factory {
-                                id
-                                position {
-                                    x
-                                    y
-                                }
-                            }
-                        }
-                    }
-                `,
-                variables: { factory: factory.id, ...position },
-                optimisticResponse:  {
-                    moveFactory: {
-                        factory: {
-                            id: factory.id,
-                            position,
-                        }
-                    }
-                }
-            })}
-        >
+       <>
             // there is a line going from one square to the other
             <line stroke={elementOutline} strokeWidth={1} x1={x + armLength} y1={y} y2={y} x2={x - armLength} />
             // render the lines joining the left square to each of the inputs
@@ -206,18 +179,48 @@ const Factory = ({
                     />
                 </>
             )}
-            // the center of a factory is the diamond used as the target for clicks
-            <polygon
-                fill={factoryPrimary}
-                stroke={'none'}
-                strokeWidth={1}
-                onClick={() => selectElements(factory.id)}
-                style={{ cursor: 'pointer' }}
-                points={`${leftPoint.x},${leftPoint.y} ${topPoint.x},${topPoint.y} ${rightPoint.x},${rightPoint.y} ${
-                    bottomPoint.x
-                },${bottomPoint.y}`}
-            />
-        </Draggable>
+
+            // the center of a factory is the diamond used as the target for clicks 
+            <Draggable
+                id={factory.id}
+                origin={{ x, y }}
+                onMove={position => mutate({
+                    query: graphql`
+                        mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
+                            moveFactory(factory: $factory, x: $x, y: $y) {
+                                factory {
+                                    id
+                                    position {
+                                        x
+                                        y
+                                    }
+                                }
+                            }
+                        }
+                    `,
+                    variables: { factory: factory.id, ...position },
+                    optimisticResponse:  {
+                        moveFactory: {
+                            factory: {
+                                id: factory.id,
+                                position,
+                            }
+                        }
+                    }
+                })}
+            >
+                <polygon
+                    fill={factoryPrimary}
+                    stroke={'none'}
+                    strokeWidth={1}
+                    onClick={() => selectElements(factory.id)}
+                    style={{ cursor: 'pointer' }}
+                    points={`${leftPoint.x},${leftPoint.y} ${topPoint.x},${topPoint.y} ${rightPoint.x},${rightPoint.y} ${
+                        bottomPoint.x
+                    },${bottomPoint.y}`}
+                />
+            </Draggable>
+        </>
     )
 }
 
