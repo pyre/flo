@@ -2,21 +2,19 @@
 import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
-import { Arc, Draggable } from '~/components'
+import { Arc, Draggable, Product as ProductCircle } from '~/components'
 import {
-    productColor,
     background,
     elementOutline,
-    productFillEmpty,
     productSelectedBorder,
     selectedBorderWidth,
     selectedBorderGap,
 } from '~/design'
 import { DiagramContext } from '~/state'
 import { mutate } from '~/utils'
+import { Radius } from '~/components/Product'
 
 // the radius of the inner circle
-const innerRadius = 12
 const gutter = 15
 
 const Product = ({ product }) => {
@@ -93,26 +91,20 @@ const Product = ({ product }) => {
                             fill={productSelectedBorder}
                             cx={product.position.x}
                             cy={product.position.y}
-                            r={innerRadius + selectedBorderWidth + selectedBorderGap}
+                            r={Radius + selectedBorderWidth + selectedBorderGap}
                         />
                         <circle
                             fill={background}
                             cx={product.position.x}
                             cy={product.position.y}
-                            r={innerRadius + selectedBorderGap}
+                            r={Radius + selectedBorderGap}
                         />
                     </>
                 )}
-                // a full circle to designate the zero-progress state
-                <circle fill={productFillEmpty} cx={product.position.x} cy={product.position.y} r={innerRadius} />
-                // the primary fill of the product should designate progress
-                <Arc
-                    fill={productColor}
+                <ProductCircle 
                     x={product.position.x}
                     y={product.position.y}
-                    r={innerRadius}
-                    theta1={0}
-                    theta2={360 * product.progress}
+                    progress={product.progress}
                 />
             </g>
         </Draggable>

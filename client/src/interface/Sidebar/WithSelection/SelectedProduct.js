@@ -3,6 +3,7 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 // local imports
+import { Product } from '~/components'
 import Header from './Header'
 
 const SelectedProduct = ({ product }) => (
@@ -11,6 +12,7 @@ const SelectedProduct = ({ product }) => (
         flexDirection: 'column',
     })}>
         <Header
+            icon={<Product progress={product.progress}/>}
             title={product.name}
             subtitle={product.description}
         />

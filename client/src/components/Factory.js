@@ -1,5 +1,6 @@
 // external import
 import React from 'react'
+import { css } from 'glamor'
 // local imports
 import {
     factoryPrimary,
@@ -36,12 +37,12 @@ const Factory = ({diamondLength=12, x, y, style, center, selected, ...unused }) 
 
     return (
         <svg
-            style={{
+            {...css({
                 width: 2 * diamondLength,
                 height: 2 * diamondLength,
                 overflow: 'visible',
                 ...style,
-            }}
+            })}
             x={x}
             y={y}
             {...unused}
