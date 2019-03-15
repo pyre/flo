@@ -209,7 +209,7 @@ const Factory = ({
                     }
                 })}
             >
-                <FactoryDiamond x={x} y={y} center={true}/>
+                <FactoryDiamond x={x} y={y} center={true} style={{ cursor: 'pointer' }}/>
             </Draggable>
         </>
     )

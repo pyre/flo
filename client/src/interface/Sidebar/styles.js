@@ -7,4 +7,6 @@ export const container = {
     backgroundColor: 'white',
     borderLeftWidth: 1,
     borderColor: gridStroke,
+    padding: 20,
+    boxSizing: 'border-box',
 }

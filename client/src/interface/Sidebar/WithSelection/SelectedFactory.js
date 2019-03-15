@@ -4,13 +4,45 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 // local imports
 import { FactoryDiamond } from '~/components'
+import { gridStroke } from '~/design'
 
-const SelectedFactory = ({ factory }) => <div {...css({
-    display: 'flex',
-    flexDirection: 'column',
-})}>
-    <FactoryDiamond/>
-</div>
+const SelectedFactory = ({ factory }) => (
+    <div {...css({
+        display: 'flex',
+        flexDirection: 'column',
+    })}>
+        <div {...css({
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingBottom: 12,
+            borderBottom: `1px solid ${gridStroke}`,
+        })}>
+            <FactoryDiamond style={{ marginRight: 14 }} />
+            <div {...css({
+                display: 'flex',
+                flexDirection: 'column',
+            })}>
+                <div>
+                    {factory.name}
+                </div>
+                <div>
+                    {factory.inputs.length > 0 && (
+                        `${factory.inputs.length} inputs`
+                    )}
+
+                    {factory.inputs.length > 0 && factory.outputs.length > 0 && (
+                        <span {...css({marginLeft: 4, marginRight: 2,})}>·</span>
+                    )}
+                    
+                    {factory.outputs.length > 0 && (
+                        `${factory.outputs.length} outputs`
+                    )} 
+                </div>
+            </div>
+        </div>
+    </div>
+)
 
 export default createFragmentContainer(
     SelectedFactory,
@@ -20,6 +52,12 @@ export default createFragmentContainer(
             attributes {
                 value
                 kind
+            }
+            inputs {
+                name
+            }
+            outputs {
+                name
             }
         }
     `
