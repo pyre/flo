@@ -11,7 +11,7 @@ import {
     factorySelectedBorder,
 } from '~/design'
 import { DiagramContext } from '~/state'
-import { Draggable, FactoryDiamond } from '~/components'
+import { Draggable, Factory as FactoryDiamond } from '~/components'
 import { mutate } from '~/utils'
 
 /*

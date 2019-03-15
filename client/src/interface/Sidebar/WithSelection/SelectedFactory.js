@@ -4,7 +4,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 import pluralize from 'pluralize'
 // local imports
-import { FactoryDiamond } from '~/components'
+import { Factory } from '~/components'
 import { gridStroke } from '~/design'
 
 const SelectedFactory = ({ factory }) => (
@@ -19,7 +19,7 @@ const SelectedFactory = ({ factory }) => (
             paddingBottom: 12,
             borderBottom: `1px solid ${gridStroke}`,
         })}>
-            <FactoryDiamond style={{ marginRight: 14 }} />
+            <Factory style={{ marginRight: 14 }} />
             <div {...css({
                 display: 'flex',
                 flexDirection: 'column',
