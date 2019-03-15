@@ -49,29 +49,11 @@ const Factory = ({
         y: y,
     }
 
-    // the locations for the 4 points of the rectangle
-    const leftPoint = {
-        x: x - diamondLength,
-        y,
-    }
-    const topPoint = {
-        x,
-        y: y - diamondLength,
-    }
-    const rightPoint = {
-        x: x + diamondLength,
-        y,
-    }
-    const bottomPoint = {
-        y: y + diamondLength,
-        x,
-    }
-
     // grab the diagram state
-    const { diagram, selectElements } = useContext(DiagramContext)
+    const { diagram } = useContext(DiagramContext)
 
     // pull out the selected element
-    const [id] = diagram.selectedElements
+    const [ selectedID ] = diagram.selectedElements
 
     return (
        <>
@@ -143,34 +125,6 @@ const Factory = ({
                     height={2 * squareLength}
                 />
             )}
-            // if the factory is selected
-            {factory.id === id && (
-                <>
-                    // the outer highlight for selected factory indicator
-                    <polygon
-                        fill={factorySelectedBorder}
-                        stroke={'none'}
-                        strokeWidth={1}
-                        points={`
-                            ${leftPoint.x - selectedBorderGap - selectedBorderWidth},${leftPoint.y}
-                            ${topPoint.x},${topPoint.y - selectedBorderGap - selectedBorderWidth}
-                            ${rightPoint.x + selectedBorderGap + selectedBorderWidth}, ${rightPoint.y}
-                            ${bottomPoint.x},${bottomPoint.y + selectedBorderGap + selectedBorderWidth}
-                        `}
-                    />
-                    <polygon
-                        fill={background}
-                        stroke={'none'}
-                        strokeWidth={1}
-                        points={`
-                            ${leftPoint.x - selectedBorderGap},${leftPoint.y}
-                            ${topPoint.x},${topPoint.y - selectedBorderGap}
-                            ${rightPoint.x + selectedBorderGap}, ${rightPoint.y}
-                            ${bottomPoint.x},${bottomPoint.y + selectedBorderGap}
-                        `}
-                    />
-                </>
-            )}
 
             // the center of a factory is the diamond used as the target for clicks 
             <Draggable
@@ -201,7 +155,7 @@ const Factory = ({
                     }
                 })}
             >
-                <FactoryDiamond x={x} y={y} center={true} style={{ cursor: 'pointer' }}/>
+                <FactoryDiamond x={x} y={y} center={true} style={{ cursor: 'pointer' }} selected={factory.id === selectedID} />
             </Draggable>
         </>
     )

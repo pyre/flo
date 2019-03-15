@@ -6,28 +6,18 @@ import pluralize from 'pluralize'
 // local imports
 import { Factory } from '~/components'
 import { gridStroke } from '~/design'
+import Header from './Header'
 
 const SelectedFactory = ({ factory }) => (
     <div {...css({
         display: 'flex',
         flexDirection: 'column',
     })}>
-        <div {...css({
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingBottom: 12,
-            borderBottom: `1px solid ${gridStroke}`,
-        })}>
-            <Factory style={{ marginRight: 14 }} />
-            <div {...css({
-                display: 'flex',
-                flexDirection: 'column',
-            })}>
-                <div>
-                    {factory.name}
-                </div>
-                <div>
+        <Header
+            icon={<Factory style={{ marginRight: 14 }} />}
+            title={factory.name}
+            subtitle={
+                <>
                     {factory.inputs.length > 0 && (
                         `${factory.inputs.length} ${pluralize("inputs", factory.inputs.length)}`
                     )}
@@ -39,9 +29,9 @@ const SelectedFactory = ({ factory }) => (
                     {factory.outputs.length > 0 && (
                         `${factory.outputs.length} ${pluralize("outputs", factory.outputs.length)}`
                     )} 
-                </div>
-            </div>
-        </div>
+                </>
+            }
+        />
     </div>
 )
 

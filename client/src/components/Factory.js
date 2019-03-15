@@ -3,9 +3,13 @@ import React from 'react'
 // local imports
 import {
     factoryPrimary,
+    factorySelectedBorder,
+    selectedBorderGap,
+    selectedBorderWidth,
+    background,
 } from '~/design'
 
-const FactoryDiamond = ({diamondLength=12, x, y, style, center, ...unused }) => {
+const Factory = ({diamondLength=12, x, y, style, center, selected, ...unused }) => {
     // the locations for the 4 points of the rectangle
     const leftPoint = {
         x: 0,
@@ -35,12 +39,41 @@ const FactoryDiamond = ({diamondLength=12, x, y, style, center, ...unused }) => 
             style={{
                 width: 2 * diamondLength,
                 height: 2 * diamondLength,
+                overflow: 'visible',
                 ...style,
             }}
             x={x}
             y={y}
             {...unused}
         >
+            // if the factory is selected
+            {selected && (
+                <>
+                    // the outer highlight for selected factory indicator
+                    <polygon
+                        fill={factorySelectedBorder}
+                        stroke={'none'}
+                        strokeWidth={1}
+                        points={`
+                            ${leftPoint.x - selectedBorderGap - selectedBorderWidth},${leftPoint.y}
+                            ${topPoint.x},${topPoint.y - selectedBorderGap - selectedBorderWidth}
+                            ${rightPoint.x + selectedBorderGap + selectedBorderWidth}, ${rightPoint.y}
+                            ${bottomPoint.x},${bottomPoint.y + selectedBorderGap + selectedBorderWidth}
+                        `}
+                    />
+                    <polygon
+                        fill={background}
+                        stroke={'none'}
+                        strokeWidth={1}
+                        points={`
+                            ${leftPoint.x - selectedBorderGap},${leftPoint.y}
+                            ${topPoint.x},${topPoint.y - selectedBorderGap}
+                            ${rightPoint.x + selectedBorderGap}, ${rightPoint.y}
+                            ${bottomPoint.x},${bottomPoint.y + selectedBorderGap}
+                        `}
+                    />
+                </>
+            )}
             <polygon
                 fill={factoryPrimary}
                 stroke={'none'}
@@ -53,4 +86,4 @@ const FactoryDiamond = ({diamondLength=12, x, y, style, center, ...unused }) => 
     )
 }
 
-export default FactoryDiamond
+export default Factory
