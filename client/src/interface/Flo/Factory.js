@@ -124,11 +124,7 @@ const Factory = ({
                 </React.Fragment>
             ))}
             // only show the input rectangle if there is more than one product
-            {(factory.inputs.length !== 1 ||
-                // or there is only one product */
-                (factory.inputs[0].product &&
-                    // and that product is on the same x coordinate
-                    factory.inputs[0].product.position.y !== y)) && (
+            {factory.inputs.length !== 1 && (
                 <rect
                     fill={elementOutline}
                     x={leftSquareLocation.x - squareLength}
@@ -138,11 +134,7 @@ const Factory = ({
                 />
             )}
             // only show the output rectangle if there is more than one result
-            {(factory.outputs.length !== 1 ||
-                // or there is only one product
-                (factory.outputs[0].product &&
-                    // and that product is on the same x coordinate
-                    factory.outputs[0].product.position.y !== y)) && (
+            {factory.outputs.length !== 1  && (
                 <rect
                     fill={elementOutline}
                     x={rightSquareLocation.x - squareLength}

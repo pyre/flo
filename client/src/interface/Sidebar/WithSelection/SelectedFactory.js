@@ -2,6 +2,7 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
+import pluralize from 'pluralize'
 // local imports
 import { FactoryDiamond } from '~/components'
 import { gridStroke } from '~/design'
@@ -28,7 +29,7 @@ const SelectedFactory = ({ factory }) => (
                 </div>
                 <div>
                     {factory.inputs.length > 0 && (
-                        `${factory.inputs.length} inputs`
+                        `${factory.inputs.length} ${pluralize("inputs", factory.inputs.length)}`
                     )}
 
                     {factory.inputs.length > 0 && factory.outputs.length > 0 && (
@@ -36,7 +37,7 @@ const SelectedFactory = ({ factory }) => (
                     )}
                     
                     {factory.outputs.length > 0 && (
-                        `${factory.outputs.length} outputs`
+                        `${factory.outputs.length} ${pluralize("outputs", factory.outputs.length)}`
                     )} 
                 </div>
             </div>

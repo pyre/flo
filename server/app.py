@@ -97,6 +97,9 @@ class Result(graphene.ObjectType):
     def resolve_id(self, info):
         return id_field(typeName="Result", id=self.id)
 
+    def resolve_name(self, info):
+        return "result_name"
+
 
 class Binding(graphene.ObjectType):
     """ An input for a factory """
@@ -118,6 +121,9 @@ class Binding(graphene.ObjectType):
 
     def resolve_id(self, info):
         return id_field(typeName="Binding", id=self.id)
+
+    def resolve_name(self, info): 
+        return "hello"
 
 
 class KVPair(graphene.ObjectType):
@@ -154,6 +160,9 @@ class Factory(graphene.ObjectType):
 
     def resolve_id(self, info):
         return id_field(typeName="Factory", id=self.id)
+
+    def resolve_name(self, info):
+        return "foo.bar.baz"
 
 
 class Flo(graphene.ObjectType):
