@@ -32,10 +32,10 @@ const SelectedFactory = ({ factory }) => (
             }
         />
         {factory.config.map(({ key, value, kind }) => (
-            <>
+            <React.Fragment key={key}>
                 <Label>{key}</Label>
-                <input {...css({ marginBottom: 6 })} value={value} />
-            </>
+                <input {...css({ marginBottom: 10 })} value={value} />
+            </React.Fragment>
         ))}
     </div>
 )

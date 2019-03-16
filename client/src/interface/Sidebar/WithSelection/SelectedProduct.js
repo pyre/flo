@@ -20,7 +20,7 @@ const SelectedProduct = ({ product }) => (
             <React.Fragment key={name} >
                 <Label>{name}</Label>
                 <div {...css({
-                    marginBottom: 6,
+                    marginBottom: 10,
                 })}>
                     {do {
                         if (kind === 'string') {
