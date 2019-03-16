@@ -12,7 +12,7 @@ const SelectedProduct = ({ product }) => (
         flexDirection: 'column',
     })}>
         <Header
-            icon={<Product progress={product.progress}/>}
+            icon={<Product progress={product.progress} />}
             title={product.name}
             subtitle={product.description}
         />
@@ -23,6 +23,7 @@ export default createFragmentContainer(
     SelectedProduct,
     graphql`
         fragment SelectedProduct_product on Product {
+            name
             progress
             attributes {
                 value

@@ -46,6 +46,7 @@ class Product(graphene.ObjectType):
 
     id = graphene.NonNull(graphene.ID)
     source = graphene.Field(lambda: Factory)
+    name = graphene.NonNull(graphene.String)
     bindings = graphene.NonNull(graphene.List(graphene.NonNull(lambda: Binding)))
     position = graphene.NonNull(Position)
     progress = graphene.NonNull(graphene.Float)
@@ -85,6 +86,9 @@ class Product(graphene.ObjectType):
                     bindings.append(binding)
 
         return bindings
+
+    def resolve_name(self, info):
+        return "My Super Awesome Product"
 
 
 class Result(graphene.ObjectType):
@@ -150,7 +154,7 @@ class Factory(graphene.ObjectType):
     class Meta:
         interfaces = (Node,)
 
-    name = graphene.String()
+    name = graphene.NonNull(graphene.String)
     id = graphene.NonNull(graphene.ID)
     inputs = graphene.NonNull(graphene.List(graphene.NonNull(Binding)))
     outputs = graphene.NonNull(graphene.List(graphene.NonNull(Result)))

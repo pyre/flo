@@ -14,7 +14,7 @@ const SelectedFactory = ({ factory }) => (
         flexDirection: 'column',
     })}>
         <Header
-            icon={<Factory style={{ marginRight: 14 }} />}
+            icon={<Factory />}
             title={factory.name}
             subtitle={
                 <>
@@ -23,12 +23,12 @@ const SelectedFactory = ({ factory }) => (
                     )}
 
                     {factory.inputs.length > 0 && factory.outputs.length > 0 && (
-                        <span {...css({marginLeft: 4, marginRight: 2,})}>·</span>
+                        <span {...css({ marginLeft: 4, marginRight: 2, })}>·</span>
                     )}
-                    
+
                     {factory.outputs.length > 0 && (
                         `${factory.outputs.length} ${pluralize("outputs", factory.outputs.length)}`
-                    )} 
+                    )}
                 </>
             }
         />

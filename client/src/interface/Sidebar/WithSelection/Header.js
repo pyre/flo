@@ -16,12 +16,13 @@ const SelectionHeader = ({ icon, title, subtitle }) => (
         <div {...css({
             display: 'flex',
             flexDirection: 'column',
+            marginLeft: 14,
         })}>
             <div>
                 {title}
             </div>
             <div>
-                { subtitle }
+                {subtitle}
             </div>
         </div>
     </div>
