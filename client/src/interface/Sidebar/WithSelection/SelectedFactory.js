@@ -4,8 +4,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 import pluralize from 'pluralize'
 // local imports
-import { Factory } from '~/components'
-import { gridStroke } from '~/design'
+import { Factory, Label } from '~/components'
 import Header from './Header'
 
 const SelectedFactory = ({ factory }) => (
@@ -32,6 +31,12 @@ const SelectedFactory = ({ factory }) => (
                 </>
             }
         />
+        {factory.config.map(({ key, value, kind }) => (
+            <>
+                <Label>{key}</Label>
+                <input {...css({ marginBottom: 6 })} value={value} />
+            </>
+        ))}
     </div>
 )
 
@@ -49,6 +54,11 @@ export default createFragmentContainer(
             }
             outputs {
                 name
+            }
+            config {
+                key
+                value
+                kind
             }
         }
     `

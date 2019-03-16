@@ -1,10 +1,9 @@
 // external imports
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { Label } from 'quark-web'
 import { css } from 'glamor'
 // local imports
-import { Product } from '~/components'
+import { Product, Label } from '~/components'
 import Header from './Header'
 
 const SelectedProduct = ({ product }) => (
@@ -19,7 +18,7 @@ const SelectedProduct = ({ product }) => (
         />
         {product.attributes.map(({ value, kind, name }) => (
             <React.Fragment key={name} >
-                <label>{name}</label>
+                <Label>{name}</Label>
                 <div {...css({
                     marginBottom: 6,
                 })}>
