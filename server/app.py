@@ -30,6 +30,7 @@ class AttributeKind(graphene.Enum):
     String = "String"
     Int = "Int"
     Float = "Float"
+    Date = "Date"
 
 
 class Attribute(graphene.ObjectType):
@@ -89,6 +90,13 @@ class Product(graphene.ObjectType):
 
     def resolve_name(self, info):
         return "My Super Awesome Product"
+
+    def resolve_attributes(self, info):
+        return [
+            Attribute(name="filepath", value="hello", kind=AttributeKind.String),
+            Attribute(name="date modified", value="2019/1/2", kind=AttributeKind.Date),
+            Attribute(name="A float value", value="2.0", kind=AttributeKind.Float)
+        ]
 
 
 class Result(graphene.ObjectType):

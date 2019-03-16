@@ -1,6 +1,7 @@
 // external imports
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { Label } from 'quark-web'
 import { css } from 'glamor'
 // local imports
 import { Product } from '~/components'
@@ -16,6 +17,24 @@ const SelectedProduct = ({ product }) => (
             title={product.name}
             subtitle={product.description}
         />
+        {product.attributes.map(({ value, kind, name }) => (
+            <React.Fragment key={name} >
+                <label>{name}</label>
+                <div {...css({
+                    marginBottom: 6,
+                })}>
+                    {do {
+                        if (kind === 'string') {
+                        value
+                    } else if (kind === 'date') {
+                        value
+                    } else {
+                        value
+                    }
+                    }}
+                </div>
+            </React.Fragment>
+        ))}
     </div>
 )
 
@@ -26,6 +45,7 @@ export default createFragmentContainer(
             name
             progress
             attributes {
+                name
                 value
                 kind
             }
