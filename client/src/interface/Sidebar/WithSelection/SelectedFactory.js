@@ -5,7 +5,7 @@ import { css } from 'glamor'
 import pluralize from 'pluralize'
 // local imports
 import { Factory, Label } from '~/components'
-import Header from './Header'
+import Header from '../Header'
 
 const SelectedFactory = ({ factory }) => (
     <div {...css({

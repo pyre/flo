@@ -4,7 +4,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 // local imports
 import { Product, Label } from '~/components'
-import Header from './Header'
+import Header from '../Header'
 
 const SelectedProduct = ({ product }) => (
     <div {...css({

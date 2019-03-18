@@ -12,6 +12,7 @@ const SelectionHeader = ({ icon, title, subtitle }) => (
         paddingBottom: 12,
         borderBottom: `1px solid ${gridStroke}`,
         marginBottom: 20,
+        width: '100%',
     })}>
         {icon}
         <div {...css({
