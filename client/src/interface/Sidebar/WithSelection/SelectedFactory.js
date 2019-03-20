@@ -10,7 +10,7 @@ import Header from '../Header'
 const SelectedFactory = ({ factory }) => {
 
     // copy the factory's config into local state
-    const [state, setState] = React.useState(factory.config.reduce((prev, config) => ({
+    const [config, setConfig] = React.useState(factory.config.reduce((prev, config) => ({
         ...prev,
         [config.key]: config.value
     }), {}))
@@ -49,11 +49,11 @@ const SelectedFactory = ({ factory }) => {
                 {factory.config.map(({ key, value, kind }) => (
                     <React.Fragment key={key}>
                         <Label>{key}</Label>
-                        <input {...css({ marginBottom: 10 })} value={state[key]} onChange={evt => {
+                        <input {...css({ marginBottom: 10 })} value={config[key]} onChange={evt => {
                             evt.persist()
 
                             // update the local state for the config value
-                            setState(state => ({
+                            setConfig(state => ({
                                 ...state,
                                 [key]: evt.target.value,
                             }))
@@ -76,8 +76,11 @@ const SelectedFactory = ({ factory }) => {
                     paddingBottom: 30,
                 })}>
                     <Button onClick={() => {
+                        console.log('submitting new config', config)
                         setModified(false)
-                    }}>save</Button>
+                    }} >
+                        save
+                    </Button>
                 </div>
             )}
         </>
