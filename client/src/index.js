@@ -7,8 +7,8 @@ import { css } from 'glamor'
 import { DiagramProvider } from '~/state'
 import { Diagram, Sidebar } from '~/interface'
 
-const App = () => {
-    return (
+ReactDOM.render(
+    <DiagramProvider>
         <div
             {...css({
                 display: 'flex',
@@ -19,12 +19,6 @@ const App = () => {
             <Diagram />
             <Sidebar />
         </div>
-    )
-}
-
-ReactDOM.render(
-    <DiagramProvider>
-        <App />
     </DiagramProvider>,
     document.getElementById('app')
 )
