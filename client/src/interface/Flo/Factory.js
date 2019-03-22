@@ -53,10 +53,10 @@ const Factory = ({
     const { diagram } = useContext(DiagramContext)
 
     // pull out the selected element
-    const [ selectedID ] = diagram.selectedElements
+    const [selectedID] = diagram.selectedElements
 
     return (
-       <>
+        <>
             // there is a line going from one square to the other
             <line stroke={elementOutline} strokeWidth={1} x1={x + armLength} y1={y} y2={y} x2={x - armLength} />
             // render the lines joining the left square to each of the inputs
@@ -116,7 +116,7 @@ const Factory = ({
                 />
             )}
             // only show the output rectangle if there is more than one result
-            {factory.outputs.length !== 1  && (
+            {factory.outputs.length !== 1 && (
                 <rect
                     fill={elementOutline}
                     x={rightSquareLocation.x - squareLength}
@@ -125,37 +125,44 @@ const Factory = ({
                     height={2 * squareLength}
                 />
             )}
-
-            // the center of a factory is the diamond used as the target for clicks 
+            // the center of a factory is the diamond used as the target for clicks
             <Draggable
                 id={factory.id}
                 origin={{ x, y }}
-                onMove={position => mutate({
-                    query: graphql`
-                        mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
-                            moveFactory(factory: $factory, x: $x, y: $y) {
-                                factory {
-                                    id
-                                    position {
-                                        x
-                                        y
+                onMove={position =>
+                    mutate({
+                        query: graphql`
+                            mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
+                                moveFactory(factory: $factory, x: $x, y: $y) {
+                                    factory {
+                                        id
+                                        position {
+                                            x
+                                            y
+                                        }
                                     }
                                 }
                             }
-                        }
-                    `,
-                    variables: { factory: factory.id, ...position },
-                    optimisticResponse:  {
-                        moveFactory: {
-                            factory: {
-                                id: factory.id,
-                                position,
-                            }
-                        }
-                    }
-                })}
+                        `,
+                        variables: { factory: factory.id, ...position },
+                        optimisticResponse: {
+                            moveFactory: {
+                                factory: {
+                                    id: factory.id,
+                                    position,
+                                },
+                            },
+                        },
+                    })
+                }
             >
-                <FactoryDiamond x={x} y={y} center={true} style={{ cursor: 'pointer' }} selected={factory.id === selectedID} />
+                <FactoryDiamond
+                    x={x}
+                    y={y}
+                    center={true}
+                    style={{ cursor: 'pointer' }}
+                    selected={factory.id === selectedID}
+                />
             </Draggable>
         </>
     )

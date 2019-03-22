@@ -27,13 +27,7 @@ export default ({ style }) => {
     // render the grid
     return (
         <g {...{ ...styles.container, ...style }} onClick={clearSelection}>
-            <rect
-                x={leftEdge}
-                y={bottomEdge}
-                width={browser.width}
-                height={browser.height + 100}
-                fill={background}
-            />
+            <rect x={leftEdge} y={bottomEdge} width={browser.width} height={browser.height + 100} fill={background} />
             {range(nVertical + 4).map(i => {
                 // the shared x coordinate of the vertical lines
                 const x = round(leftEdge + i * diagram.gridSize, diagram.gridSize)

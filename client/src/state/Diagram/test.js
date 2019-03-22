@@ -16,12 +16,7 @@ test('can zoom in and out but not passed bounds', () => {
 
     // the component to exercise zoom tests
     const { getByTestId } = render(
-        <DiagramProvider
-            maxZoom={maxZoom}
-            minZoom={minZoom}
-            zoomStep={zoomStep}
-            zoomLevel={zoomLevel}
-        >
+        <DiagramProvider maxZoom={maxZoom} minZoom={minZoom} zoomStep={zoomStep} zoomLevel={zoomLevel}>
             <DiagramContext.Consumer>
                 {({ diagram, zoomIn, zoomOut }) => (
                     <React.Fragment>

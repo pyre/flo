@@ -5,27 +5,27 @@ import { css } from 'glamor'
 import { gridStroke } from '~/design'
 
 const SelectionHeader = ({ icon, title, subtitle }) => (
-    <div {...css({
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingBottom: 12,
-        borderBottom: `1px solid ${gridStroke}`,
-        marginBottom: 20,
-        width: '100%',
-    })}>
-        {icon}
-        <div {...css({
+    <div
+        {...css({
             display: 'flex',
-            flexDirection: 'column',
-            marginLeft: 14,
-        })}>
-            <div>
-                {title}
-            </div>
-            <div>
-                {subtitle}
-            </div>
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingBottom: 12,
+            borderBottom: `1px solid ${gridStroke}`,
+            marginBottom: 20,
+            width: '100%',
+        })}
+    >
+        {icon}
+        <div
+            {...css({
+                display: 'flex',
+                flexDirection: 'column',
+                marginLeft: 14,
+            })}
+        >
+            <div>{title}</div>
+            <div>{subtitle}</div>
         </div>
     </div>
 )

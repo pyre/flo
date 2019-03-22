@@ -8,7 +8,6 @@ import { Arc } from '~/components'
 export const Radius = 12
 
 const Product = ({ progress, x, y, style, ...unused }) => {
-
     // if we weren't given an x or y
     if (!x || !y) {
         x = Radius
@@ -29,14 +28,7 @@ const Product = ({ progress, x, y, style, ...unused }) => {
             // a full circle to designate the zero-progress state
             <circle fill={productFillEmpty} cx={Radius} cy={Radius} r={Radius} />
             // the primary fill of the product should designate progress
-            <Arc
-                fill={productColor}
-                x={Radius}
-                y={Radius}
-                r={Radius}
-                theta1={0}
-                theta2={360 * progress}
-            />
+            <Arc fill={productColor} x={Radius} y={Radius} r={Radius} theta1={0} theta2={360 * progress} />
         </svg>
     )
 }

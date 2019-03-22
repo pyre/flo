@@ -2,15 +2,9 @@
 import React from 'react'
 import { css } from 'glamor'
 // local imports
-import {
-    factoryPrimary,
-    factorySelectedBorder,
-    selectedBorderGap,
-    selectedBorderWidth,
-    background,
-} from '~/design'
+import { factoryPrimary, factorySelectedBorder, selectedBorderGap, selectedBorderWidth, background } from '~/design'
 
-const Factory = ({diamondLength=12, x, y, style, center, selected, ...unused }) => {
+const Factory = ({ diamondLength = 12, x, y, style, center, selected, ...unused }) => {
     // the locations for the 4 points of the rectangle
     const leftPoint = {
         x: 0,
@@ -25,7 +19,7 @@ const Factory = ({diamondLength=12, x, y, style, center, selected, ...unused }) 
         y: diamondLength,
     }
     const bottomPoint = {
-        y: 2 *  diamondLength,
+        y: 2 * diamondLength,
         x: diamondLength,
     }
 
@@ -33,7 +27,7 @@ const Factory = ({diamondLength=12, x, y, style, center, selected, ...unused }) 
     if (center) {
         x -= diamondLength
         y -= diamondLength
-    } 
+    }
 
     return (
         <svg

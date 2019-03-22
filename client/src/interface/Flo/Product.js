@@ -3,13 +3,7 @@ import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc, Draggable, Product as ProductCircle } from '~/components'
-import {
-    background,
-    elementOutline,
-    productSelectedBorder,
-    selectedBorderWidth,
-    selectedBorderGap,
-} from '~/design'
+import { background, elementOutline, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
 import { DiagramContext } from '~/state'
 import { mutate } from '~/utils'
 import { Radius } from '~/components/Product'
@@ -25,30 +19,32 @@ const Product = ({ product }) => {
         <Draggable
             id={product.id}
             origin={product.position}
-            onMove={position => mutate({
-                query: graphql`
-                    mutation ProductMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
-                        moveProduct(product: $product, x: $x, y: $y) {
-                            product {
-                                id
-                                position {
-                                    x
-                                    y
+            onMove={position =>
+                mutate({
+                    query: graphql`
+                        mutation ProductMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
+                            moveProduct(product: $product, x: $x, y: $y) {
+                                product {
+                                    id
+                                    position {
+                                        x
+                                        y
+                                    }
                                 }
                             }
                         }
-                    }
-                `,
-                variables: { product: product.id, ...position },
-                optimisticResponse:  {
-                    moveProduct: {
-                        product: {
-                            id: product.id,
-                            position,
-                        }
-                    }
-                }
-            })}
+                    `,
+                    variables: { product: product.id, ...position },
+                    optimisticResponse: {
+                        moveProduct: {
+                            product: {
+                                id: product.id,
+                                position,
+                            },
+                        },
+                    },
+                })
+            }
         >
             <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
                 // render the outer circle
@@ -101,11 +97,7 @@ const Product = ({ product }) => {
                         />
                     </>
                 )}
-                <ProductCircle 
-                    x={product.position.x}
-                    y={product.position.y}
-                    progress={product.progress}
-                />
+                <ProductCircle x={product.position.x} y={product.position.y} progress={product.progress} />
             </g>
         </Draggable>
     )

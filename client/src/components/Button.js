@@ -1,8 +1,6 @@
 // external imports
 import React from 'react'
 
-const Button = ({ ...props }) => (
-    <button {...props} />
-)
+const Button = ({ ...props }) => <button {...props} />
 
 export default Button

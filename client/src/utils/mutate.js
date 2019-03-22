@@ -3,7 +3,7 @@ import { commitMutation } from 'react-relay'
 // local imports
 import env from '~/environment'
 
-const mutate = ({query, variables,  ...config}) => {
+const mutate = ({ query, variables, ...config }) => {
     // otherwise return promise that can be awaited :)
     return new Promise((resolve, reject) => {
         commitMutation(env, {
@@ -13,7 +13,7 @@ const mutate = ({query, variables,  ...config}) => {
                 if (errors) {
                     return reject(errors)
                 }
-                
+
                 // there were no errors so resolve the promise
                 resolve(data)
             },

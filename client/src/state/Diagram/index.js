@@ -5,13 +5,7 @@ import React, { createContext, useState } from 'react'
 export const DiagramContext = createContext()
 
 // a provider with the specified state
-export const DiagramProvider = ({
-    maxZoom = 2,
-    minZoom = 0.5,
-    zoomStep = 0.1,
-    children,
-    ...initialState
-}) => {
+export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, children, ...initialState }) => {
     // the initial state of the diagram
     const [diagram, setState] = useState({
         showGrid: true,
@@ -78,9 +72,5 @@ export const DiagramProvider = ({
     }
 
     // return the children wrapped in a provider
-    return (
-        <DiagramContext.Provider value={{ diagram, ...actions }}>
-            {children}
-        </DiagramContext.Provider>
-    )
+    return <DiagramContext.Provider value={{ diagram, ...actions }}>{children}</DiagramContext.Provider>
 }

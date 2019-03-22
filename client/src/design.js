@@ -14,5 +14,4 @@ export const selectedBorderGap = 2
 export const productSelectedBorder = '#90DAF9'
 export const factorySelectedBorder = '#FFC97F'
 
-
 export const darkGrey = '#b3aeaa'
