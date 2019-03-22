@@ -2,8 +2,9 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
+import { Label } from 'quark-web'
 // local imports
-import { Product, Label } from '~/components'
+import { Product } from '~/components'
 import Header from '../Header'
 
 const SelectedProduct = ({ product }) => (
@@ -15,13 +16,8 @@ const SelectedProduct = ({ product }) => (
     >
         <Header icon={<Product progress={product.progress} />} title={product.name} subtitle={product.description} />
         {product.attributes.map(({ value, kind, name }) => (
-            <React.Fragment key={name}>
-                <Label>{name}</Label>
-                <div
-                    {...css({
-                        marginBottom: 10,
-                    })}
-                >
+            <Label key={name} value={name} style={{ marginBottom: 10 }}>
+                <span>
                     {do {
                         if (kind === 'string') {
                             value
@@ -31,8 +27,8 @@ const SelectedProduct = ({ product }) => (
                             value
                         }
                     }}
-                </div>
-            </React.Fragment>
+                </span>
+            </Label>
         ))}
     </div>
 )

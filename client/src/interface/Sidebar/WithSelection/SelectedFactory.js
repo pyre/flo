@@ -3,8 +3,9 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 import pluralize from 'pluralize'
+import { Label, TextInput, PrimaryButton } from 'quark-web'
 // local imports
-import { Factory, Label, Button } from '~/components'
+import { Factory } from '~/components'
 import Header from '../Header'
 
 const SelectedFactory = ({ factory }) => {
@@ -41,9 +42,10 @@ const SelectedFactory = ({ factory }) => {
                             {factory.inputs.length > 0 &&
                                 `${factory.inputs.length} ${pluralize('input', factory.inputs.length)}`}
 
-                            {factory.inputs.length > 0 && factory.outputs.length > 0 && (
-                                <span {...css({ marginLeft: 4, marginRight: 2 })}>·</span>
-                            )}
+                            {factory.inputs.length > 0 &&
+                                factory.outputs.length > 0 && (
+                                    <span {...css({ marginLeft: 4, marginRight: 2 })}>·</span>
+                                )}
 
                             {factory.outputs.length > 0 &&
                                 `${factory.outputs.length} ${pluralize('output', factory.outputs.length)}`}
@@ -52,23 +54,24 @@ const SelectedFactory = ({ factory }) => {
                 />
                 {factory.config.map(({ key, value, kind }) => (
                     <React.Fragment key={key}>
-                        <Label>{key}</Label>
-                        <input
-                            {...css({ marginBottom: 10 })}
-                            value={config[key]}
-                            onChange={evt => {
-                                evt.persist()
+                        <Label value={key} style={{ marginBottom: 12 }}>
+                            <TextInput
+                                {...css({
+                                    marginBottom: 10,
+                                })}
+                                value={config[key]}
+                                onChange={value => {
+                                    // update the local state for the config value
+                                    setConfig(state => ({
+                                        ...state,
+                                        [key]: value,
+                                    }))
 
-                                // update the local state for the config value
-                                setConfig(state => ({
-                                    ...state,
-                                    [key]: evt.target.value,
-                                }))
-
-                                // mark the form as updated
-                                setModified(true)
-                            }}
-                        />
+                                    // mark the form as updated
+                                    setModified(true)
+                                }}
+                            />
+                        </Label>
                     </React.Fragment>
                 ))}
             </div>
@@ -85,14 +88,14 @@ const SelectedFactory = ({ factory }) => {
                         paddingBottom: 30,
                     })}
                 >
-                    <Button
-                        onClick={() => {
+                    <PrimaryButton
+                        onPress={() => {
                             console.log('submitting new config', config)
                             setModified(false)
                         }}
                     >
                         save
-                    </Button>
+                    </PrimaryButton>
                 </div>
             )}
         </>
