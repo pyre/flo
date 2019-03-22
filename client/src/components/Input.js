@@ -4,7 +4,7 @@ import { css, focus } from 'glamor'
 // local imports
 import { productColor } from '~/design'
 
-const Input = props => (
+const Input = ({ onChange = () => {}, ...props }) => (
     <input
         {...css({
             fontSize: 14,
@@ -23,7 +23,7 @@ const Input = props => (
         {...props}
         onChange={evt => {
             evt.persist()
-            props.onChange(evt.target.value)
+            onChange(evt.target.value)
         }}
     />
 )
