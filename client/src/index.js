@@ -7,6 +7,8 @@ import { css } from 'glamor'
 import { DiagramProvider } from '~/state'
 import { Diagram, Sidebar } from '~/interface'
 
+import './reset.css'
+
 ReactDOM.render(
     <DiagramProvider>
         <div
