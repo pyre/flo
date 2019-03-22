@@ -3,22 +3,22 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 import pluralize from 'pluralize'
-import { Label, TextInput, PrimaryButton } from 'quark-web'
+import { Label, TextInput, SecondaryButton, PrimaryButton } from 'quark-web'
 // local imports
 import { Factory } from '~/components'
 import Header from '../Header'
 
 const SelectedFactory = ({ factory }) => {
-    // copy the factory's config into local state
-    const [config, setConfig] = React.useState(
-        factory.config.reduce(
-            (prev, config) => ({
-                ...prev,
-                [config.key]: config.value,
-            }),
-            {}
-        )
+    const initialState = factory.config.reduce(
+        (prev, config) => ({
+            ...prev,
+            [config.key]: config.value,
+        }),
+        {}
     )
+
+    // copy the factory's config into local state
+    const [config, setConfig] = React.useState(initialState)
 
     // a piece of state to track if we've modified the factory
     const [modified, setModified] = React.useState(false)
@@ -88,9 +88,22 @@ const SelectedFactory = ({ factory }) => {
                         paddingBottom: 30,
                     })}
                 >
+                    <SecondaryButton
+                        onPress={() => {
+                            // hide the buttons
+                            setModified(false)
+
+                            // reset the form
+                            setConfig(initialState)
+                        }}
+                    >
+                        cancel
+                    </SecondaryButton>
                     <PrimaryButton
                         onPress={() => {
                             console.log('submitting new config', config)
+
+                            // hide the buttons
                             setModified(false)
                         }}
                     >
