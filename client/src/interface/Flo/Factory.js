@@ -63,7 +63,6 @@ const Factory = ({
             {factory.inputs.map((binding, i) => (
                 <React.Fragment key={binding.id}>
                     <line
-                        id={binding.id}
                         x1={leftSquareLocation.x}
                         y1={leftSquareLocation.y}
                         x2={leftSquareLocation.x}
@@ -72,7 +71,6 @@ const Factory = ({
                         strokeWidth={1}
                     />
                     <line
-                        id={binding.id}
                         x1={leftSquareLocation.x}
                         y1={binding.product.position.y}
                         x2={binding.product.position.x}
@@ -86,7 +84,6 @@ const Factory = ({
             {factory.outputs.map(result => (
                 <React.Fragment key={result.id}>
                     <line
-                        id={result.id}
                         x1={rightSquareLocation.x}
                         y1={rightSquareLocation.y}
                         x2={rightSquareLocation.x}
@@ -95,7 +92,6 @@ const Factory = ({
                         strokeWidth={1}
                     />
                     <line
-                        id={result.id}
                         x1={rightSquareLocation.x}
                         y1={result.product.position.y}
                         x2={result.product.position.x}

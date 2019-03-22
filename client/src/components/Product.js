@@ -24,6 +24,7 @@ const Product = ({ progress, x, y, style, ...unused }) => {
             })}
             x={x - Radius}
             y={y - Radius}
+            {...unused}
         >
             // a full circle to designate the zero-progress state
             <circle fill={productFillEmpty} cx={Radius} cy={Radius} r={Radius} />
