@@ -3,9 +3,8 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 import pluralize from 'pluralize'
-import { Label, TextInput, SecondaryButton, PrimaryButton } from 'quark-web'
 // local imports
-import { Factory } from '~/components'
+import { Factory, Label, Input, SecondaryButton, PrimaryButton } from '~/components'
 import Header from '../Header'
 
 const SelectedFactory = ({ factory }) => {
@@ -54,24 +53,23 @@ const SelectedFactory = ({ factory }) => {
                 />
                 {factory.config.map(({ key, value, kind }) => (
                     <React.Fragment key={key}>
-                        <Label value={key} style={{ marginBottom: 12 }}>
-                            <TextInput
-                                {...css({
-                                    marginBottom: 10,
-                                })}
-                                value={config[key]}
-                                onChange={value => {
-                                    // update the local state for the config value
-                                    setConfig(state => ({
-                                        ...state,
-                                        [key]: value,
-                                    }))
+                        <Label value={key}>{key}</Label>
+                        <Input
+                            {...css({
+                                marginBottom: 12,
+                            })}
+                            value={config[key]}
+                            onChange={value => {
+                                // update the local state for the config value
+                                setConfig(state => ({
+                                    ...state,
+                                    [key]: value,
+                                }))
 
-                                    // mark the form as updated
-                                    setModified(true)
-                                }}
-                            />
-                        </Label>
+                                // mark the form as updated
+                                setModified(true)
+                            }}
+                        />
                     </React.Fragment>
                 ))}
             </div>
@@ -82,14 +80,13 @@ const SelectedFactory = ({ factory }) => {
                         alignSelf: 'flex-end',
                         bottom: 0,
                         background: 'white',
-                        height: 30,
                         justifyContent: 'flex-end',
                         width: `100%`,
-                        paddingBottom: 30,
+                        paddingBottom: 20,
                     })}
                 >
                     <SecondaryButton
-                        onPress={() => {
+                        onClick={() => {
                             // hide the buttons
                             setModified(false)
 
@@ -100,7 +97,7 @@ const SelectedFactory = ({ factory }) => {
                         cancel
                     </SecondaryButton>
                     <PrimaryButton
-                        onPress={() => {
+                        onClick={() => {
                             console.log('submitting new config', config)
 
                             // hide the buttons
