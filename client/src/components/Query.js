@@ -1,7 +1,6 @@
 // external imports
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
-import { triggerAlert } from 'quark-web'
 // local imports
 import environment from '~/environment'
 
@@ -19,7 +18,7 @@ export default ({ children, query, variables, loadingState, onError }) => (
                     return onError(error)
                 } else {
                     // trigger an alert with the error
-                    triggerAlert({
+                    console.log({
                         message: error,
                         type: 'warning',
                     })
