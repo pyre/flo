@@ -13,6 +13,7 @@ export const baseStyle = css({
     paddingRight: 10,
     borderRadius: 4,
     minWidth: 125,
+    cursor: 'pointer',
 })
 
 const PrimaryButton = props => (

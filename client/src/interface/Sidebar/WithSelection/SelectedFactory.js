@@ -80,7 +80,7 @@ const SelectedFactory = ({ factory }) => {
                         alignSelf: 'flex-end',
                         bottom: 0,
                         background: 'white',
-                        justifyContent: 'flex-end',
+                        justifyContent: 'center',
                         width: `100%`,
                         paddingBottom: 20,
                     })}
@@ -93,6 +93,9 @@ const SelectedFactory = ({ factory }) => {
                             // reset the form
                             setConfig(initialState)
                         }}
+                        {...css({
+                            marginRight: 10,
+                        })}
                     >
                         cancel
                     </SecondaryButton>
