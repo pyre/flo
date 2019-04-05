@@ -1,7 +1,7 @@
 // external imports
 import React, { useContext } from 'react'
 // local imports
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 import { useBrowserSize } from '~/hooks'
 import { range, round } from '~/utils'
 import styles from './styles'
@@ -11,7 +11,7 @@ export default ({ style }) => {
     // get the size of the browser
     const browser = useBrowserSize()
     // and the current state of the diagram
-    const { diagram, clearSelection } = useContext(DiagramContext)
+    const { diagram, clearSelection } = useContext(Diagram)
 
     // the number of vertical grid lines (plus one to cover the remainder)
     const nVertical = (Math.floor(browser.width / diagram.gridSize) + 1) / diagram.zoomLevel

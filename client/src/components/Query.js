@@ -2,39 +2,44 @@
 import React from 'react'
 import { QueryRenderer } from 'react-relay'
 // local imports
-import environment from '~/environment'
+import { Environment } from '~/context'
 
-export default ({ children, query, variables, loadingState, onError }) => (
-    <QueryRenderer
-        query={query}
-        variables={variables}
-        environment={environment}
-        render={({ error, props, ...rest }) => {
-            // if something went wrong
-            if (error) {
-                // if there is an error handler
-                if (onError) {
-                    // return the result of the error handler
-                    return onError(error)
-                } else {
-                    // trigger an alert with the error
-                    console.log({
-                        message: error,
-                        type: 'warning',
-                    })
+export default ({ children, query, variables, loadingState, onError }) => {
+    // pull the environment out of context
+    const environment = React.useContext(Environment)
 
-                    // dont render anything
-                    return null
+    return (
+        <QueryRenderer
+            query={query}
+            variables={variables}
+            environment={environment}
+            render={({ error, props, ...rest }) => {
+                // if something went wrong
+                if (error) {
+                    // if there is an error handler
+                    if (onError) {
+                        // return the result of the error handler
+                        return onError(error)
+                    } else {
+                        // trigger an alert with the error
+                        console.log({
+                            message: error,
+                            type: 'warning',
+                        })
+
+                        // dont render anything
+                        return null
+                    }
                 }
-            }
-            // if we are still loading
-            if (!props) {
-                // return the loading state
-                return loadingState
-            }
+                // if we are still loading
+                if (!props) {
+                    // return the loading state
+                    return loadingState
+                }
 
-            // we are done with the query, pass it along to the render prop
-            return children(props)
-        }}
-    />
-)
+                // we are done with the query, pass it along to the render prop
+                return children(props)
+            }}
+        />
+    )
+}

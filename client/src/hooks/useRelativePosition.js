@@ -1,7 +1,7 @@
 // external imports
 import { useContext } from 'react'
 // local imports
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 
 // this hook takes a relative location and returns a live version of it that accomodates pan and zoom
 export default location => {
@@ -12,7 +12,7 @@ export default location => {
     }
 
     // get the current state of the diagram
-    const { diagram } = useContext(DiagramContext)
+    const { diagram } = useContext(Diagram)
 
     // for now, just incorporate the sidebar
     return {

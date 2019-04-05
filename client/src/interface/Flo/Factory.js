@@ -10,7 +10,7 @@ import {
     background,
     factorySelectedBorder,
 } from '~/design'
-import { DiagramContext } from '~/state'
+import { Diagram, Environment } from '~/context'
 import { Draggable, Factory as FactoryDiamond } from '~/components'
 import { mutate } from '~/utils'
 
@@ -50,7 +50,8 @@ const Factory = ({
     }
 
     // grab the diagram state
-    const { diagram } = useContext(DiagramContext)
+    const { diagram } = useContext(Diagram)
+    const environment = useContext(Environment)
 
     // pull out the selected element
     const [selectedID] = diagram.selectedElements
@@ -127,6 +128,7 @@ const Factory = ({
                 origin={{ x, y }}
                 onMove={position =>
                     mutate({
+                        environment,
                         query: graphql`
                             mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
                                 moveFactory(factory: $factory, x: $x, y: $y) {

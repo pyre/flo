@@ -2,7 +2,7 @@
 import React, { useContext } from 'react'
 import { graphql } from 'react-relay'
 // local imports
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 import { Query } from '~/components'
 import SelectedProduct from './SelectedProduct'
 import SelectedFactory from './SelectedFactory'
@@ -19,7 +19,7 @@ const SingleSelectionQuery = graphql`
 
 export default () => {
     // pull the diagram state out of the application
-    const { diagram } = useContext(DiagramContext)
+    const { diagram } = useContext(Diagram)
 
     // get the id of the selected element
     const [id] = diagram.selectedElements
@@ -28,11 +28,11 @@ export default () => {
         <Query query={SingleSelectionQuery} variables={{ id }} loadingState={'loading'}>
             {({ node }) => do {
                 if (node.__typename === 'Product') {
-                    ;<SelectedProduct product={node} />
+                    ; <SelectedProduct product={node} />
                 } else if (node.__typename === 'Factory') {
-                    ;<SelectedFactory factory={node} />
+                    ; <SelectedFactory factory={node} />
                 }
             }}
         </Query>
-    )
-}
+        )
+    }

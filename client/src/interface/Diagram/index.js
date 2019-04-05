@@ -5,7 +5,7 @@ import SvgMatrix from 'svg-matrix'
 // local imports
 import { Query } from '~/components'
 import { Flo } from '~/interface'
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import Grid from './Grid'
 import SelectionRectangle from './SelectionRectangle'
@@ -21,7 +21,7 @@ export default () => {
     useDragBehavior(elementRef)
 
     // grab the info and actions we need from the diagram
-    const { diagram } = useContext(DiagramContext)
+    const { diagram } = useContext(Diagram)
 
     // compute the transform string for the diagram
     const { transformString } = SvgMatrix()
@@ -54,7 +54,7 @@ const floQuery = graphql`
 `
 
 const useDragBehavior = elementRef => {
-    const { pan } = useContext(DiagramContext)
+    const { pan } = useContext(Diagram)
     // we care if the space bar is pressed
     const spacePressed = useKeyPress(' ')
 
@@ -82,7 +82,7 @@ const useDragBehavior = elementRef => {
 
 const useZoomBehavior = elementRef => {
     // grab the info and actions we need from the diagram
-    const { zoomIn, zoomOut } = useContext(DiagramContext)
+    const { zoomIn, zoomOut } = useContext(Diagram)
 
     // when the wheel scrolls
     useEvent('mousewheel', event => {

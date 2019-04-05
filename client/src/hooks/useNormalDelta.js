@@ -1,14 +1,14 @@
 // external imports
 import { useContext } from 'react'
 // local imports
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 import { round } from '~/utils'
 
 // this hook normalizes a given delta by the grid size. If the grid size is 50, and the delta is 25
 // this hook returns .5 (half of a grid)
 export default delta => {
     // pull the diagram information
-    const { diagram } = useContext(DiagramContext)
+    const { diagram } = useContext(Diagram)
 
     // if there is no grid size
     if (diagram.gridSize === 0) {

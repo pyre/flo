@@ -2,14 +2,14 @@
 import React, { useRef, useContext, useEffect } from 'react'
 // local imports
 import { useMouseDrag, useNormalDelta } from '~/hooks'
-import { DiagramContext } from '~/state'
+import { Diagram } from '~/context'
 
 const Draggable = ({ id, children, origin, onMove }) => {
     const elementRef = useRef(null)
 
     // track the movement of the mouse
     const mouseDrag = useMouseDrag(elementRef)
-    const { diagram, selectElements } = useContext(DiagramContext)
+    const { diagram, selectElements } = useContext(Diagram)
 
     // we need to make sure that we are seleted if we are dragging
     useEffect(() => {

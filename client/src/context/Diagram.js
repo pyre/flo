@@ -2,7 +2,7 @@
 import React, { createContext, useState } from 'react'
 
 // a context for diagram state
-export const DiagramContext = createContext()
+export const Diagram = createContext()
 
 // a provider with the specified state
 export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, children, ...initialState }) => {
@@ -72,5 +72,5 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
     }
 
     // return the children wrapped in a provider
-    return <DiagramContext.Provider value={{ diagram, ...actions }}>{children}</DiagramContext.Provider>
+    return <Diagram.Provider value={{ diagram, ...actions }}>{children}</Diagram.Provider>
 }
