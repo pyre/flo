@@ -5,8 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "parcel build src/index.html",
-        "build:schema": "get-graphql-schema http://localhost:5000/graphql > schema.graphql",
-        "dev": "parcel src/index.html",
+        "dev": "parcel client/index.html",
         "relay": "relay-compiler --src ./src --schema ./schema.graphql",
         "test": "jest",
         "test:watch": "npm run test -- --watch"
