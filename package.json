@@ -7,9 +7,7 @@
         "build": "parcel build src/index.html",
         "dev": "parcel client/index.html",
         "server": "babel-node server/index.js",
-        "relay": "relay-compiler --src ./src --schema ./schema.graphql",
-        "test": "jest",
-        "test:watch": "npm run test -- --watch"
+        "relay": "relay-compiler --src ./client --schema ./schema.graphql",
     },
     "keywords": [],
     "author": "",
