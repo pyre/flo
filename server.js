@@ -44,15 +44,15 @@ const resolvers = {
         name: () => "foo.bar.baz"
     },
     Result: {
-        id: product => toGlobalId('Result', product.id),
+        id: result => toGlobalId('Result', result.id),
         name: () => "result name",
     },
     Binding: {
-        id: product => toGlobalId('Binding', product.id),
+        id: binding => toGlobalId('Binding', binding.id),
         name: () => "hello",
     },
     Result: {
-        id: product => toGlobalId('Result', product.id),
+        id: result => toGlobalId('Result', result.id),
     },
 }
 

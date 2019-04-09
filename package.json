@@ -7,7 +7,7 @@
         "build": "parcel build src/index.html",
         "dev": "parcel client/index.html",
         "server": "babel-node server.js",
-        "relay": "relay-compiler --src ./client --schema ./schema.graphql",
+        "relay": "relay-compiler --src ./client --schema ./schema.graphql"
     },
     "keywords": [],
     "author": "",
@@ -46,6 +46,7 @@
         "fast-async": "^6.3.8",
         "get-graphql-schema": "^2.1.2",
         "graphql": "^14.0.2",
+        "graphql-relay": "^0.6.0",
         "jest": "^24.7.1",
         "jest-dom": "^2.1.0",
         "prettier": "^1.14.3",
