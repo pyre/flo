@@ -7,10 +7,6 @@ import { toGloablId } from 'graphql-relay'
 // load the schema from the local file
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
 
-// the example data
-const products = []
-const factories = []
-
 // schema resolvers
 const resolvers = {
     Product: {
@@ -22,8 +18,7 @@ const resolvers = {
                     output => output.product && output.product.id === product.id
                 ).length > 0
             )[0],
-        // the bindings of a product are the list of bindings (inputs of a factory) 
-        // that this product is connected to
+        // the bindings of a product are the list of factory inputs that this product is bound to
         bindings: (product, _, __, context) => context.data.factories.reduce(
             (prev, factory) => [
                 // grab the inputs from the factory that 
@@ -32,7 +27,7 @@ const resolvers = {
                 )
             ]
             , []),
-        // the attributes of a product are the read only parameters of a productc
+        // the attributes of a product are the read only parameters of a product
         attributes: () => [
             { name: "filepath", value: "hello", kind: "String" },
             { name: "date modified", value: "2019/1/2", kind: "Date" },
@@ -56,9 +51,22 @@ const resolvers = {
     },
 }
 
+// dummy data
+const factories = {
+    1: {
+
+    }
+}
+
+const products = {}
+
 // define the server
 const server = new ApolloServer({
-    typeDefs: schema, resolvers
+    typeDefs: schema, resolvers,
+    context: {
+        factories,
+        products,
+    }
 })
 
 
