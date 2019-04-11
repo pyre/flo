@@ -17,7 +17,7 @@ export default ({ x, y, r, theta1, theta2, fill = 'none', ...props }) => do {
     // if we are supposed to draw a circle
     if (theta2 === 360) {
         // do that instead
-        ;<circle cx={x} cy={y} r={r} fill={fill} {...props} />
+        <circle cx={x} cy={y} r={r} fill={fill} {...props} />
     } else {
         // compute the bounds of the arc
         const start = polarToCartesian({ x, y, r, angle: theta2 })
@@ -34,6 +34,6 @@ export default ({ x, y, r, theta1, theta2, fill = 'none', ...props }) => do {
             path.push('L', x, y, 'Z')
         }
 
-        ;<path d={path.join(' ')} fill={fill} {...props} />
+        <path d={path.join(' ')} fill={fill} {...props} />
     }
 }

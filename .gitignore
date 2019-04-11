@@ -1,6 +1,6 @@
-client/node_modules/
-client/dist/
-client/.cache/
-client/schema.graphql
+node_modules/
+dist/
+.cache/
+schema.graphql
 **/__generated__/**
 **/__pycache__/**
