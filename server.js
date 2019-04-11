@@ -110,6 +110,7 @@ const products = [
     ...prev,
     [id]: {
         id,
+        name: "this.awesome.product",
         position,
         progress,
         source: factories[source],
@@ -132,7 +133,7 @@ for (const product of Object.values(products)) {
         // add this product as a Binding
         factory.inputs = [...factory.inputs, {
             product,
-            id: `${product.id}-${id}`,
+            id: `${product.id}-${id++}`,
         }]
     }
 

@@ -13,6 +13,7 @@ enum AttributeKind {
   String
   Int
   Float
+  Date
 }
 
 """An input for a factory """
@@ -39,7 +40,7 @@ matches a particular protocol and results in a concrete product
 """
 type Factory implements Node {
   id: ID!
-  name: String
+  name: String!
   inputs: [Binding!]!
   outputs: [Result!]!
   config: [KVPair!]!
