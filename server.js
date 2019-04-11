@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { ApolloServer } from 'apollo-server'
-import { toGloablId } from 'graphql-relay'
+import { toGlobalId, fromGlobalId } from 'graphql-relay'
 
 
 // load the schema from the local file
@@ -12,14 +12,14 @@ const resolvers = {
     Product: {
         id: product => toGlobalId('Product', product.id),
         // the source of a product is the factory that created it
-        source: (product, _, __, context) =>
-            context.data.factories.filter(
+        source: (product, _, context) =>
+            Object.values(context.factories).filter(
                 factory => factory.outputs.filter(
                     output => output.product && output.product.id === product.id
                 ).length > 0
             )[0],
         // the bindings of a product are the list of factory inputs that this product is bound to
-        bindings: (product, _, __, context) => context.data.factories.reduce(
+        bindings: (product, _, context) => Object.values(context.factories).reduce(
             (prev, factory) => [
                 // grab the inputs from the factory that 
                 ...prev, ...factory.inputs.filter(
@@ -35,7 +35,7 @@ const resolvers = {
         ]
     },
     Factory: {
-        id: product => toGlobalId('Product', product.id),
+        id: product => toGlobalId('Factory', product.id),
         name: () => "foo.bar.baz"
     },
     Result: {
@@ -46,19 +46,118 @@ const resolvers = {
         id: binding => toGlobalId('Binding', binding.id),
         name: () => "hello",
     },
-    Result: {
-        id: result => toGlobalId('Result', result.id),
+    Flo: {
+        id: flo => toGlobalId('Flo', flo.id)
     },
-}
+    Node: {
+        __resolveType: obj => obj.__typename
+    },
+    Query: {
+        node(_, { id: globalID }, context) {
+            // grab the id from the argument
+            const { id, type } = fromGlobalId(globalID)
 
-// dummy data
-const factories = {
-    1: {
+            // look up the store for that record
+            const store = context[{
+                Flo: 'flos',
+                Product: 'products',
+                Factory: 'factories',
+            }[type]]
+            if (!store) {
+                throw new Error(`Unknown type: ${type}`)
+            }
 
+            // return the appropriate record with the typename mixed in
+            return {
+                __typename: type,
+                ...store[id],
+            }
+        }
     }
 }
 
-const products = {}
+// create the factories
+const factories = [
+    { x: 500, y: 300 },
+    // create the same meta data for each factory
+].reduce((prev, position, id) => ({
+    ...prev,
+    [id]: {
+        id,
+        position,
+        attributes: [
+            { name: "favoriteNumber", value: 5, kind: "Int" },
+        ],
+        config: [
+            { key: 'size', value: "1", kind: "Int" },
+            { key: 'name', value: "hello", kind: "String" },
+            { key: 'hello', value: "1", kind: "Int" },
+        ],
+        inputs: [],
+        outputs: [],
+    },
+}), {})
+
+// create the products
+const products = [
+    // position, progress, source, factory input bindings
+    [{ x: 350, y: 200 }, 1, null, [0]],
+    [{ x: 350, y: 300 }, 1, null, [0]],
+    [{ x: 350, y: 400 }, 1, null, [0]],
+    [{ x: 650, y: 250 }, 0.1, 0, []],
+    [{ x: 650, y: 350 }, 0.1, 0, []],
+].reduce((prev, [position, progress, source, inputs], id) => ({
+    ...prev,
+    [id]: {
+        id,
+        position,
+        progress,
+        source: factories[source],
+        inputs,
+        attributes: [
+            { name: "favoriteNumber", value: "5", kind: "Int" },
+        ]
+    },
+}), {})
+
+// build up the binding and result associations
+for (const product of Object.values(products)) {
+
+    let id = 0
+    // each product can be the input to a factory
+    for (const factoryID of product.inputs) {
+        // grab the factory in question
+        const factory = factories[factoryID]
+
+        // add this product as a Binding
+        factory.inputs = [...factory.inputs, {
+            product,
+            id: `${product.id}-${id}`,
+        }]
+    }
+
+    // each product can also specify a source which adds an output to the factory
+    if (product.source) {
+        // grab the factory
+        const factory = product.source
+
+        // add the product as a Result to the list of product outputs
+        factory.outputs = [...factory.outputs, { product, id: `${product.id}-source` }]
+    }
+}
+
+// create the flos
+const flos = [
+    // produccts, factories
+    [Object.keys(products), Object.keys(factories)]
+].reduce((prev, [productIDs, factoryIDs], id) => ({
+    ...prev,
+    [id]: {
+        id,
+        factories: factoryIDs.map(id => factories[id]),
+        products: productIDs.map(id => products[id]),
+    }
+}), {})
 
 // define the server
 const server = new ApolloServer({
@@ -66,6 +165,7 @@ const server = new ApolloServer({
     context: {
         factories,
         products,
+        flos,
     }
 })
 

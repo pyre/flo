@@ -34,7 +34,7 @@ export default () => {
                 <Grid />
 
                 {/* make sure the diagram sits above the grid */}
-                <Query query={floQuery} variables={{ id: 'RmxvOjE=' }} loadingState={null}>
+                <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
                     {({ node }) => <Flo flo={node} />}
                 </Query>
             </g>
