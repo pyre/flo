@@ -1,7 +1,8 @@
 // external imports
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 // local imports
 import { useEvent } from '.'
+import { Diagram } from '~/context'
 
 export default (targetElement, trackers = []) => {
     const [state, setState] = useState({

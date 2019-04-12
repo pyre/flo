@@ -15,6 +15,6 @@ export default (subscription, variables) => {
         // when we're done call the dispose function
         return dispose
 
-        // this effect sound only be added once
+        // this effect should only be added once
     }, [])
 }

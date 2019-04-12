@@ -20,9 +20,9 @@ const Draggable = ({ id, children, origin, onMove }) => {
     )
 
     // compute the amount we've moved in the x direction
-    const deltaX = useNormalDelta(mouseDrag && mouseDrag.currentLocation.x - origin.x)
+    const deltaX = useNormalDelta(mouseDrag && mouseDrag.currentLocation.x - origin.x - diagram.pan.x)
     // compute the amount we've moved in the y direction
-    const deltaY = useNormalDelta(mouseDrag && mouseDrag.currentLocation.y - origin.y)
+    const deltaY = useNormalDelta(mouseDrag && mouseDrag.currentLocation.y - origin.y - diagram.pan.y)
 
     // we need to kick off the onMove handler if we have moved beyond a grid cell
     useEffect(
