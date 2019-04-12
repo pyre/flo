@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { ApolloServer, PubSub } from 'apollo-server'
 import { toGlobalId, fromGlobalId } from 'graphql-relay'
+import { round } from '~/utils'
 
 // load the schema from the local file
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
@@ -220,4 +221,18 @@ const server = new ApolloServer({
 server.listen(5000).then(({ url, subscriptionsUrl }) => {
     console.log(`🚀  Server ready at ${url}`)
     console.log(`🚀  Subscriptions ready at ${subscriptionsUrl}`)
+
+    // lets increment the progress of each product by .1 every 5 seconds
+    const interval = setInterval(() => {
+        // the products we want to modify
+        const updatedProducts = [products[3], products[4]]
+
+        for (const product of updatedProducts) {
+            // bump the progress for the product
+            product.progress = Math.min(round(product.progress + 0.1, 0.1).toFixed(1), 1)
+
+            // trigger an update for that product
+            pubsub.publish(toGlobalId('Product', product.id), { node: product })
+        }
+    }, 2000)
 })
