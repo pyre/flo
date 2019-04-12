@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc, Draggable, Product as ProductCircle } from '~/components'
+import { background, elementOutline, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
 import { useSubscription } from '~/hooks'
 import { Diagram, Environment } from '~/context'
 import { mutate } from '~/utils'
@@ -16,6 +17,22 @@ const Product = ({ product }) => {
     const { diagram, selectElements } = useContext(Diagram)
     const environment = useContext(Environment)
 
+    useSubscription(
+        graphql`
+            subscription ProductSubscription($id: ID!) {
+                product(id: $id) {
+                    progress
+                    position {
+                        x
+                        y
+                    }
+                }
+            }
+        `,
+        {
+            id: product.id,
+        }
+    )
 
     return (
         <Draggable
@@ -54,34 +71,34 @@ const Product = ({ product }) => {
                 {do {
                     // render a full circle if there are both a source and at least one binding
                     if (product.source && product.bindings.length > 0) {
-                        ; <circle fill={elementOutline} cx={product.position.x} cy={product.position.y} r={gutter + 1} />
-                }
-                // if there is no source, then there is only bindings
+                        ;<circle fill={elementOutline} cx={product.position.x} cy={product.position.y} r={gutter + 1} />
+                    }
+                    // if there is no source, then there is only bindings
                     else if (product.source) {
                         // so render the arc that leaves the gap on the right
-                        ; <Arc
-                    r={gutter + 1}
-                    x={product.position.x}
-                    y={product.position.y}
-                    theta1={-230}
-                    theta2={40}
-                    stroke={elementOutline}
-                />
-                }
-                // there are only bindings
+                        ;<Arc
+                            r={gutter + 1}
+                            x={product.position.x}
+                            y={product.position.y}
+                            theta1={-230}
+                            theta2={40}
+                            stroke={elementOutline}
+                        />
+                    }
+                    // there are only bindings
                     else {
                         // so render the arc tha leaves the gap on the left
-                        ; <Arc
-                    r={gutter + 1}
-                    x={product.position.x}
-                    y={product.position.y}
-                    theta1={-40}
-                    theta2={230}
-                    stroke={elementOutline}
-                />
-                }
-            }}
-            // render some space between the fillter and the border
+                        ;<Arc
+                            r={gutter + 1}
+                            x={product.position.x}
+                            y={product.position.y}
+                            theta1={-40}
+                            theta2={230}
+                            stroke={elementOutline}
+                        />
+                    }
+                }}
+                // render some space between the fillter and the border
                 <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} />
                 // if this element is selected we should show a visual indicator
                 {diagram.selectedElements.includes(product.id) && (
