@@ -1,6 +1,6 @@
 // external imports
 import React, { useContext } from 'react'
-import { graphql, createFragmentContainer } from 'react-relay'
+import { graphql, createFragmentContainer, requestSubscription } from 'react-relay'
 // local imports
 import { Arc, Draggable, Product as ProductCircle } from '~/components'
 import { background, elementOutline, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
@@ -15,6 +15,25 @@ const Product = ({ product }) => {
     // grab the diagram selected state
     const { diagram, selectElements } = useContext(Diagram)
     const environment = useContext(Environment)
+
+    const subscription = graphql`
+        subscription ProductSubscription($id: ID!) {
+            product(id: $id) {
+                progress
+                position {
+                    x
+                    y
+                }
+            }
+        }
+    `
+
+    requestSubscription(environment, {
+        subscription,
+        variables: {
+            id: product.id,
+        }
+    })
 
     return (
         <Draggable

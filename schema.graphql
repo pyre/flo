@@ -110,6 +110,10 @@ type Query {
   node(id: ID!): Node
 }
 
+type Subscription {
+  product(id: ID!): Product
+}
+
 """A named result that was created from a factory """
 type Result {
   name: String!

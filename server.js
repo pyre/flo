@@ -86,6 +86,8 @@ const resolvers = {
             // update the position of the specified product
             product.position = { x, y }
 
+            pubsub.publish(productID, { product })
+
             return { product }
         },
         moveFactory(_, { factory: factoryID, x, y }, context) {
@@ -97,6 +99,11 @@ const resolvers = {
             factory.position = { x, y }
 
             return { factory }
+        }
+    },
+    Subscription: {
+        product: {
+            subscribe: (_, { id }) => pubsub.asyncIterator([id])
         }
     },
 }
@@ -197,6 +204,7 @@ const server = new ApolloServer({
 
 
 // start it
-server.listen(5000).then(({ url }) => {
+server.listen(5000).then(({ url, subscriptionsUrl }) => {
     console.log(`🚀  Server ready at ${url}`);
+    console.log(`🚀  Subscriptions ready at ${subscriptionsUrl}`)
 })

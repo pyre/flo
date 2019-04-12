@@ -1,6 +1,9 @@
 // external imports
 import React, { createContext, useState } from 'react'
 import { Environment as RelayEnvironment, Network, RecordSource, Store } from 'relay-runtime'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { execute } from 'apollo-link'
+import { WebSocketLink } from 'apollo-link-ws'
 
 // a context for diagram state
 export const Environment = createContext()
@@ -9,8 +12,8 @@ export const Environment = createContext()
 const source = new RecordSource()
 const store = new Store(source)
 
-// build up the network interface
-const network = Network.create((operation, variables, cacheConfig, uploadables) =>
+// this function is called to retrieve the value of a query
+const fetchQuery = (operation, variables, cacheConfig, uploadables) =>
     fetch('http://localhost:5000/graphql', {
         method: 'POST',
         headers: {
@@ -27,7 +30,22 @@ const network = Network.create((operation, variables, cacheConfig, uploadables) 
         }
         return body
     })
-)
+
+const socketLink = new WebSocketLink(new SubscriptionClient('ws://localhost:5000/graphql', {
+    reconnect: true,
+}))
+
+
+// this function is called to set up a websocket subscription
+const fetchSubscription = (operation, variables) =>
+    execute(socketLink, {
+        query: operation.text,
+        variables,
+    });
+
+
+// build up the network interface
+const network = Network.create(fetchQuery, fetchSubscription)
 
 // instantiate the environment
 const environment = new RelayEnvironment({

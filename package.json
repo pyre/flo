@@ -20,6 +20,8 @@
         "trailingComma": "es5"
     },
     "dependencies": {
+        "apollo-link": "^1.2.11",
+        "apollo-link-ws": "^1.0.17",
         "glamor": "^2.20.40",
         "parcel-bundler": "^1.12.3",
         "pluralize": "^7.0.0",
@@ -51,6 +53,7 @@
         "jest-dom": "^2.1.0",
         "prettier": "^1.14.3",
         "regenerator-runtime": "^0.12.1",
-        "relay-compiler": "^1.7.0"
+        "relay-compiler": "^1.7.0",
+        "subscriptions-transport-ws": "^0.9.16"
     }
 }
