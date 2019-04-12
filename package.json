@@ -28,6 +28,7 @@
         "react": "^16.8.0-alpha.1",
         "react-dom": "^16.8.0-alpha.1",
         "react-relay": "^1.7.0",
+        "react-spring": "^8.0.19",
         "react-testing-library": "^5.2.3",
         "relay-runtime": "^1.7.0",
         "svg-matrix": "0.0.8"

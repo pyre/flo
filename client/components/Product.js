@@ -1,6 +1,7 @@
 // external imports
 import React from 'react'
 import { css } from 'glamor'
+import { Spring } from 'react-spring/renderprops'
 // local imports
 import { productColor, productFillEmpty } from '~/design'
 import { Arc } from '~/components'
@@ -29,7 +30,9 @@ const Product = ({ progress, x, y, style, ...unused }) => {
             // a full circle to designate the zero-progress state
             <circle fill={productFillEmpty} cx={Radius} cy={Radius} r={Radius} />
             // the primary fill of the product should designate progress
-            <Arc fill={productColor} x={Radius} y={Radius} r={Radius} theta1={0} theta2={360 * progress} />
+            <Spring from={{ value: progress === 1 ? 360 : 0 }} to={{ value: progress * 360 }}>
+                {({ value }) => <Arc fill={productColor} x={Radius} y={Radius} r={Radius} theta1={0} theta2={value} />}
+            </Spring>
         </svg>
     )
 }
