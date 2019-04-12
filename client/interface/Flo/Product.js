@@ -17,6 +17,7 @@ const Product = ({ product }) => {
     const { diagram, selectElements } = useContext(Diagram)
     const environment = useContext(Environment)
 
+    // make sure we update this component when the product moves
     useSubscription(
         graphql`
             subscription ProductSubscription($id: ID!) {
