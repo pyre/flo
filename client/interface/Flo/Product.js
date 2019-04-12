@@ -16,20 +16,18 @@ const Product = ({ product }) => {
     const { diagram, selectElements } = useContext(Diagram)
     const environment = useContext(Environment)
 
-    const subscription = graphql`
-        subscription ProductSubscription($id: ID!) {
-            product(id: $id) {
-                progress
-                position {
-                    x
-                    y
+    requestSubscription(environment, {
+        subscription: graphql`
+            subscription ProductSubscription($id: ID!) {
+                product(id: $id) {
+                    progress
+                    position {
+                        x
+                        y
+                    }
                 }
             }
-        }
-    `
-
-    requestSubscription(environment, {
-        subscription,
+        `,
         variables: {
             id: product.id,
         }
