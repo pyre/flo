@@ -79,10 +79,8 @@ type MoveProduct {
 }
 
 type Mutation {
-  assignInputs(factory: ID!, inputs: [BindingAssignment!]!): AssignInputs
   moveProduct(product: ID!, x: Int!, y: Int!): MoveProduct
   moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactory
-  updateFactoryInput(config: KVPairInput!, factory: ID!): UpdateFactoryConfig
 }
 
 """

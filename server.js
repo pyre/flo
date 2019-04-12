@@ -1,11 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import { ApolloServer } from 'apollo-server'
+import { ApolloServer, PubSub } from 'apollo-server'
 import { toGlobalId, fromGlobalId } from 'graphql-relay'
 
 
 // load the schema from the local file
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
+
+// an event broker for subscriptions
+const pubsub = new PubSub()
 
 // schema resolvers
 const resolvers = {
@@ -73,7 +76,29 @@ const resolvers = {
                 ...store[id],
             }
         }
-    }
+    },
+    Mutation: {
+        moveProduct(_, { product: productID, x, y }, context) {
+            // convert the global id into something we can use
+            const { id } = fromGlobalId(productID)
+            const product = context.products[id]
+
+            // update the position of the specified product
+            product.position = { x, y }
+
+            return { product }
+        },
+        moveFactory(_, { factory: factoryID, x, y }, context) {
+            // convert the global id into something we can use
+            const { id } = fromGlobalId(factoryID)
+            const factory = context.factories[id]
+
+            // update the position of the specified factory
+            factory.position = { x, y }
+
+            return { factory }
+        }
+    },
 }
 
 // create the factories
