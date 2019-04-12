@@ -28,11 +28,11 @@ export default () => {
         <Query query={SingleSelectionQuery} variables={{ id }} loadingState={'loading'}>
             {({ node }) => do {
                 if (node.__typename === 'Product') {
-                    ; <SelectedProduct product={node} />
+                    ;<SelectedProduct product={node} />
                 } else if (node.__typename === 'Factory') {
-                    ; <SelectedFactory factory={node} />
+                    ;<SelectedFactory factory={node} />
                 }
             }}
         </Query>
-        )
-    }
+    )
+}

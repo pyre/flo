@@ -62,13 +62,16 @@ const useDragBehavior = elementRef => {
     const mouseDrag = useMouseDrag(elementRef, [spacePressed])
 
     // the keyboard interactions have all sorts of effects
-    useEffect(() => {
-        // if the space bar is pressed and the mouse is being moved
-        if (spacePressed && mouseDrag) {
-            // pan the diagram
-            pan(mouseDrag.delta)
-        }
-    }, [spacePressed, mouseDrag && mouseDrag.delta.x, mouseDrag && mouseDrag.delta.y])
+    useEffect(
+        () => {
+            // if the space bar is pressed and the mouse is being moved
+            if (spacePressed && mouseDrag) {
+                // pan the diagram
+                pan(mouseDrag.delta)
+            }
+        },
+        [spacePressed, mouseDrag && mouseDrag.delta.x, mouseDrag && mouseDrag.delta.y]
+    )
 
     // this hook returns wether or not to show the selection rectangle while dragging
     return (

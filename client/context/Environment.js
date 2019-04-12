@@ -31,16 +31,19 @@ const fetchQuery = (operation, variables, cacheConfig, uploadables) =>
         return body
     })
 
-
 // this function is called to set up a websocket subscription
 const fetchSubscription = (operation, variables) =>
-    execute(new WebSocketLink(new SubscriptionClient('ws://localhost:5000/graphql', {
-        reconnect: true,
-    })), {
+    execute(
+        new WebSocketLink(
+            new SubscriptionClient('ws://localhost:5000/graphql', {
+                reconnect: true,
+            })
+        ),
+        {
             query: operation.text,
             variables,
-        });
-
+        }
+    )
 
 // instantiate the environment
 const environment = new RelayEnvironment({
@@ -48,4 +51,4 @@ const environment = new RelayEnvironment({
     store,
 })
 
-export const EnvironmentProvider = (props) => <Environment.Provider value={environment} {...props} />
+export const EnvironmentProvider = props => <Environment.Provider value={environment} {...props} />

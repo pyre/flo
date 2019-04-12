@@ -1,9 +1,9 @@
 // external imports
 import React, { useContext } from 'react'
-import { graphql, createFragmentContainer, requestSubscription } from 'react-relay'
+import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc, Draggable, Product as ProductCircle } from '~/components'
-import { background, elementOutline, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
+import { useSubscription } from '~/hooks'
 import { Diagram, Environment } from '~/context'
 import { mutate } from '~/utils'
 import { Radius } from '~/components/Product'
@@ -16,23 +16,6 @@ const Product = ({ product }) => {
     const { diagram, selectElements } = useContext(Diagram)
     const environment = useContext(Environment)
 
-    // make sure we update the UI if the position or progress changes
-    requestSubscription(environment, {
-        subscription: graphql`
-            subscription ProductSubscription($id: ID!) {
-                product(id: $id) {
-                    progress
-                    position {
-                        x
-                        y
-                    }
-                }
-            }
-        `,
-        variables: {
-            id: product.id,
-        }
-    })
 
     return (
         <Draggable
