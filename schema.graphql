@@ -1,28 +1,32 @@
-"""Assign a concreate product to the named input of a given factory."""
+"""
+Assign a concreate product to the named input of a given factory.
+"""
 type AssignInputs {
-  factory: Factory
+    factory: Factory
 }
 
 type Attribute {
-  name: String
-  value: String
-  kind: AttributeKind
+    name: String
+    value: String
+    kind: AttributeKind
 }
 
 enum AttributeKind {
-  String
-  Int
-  Float
-  Date
+    String
+    Int
+    Float
+    Date
 }
 
-"""An input for a factory """
+"""
+An input for a factory
+"""
 type Binding implements Node {
-  id: ID!
-  name: String!
-  protocol: String!
-  product: Product
-  factory: Factory!
+    id: ID!
+    name: String!
+    protocol: String!
+    product: Product
+    factory: Factory!
 }
 
 """
@@ -30,8 +34,8 @@ An input to specify a particular product to be assigned to the input
 of a factory.
 """
 input BindingAssignment {
-  name: String!
-  product: ID!
+    name: String!
+    product: ID!
 }
 
 """
@@ -39,90 +43,103 @@ The primary actor of our flows. Responsible for taking data in that
 matches a particular protocol and results in a concrete product
 """
 type Factory implements Node {
-  id: ID!
-  name: String!
-  inputs: [Binding!]!
-  outputs: [Result!]!
-  config: [KVPair!]!
-  position: Position!
-  attributes: [Attribute!]!
+    id: ID!
+    name: String!
+    inputs: [Binding!]!
+    outputs: [Result!]!
+    config: [KVPair!]!
+    position: Position!
+    attributes: [Attribute!]!
 }
 
 type Flo implements Node {
-  id: ID!
-  fixed: Boolean
-  factories: [Factory!]!
-  products: [Product!]!
+    id: ID!
+    fixed: Boolean
+    factories: [Factory!]!
+    products: [Product!]!
 }
 
-"""A generic key/value object to store shapeless meta data and config """
+"""
+A generic key/value object to store shapeless meta data and config
+"""
 type KVPair {
-  key: String!
-  value: String!
-  kind: String!
+    key: String!
+    value: String!
+    kind: String!
 }
 
-"""A generic key/value object to store shapeless meta data and config """
+"""
+A generic key/value object to store shapeless meta data and config
+"""
 input KVPairInput {
-  key: String!
-  value: String!
+    key: String!
+    value: String!
 }
 
-"""Move the location for a product to a specific x,y coordinate"""
+"""
+Move the location for a product to a specific x,y coordinate
+"""
 type MoveFactory {
-  factory: Factory
+    factory: Factory
 }
 
-"""Move the location for a product to a specific x,y coordinate"""
+"""
+Move the location for a product to a specific x,y coordinate
+"""
 type MoveProduct {
-  product: Product
+    product: Product
 }
 
 type Mutation {
-  moveProduct(product: ID!, x: Int!, y: Int!): MoveProduct
-  moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactory
+    moveProduct(product: ID!, x: Int!, y: Int!): MoveProduct
+    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactory
 }
 
 """
 An interface for objects that can be looked up by a globally unique ID
 """
 interface Node {
-  id: ID!
+    id: ID!
 }
 
 type Position {
-  x: Int
-  y: Int
+    x: Int
+    y: Int
 }
 
-"""A concrete result of running a specific factory """
+"""
+A concrete result of running a specific factory
+"""
 type Product implements Node {
-  id: ID!
-  source: Factory
-  name: String!
-  bindings: [Binding!]!
-  position: Position!
-  progress: Float!
-  attributes: [Attribute!]!
+    id: ID!
+    source: Factory
+    name: String!
+    bindings: [Binding!]!
+    position: Position!
+    progress: Float!
+    attributes: [Attribute!]!
 }
 
 type Query {
-  node(id: ID!): Node
+    node(id: ID!): Node
 }
 
 type Subscription {
-  product(id: ID!): Product
+    node(id: ID!): Node
 }
 
-"""A named result that was created from a factory """
+"""
+A named result that was created from a factory
+"""
 type Result {
-  name: String!
-  product: Product!
-  id: ID!
+    name: String!
+    product: Product!
+    id: ID!
 }
 
-"""Update the config of a factory"""
+"""
+Update the config of a factory
+"""
 type UpdateFactoryConfig {
-  factory: Factory
+    factory: Factory
 }
-

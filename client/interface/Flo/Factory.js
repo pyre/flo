@@ -10,6 +10,7 @@ import {
     background,
     factorySelectedBorder,
 } from '~/design'
+import { useSubscription } from '~/hooks'
 import { Diagram, Environment } from '~/context'
 import { Draggable, Factory as FactoryDiamond } from '~/components'
 import { mutate } from '~/utils'
@@ -55,6 +56,25 @@ const Factory = ({
 
     // pull out the selected element
     const [selectedID] = diagram.selectedElements
+
+    // make sure we update this component when the product moves
+    useSubscription(
+        graphql`
+            subscription FactorySubscription($id: ID!) {
+                node(id: $id) {
+                    ... on Factory {
+                        position {
+                            x
+                            y
+                        }
+                    }
+                }
+            }
+        `,
+        {
+            id: factory.id,
+        }
+    )
 
     return (
         <>

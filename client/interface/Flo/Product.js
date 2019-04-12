@@ -21,11 +21,13 @@ const Product = ({ product }) => {
     useSubscription(
         graphql`
             subscription ProductSubscription($id: ID!) {
-                product(id: $id) {
-                    progress
-                    position {
-                        x
-                        y
+                node(id: $id) {
+                    ... on Product {
+                        progress
+                        position {
+                            x
+                            y
+                        }
                     }
                 }
             }
