@@ -229,7 +229,7 @@ server.listen(5000).then(({ url, subscriptionsUrl }) => {
 
         for (const product of updatedProducts) {
             // bump the progress for the product
-            product.progress = Math.min(round(product.progress + 0.1, 0.1).toFixed(1), 1)
+            product.progress = product.progress === 1 ? 0 : Math.min(round(product.progress + 0.1, 0.1).toFixed(1), 1)
 
             // trigger an update for that product
             pubsub.publish(toGlobalId('Product', product.id), { node: product })
