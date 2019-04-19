@@ -1,0 +1,22 @@
+;
+; michael a.g. aïvázis <michael.aivazis@para-sim.com>
+; parasim
+; (c) 1998-2019 all rights reserved
+;
+
+; project defaults
+project:
+  name = flo
+  authors = michael a.g. aïvázis <michael.aivazis@para-sim.com>
+  affiliations = parasim
+  span = 1998-2019
+
+; do not auto-launch the browser
+pyre.shells.web # flo.plexus.shell:
+    auto = off
+
+; http configuration
+flo.plexus.nexus.services.web:
+    address = ip4:0.0.0.0:50000
+
+; end of file
