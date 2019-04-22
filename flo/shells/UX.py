@@ -7,9 +7,12 @@
 
 
 # external
+import json
 import re
 # support
 import flo
+# the graphql hndler
+from .GraphQL import GraphQL
 
 
 # declaration
@@ -89,9 +92,17 @@ class UX:
             return server.documents.Literal(server=server, value=payload)
 
         # show me
-        channel.log(request.payload)
-        # otherwise
-        return server.documents.JSON(server=server, value={})
+        # channel.log(request.payload)
+        # convert from JSON
+        payload = json.loads(b'\n'.join(request.payload))
+        # unpack
+        variables = payload.get("variables")
+        operation = payload.get("operationName")
+        query = payload.get("query")
+
+        # otherwise, pass it on to the graphql handler
+        return self.gql.resolve(server=server, request=request,
+                                query=query, operation=operation, variables=variables)
 
 
     # private data
@@ -101,6 +112,9 @@ class UX:
         r"/(?P<document>(fonts/.+)|(graphics/.+)|(scripts/.+)|(styles/.+)|(.+\.js))",
         r"/(?P<root>.*)",
         ]))
+
+
+    gql = GraphQL()
 
 
 # end of file
