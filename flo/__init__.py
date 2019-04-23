@@ -15,6 +15,8 @@ from pyre import (
     export, provides,
     # the manager of the pyre runtime
     executive,
+    # support for work flows
+    flow,
     # miscellaneous
     tracking, units
     )
@@ -27,7 +29,9 @@ home, prefix, defaults = package.layout()
 
 # publish local modules
 from . import (
-    meta, # meta-data
+    meta,   # meta-data
+    model,  # product and factory specifications
+    isce,   # product and factory implementations
     )
 
 # administrivia
