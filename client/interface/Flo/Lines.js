@@ -6,17 +6,19 @@ import { elementOutline } from '~/design'
 
 // the primary length for the squares that define the in and out point
 const squareLength = 3
+// the distance from the central diamond to the square
+const armLength = 50
 
 const Lines = ({ flo }) => (
     <g>
         {flo.factories.map(factory => {
             // compute the location for the left and right input squares
             const leftSquareLocation = {
-                x: factory.position.x - 50,
+                x: factory.position.x - armLength,
                 y: factory.position.y,
             }
             const rightSquareLocation = {
-                x: factory.position.x + 50,
+                x: factory.position.x + armLength,
                 y: factory.position.y,
             }
 
@@ -42,6 +44,15 @@ const Lines = ({ flo }) => (
                             height={2 * squareLength}
                         />
                     )}
+                    // there is a line going from one square to the other
+                    <line
+                        stroke={elementOutline}
+                        strokeWidth={1}
+                        x1={factory.position.x + armLength}
+                        y1={factory.position.y}
+                        y2={factory.position.y}
+                        x2={factory.position.x - armLength}
+                    />
                     // render the lines joining the left square to each of the inputs
                     {factory.inputs.map(binding => (
                         <React.Fragment key={binding.id}>

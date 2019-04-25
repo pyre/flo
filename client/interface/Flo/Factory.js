@@ -23,29 +23,12 @@ import { mutate } from '~/utils'
         - the optional input and output squares (with a line joining them)
 */
 
-// the primary length for the central daimond
-const diamondLength = 12
-
-// the distance from the central diamond to the square
-const armLength = 50
-
 const Factory = ({
     factory: {
         position: { x, y },
         ...factory
     },
 }) => {
-    // the location of the left square
-    const leftSquareLocation = {
-        x: x - armLength,
-        y: y,
-    }
-    // the location of the right square
-    const rightSquareLocation = {
-        x: x + armLength,
-        y: y,
-    }
-
     // grab the diagram state
     const { diagram } = useContext(Diagram)
     const environment = useContext(Environment)
@@ -73,50 +56,39 @@ const Factory = ({
     )
 
     return (
-        <>
-            // there is a line going from one square to the other
-            <line stroke={elementOutline} strokeWidth={1} x1={x + armLength} y1={y} y2={y} x2={x - armLength} />
-            // the center of a factory is the diamond used as the target for clicks
-            <Draggable
-                id={factory.id}
-                origin={{ x, y }}
-                onMove={position =>
-                    mutate({
-                        environment,
-                        query: graphql`
-                            mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
-                                moveFactory(factory: $factory, x: $x, y: $y) {
-                                    factory {
-                                        id
-                                        position {
-                                            x
-                                            y
-                                        }
+        <Draggable
+            id={factory.id}
+            origin={{ x, y }}
+            onMove={position =>
+                mutate({
+                    environment,
+                    query: graphql`
+                        mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
+                            moveFactory(factory: $factory, x: $x, y: $y) {
+                                factory {
+                                    id
+                                    position {
+                                        x
+                                        y
                                     }
                                 }
                             }
-                        `,
-                        variables: { factory: factory.id, ...position },
-                        optimisticResponse: {
-                            moveFactory: {
-                                factory: {
-                                    id: factory.id,
-                                    position,
-                                },
+                        }
+                    `,
+                    variables: { factory: factory.id, ...position },
+                    optimisticResponse: {
+                        moveFactory: {
+                            factory: {
+                                id: factory.id,
+                                position,
                             },
                         },
-                    })
-                }
-            >
-                <FactoryDiamond
-                    x={x}
-                    y={y}
-                    center={true}
-                    style={{ cursor: 'pointer' }}
-                    selected={factory.id === selectedID}
-                />
-            </Draggable>
-        </>
+                    },
+                })
+            }
+        >
+            <FactoryDiamond x={x} y={y} center={true} selected={factory.id === selectedID} />
+        </Draggable>
     )
 }
 

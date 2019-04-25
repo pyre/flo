@@ -46,7 +46,11 @@ const Draggable = ({ id, children, origin, onMove }) => {
         [deltaX, deltaY]
     )
 
-    return <g ref={ref => (elementRef.current = ref)}>{children}</g>
+    return (
+        <g ref={ref => (elementRef.current = ref)} style={{ cursor: 'pointer' }}>
+            {children}
+        </g>
+    )
 }
 
 export default Draggable
