@@ -21,7 +21,7 @@ const Lines = ({ flo }) => (
             }
 
             return (
-                <>
+                <React.Fragment key={factory.id}>
                     // only show the input rectangle if there is more than one product
                     {factory.inputs.length !== 1 && (
                         <rect
@@ -43,7 +43,7 @@ const Lines = ({ flo }) => (
                         />
                     )}
                     // render the lines joining the left square to each of the inputs
-                    {factory.inputs.map((binding, i) => (
+                    {factory.inputs.map(binding => (
                         <React.Fragment key={binding.id}>
                             <line
                                 x1={leftSquareLocation.x}
@@ -84,7 +84,7 @@ const Lines = ({ flo }) => (
                             />
                         </React.Fragment>
                     ))}
-                </>
+                </React.Fragment>
             )
         })}
     </g>
@@ -101,6 +101,7 @@ export default createFragmentContainer(
                     y
                 }
                 outputs {
+                    id
                     product {
                         id
                         position {
@@ -110,6 +111,7 @@ export default createFragmentContainer(
                     }
                 }
                 inputs {
+                    id
                     product {
                         id
                         position {
