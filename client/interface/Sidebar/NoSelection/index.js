@@ -9,18 +9,23 @@ import { darkGrey } from '~/design'
 import { Query } from '~/components'
 import { useQuery } from '~/hooks'
 
+const NoSelectionQuery = graphql`
+    query NoSelectionSidebarQuery {
+        products {
+            id
+        }
+        factories {
+            id
+        }
+    }
+`
+
 export default () => {
     // the current tab
     const [tabIndex, setTabIndex] = useState(0)
 
     // fire the query
-    const { data, loading } = useQuery(graphql`
-        query NoSelectionSidebarQuery {
-            products {
-                id
-            }
-        }
-    `)
+    const { data, loading } = useQuery(NoSelectionQuery)
 
     return (
         <Tabs
@@ -51,7 +56,9 @@ export default () => {
                 <TabPanel {...css({ outline: 'none' })}>
                     {!loading && data.products.map(product => <div key={product.id}>{product.id}</div>)}
                 </TabPanel>
-                <TabPanel {...css({ outline: 'none' })}>factories</TabPanel>
+                <TabPanel {...css({ outline: 'none' })}>
+                    {!loading && data.factories.map(factory => <div key={factory.id}>{factory.id}</div>)}
+                </TabPanel>
             </TabPanels>
         </Tabs>
     )
