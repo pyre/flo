@@ -56,6 +56,7 @@ const resolvers = {
         __resolveType: obj => obj.__typename,
     },
     Query: {
+        products: (_, __, { products }) => Object.values(products),
         node(_, { id: globalID }, context) {
             // grab the id from the argument
             const { id, type } = fromGlobalId(globalID)

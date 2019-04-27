@@ -2,13 +2,25 @@
 import React, { useState } from 'react'
 import { css } from 'glamor'
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
+import { graphql } from 'react-relay'
 // local imports
 import Header from '../Header'
 import { darkGrey } from '~/design'
+import { Query } from '~/components'
+import { useQuery } from '~/hooks'
 
 export default () => {
     // the current tab
     const [tabIndex, setTabIndex] = useState(0)
+
+    // fire the query
+    const { data, loading } = useQuery(graphql`
+        query NoSelectionSidebarQuery {
+            products {
+                id
+            }
+        }
+    `)
 
     return (
         <Tabs
@@ -36,7 +48,9 @@ export default () => {
                 </Tab>
             </TabList>
             <TabPanels>
-                <TabPanel {...css({ outline: 'none' })}>products</TabPanel>
+                <TabPanel {...css({ outline: 'none' })}>
+                    {!loading && data.products.map(product => <div key={product.id}>{product.id}</div>)}
+                </TabPanel>
                 <TabPanel {...css({ outline: 'none' })}>factories</TabPanel>
             </TabPanels>
         </Tabs>
