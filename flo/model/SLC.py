@@ -17,4 +17,14 @@ class SLC(flo.flow.specification, family="flo.products.slc"):
     """
 
 
+    # framework support
+    @classmethod
+    def pyre_default(cls, **kwds):
+        """
+        Pick a default implementation
+        """
+        # use SLC from the isce data model
+        return flo.isce.slc()
+
+
 # end of file
