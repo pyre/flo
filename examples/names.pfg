@@ -1,0 +1,24 @@
+;
+; michael a.g. aïvázis <michael.aivazis@para-sim.com>
+; parasim
+; (c) 1998-2019 all rights reserved
+;
+
+; the app
+names:
+    factories = flo.isce.formSLC#f1,flo.isce.formSLC#f2
+
+    products =
+        flo.isce.raw#r1, flo.isce.slc#s1,
+        flo.isce.raw#r2, flo.isce.slc#s2
+
+; factories
+flo.isce.formSLC # f1:
+    raw = r1
+    slc = s1
+
+flo.isce.formSLC # f2:
+    raw = r2
+    slc = s2
+
+; end of file
