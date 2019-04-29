@@ -69,7 +69,7 @@ const Product = ({ product }) => {
                 })
             }
         >
-            <g onClick={() => selectElements(product.id)} style={{ cursor: 'pointer' }}>
+            <>
                 // render the outer circle
                 {do {
                     // render a full circle if there are both a source and at least one binding
@@ -121,7 +121,7 @@ const Product = ({ product }) => {
                     </>
                 )}
                 <ProductCircle x={product.position.x} y={product.position.y} progress={product.progress} />
-            </g>
+            </>
         </Draggable>
     )
 }

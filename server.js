@@ -144,7 +144,7 @@ const products = [
     [{ x: 350, y: 300 }, 1, null, [0]],
     [{ x: 350, y: 400 }, 1, null, [0]],
     [{ x: 650, y: 250 }, 0.1, 0, []],
-    [{ x: 650, y: 350 }, 0.1, 0, []],
+    [{ x: 650, y: 350 }, 0.6, 0, []],
 ].reduce(
     (prev, [position, progress, source, inputs], id) => ({
         ...prev,

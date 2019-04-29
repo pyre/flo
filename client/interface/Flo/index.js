@@ -4,9 +4,13 @@ import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
 import Factory from './Factory'
 import Product from './Product'
+import Lines from './Lines'
 
 const Flo = ({ flo }) => (
     <>
+        // the lines have to go above so they render underneath
+        <Lines flo={flo} />
+        // render the products and factories
         {flo.factories.map(factory => (
             <Factory key={factory.id} factory={factory} />
         ))}
@@ -28,6 +32,7 @@ export default createFragmentContainer(
                 id
                 ...Factory_factory
             }
+            ...Lines_flo
         }
     `
 )

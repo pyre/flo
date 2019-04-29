@@ -17,4 +17,14 @@ class RAW(flo.flow.specification, family="flo.products.raw"):
     """
 
 
+    # framework support
+    @classmethod
+    def pyre_default(cls, **kwds):
+        """
+        Pick a default implementation
+        """
+        # use RAW from the isce data model
+        return flo.isce.raw()
+
+
 # end of file
