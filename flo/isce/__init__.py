@@ -43,5 +43,35 @@ def formSLC():
     return FormSLC
 
 
+# functions that create instances
+def newRAW(**kwds):
+    """
+    Build a new instance of a RAW product
+    """
+    # get the class
+    from .RAW import RAW
+    # build one and return it
+    return RAW(**kwds)
+
+
+def newSLC(**kwds):
+    """
+    Build a new instance of a SLC product
+    """
+    # get the class
+    from .SLC import SLC
+    # build one and return it
+    return SLC(**kwds)
+
+
+def newFormSLC(**kwds):
+    """
+    Build a new instance of a FormSLC factory
+    """
+    # get the class
+    from .FormSLC import FormSLC
+    # build one and return it
+    return FormSLC(**kwds)
+
 
 # end of file
