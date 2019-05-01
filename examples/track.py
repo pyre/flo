@@ -40,8 +40,15 @@ class Names(flo.flow.workflow, family="flo.applications.names"):
         channel.line(f"slc factory: {f}")
         channel.line(f"    raw: {f.raw}")
         channel.line(f"    slc: {f.slc}")
-        channel.line(f"    inputs: {f.pyre_inputs}")
-        channel.line(f"    outputs: {f.pyre_outputs}")
+        channel.line(f"    inputs:")
+        for input in f.pyre_inputs:
+            # get the actual product
+            product = f.pyre_inventory[input].value
+            channel.line(f"       {product}")
+        channel.line(f"    outputs:")
+        for output in f.pyre_outputs:
+            product = f.pyre_inventory[output].value
+            channel.line(f"       {product}")
         channel.line(f"    history:")
 
         # grab the formSLC tracker
