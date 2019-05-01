@@ -5,7 +5,7 @@
 ;
 
 ; the app
-names:
+load:
     factories = flo.isce.formSLC#f1,flo.isce.formSLC#f2
 
     products =
