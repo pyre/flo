@@ -21,9 +21,9 @@ class FormSLC(flo.flow.producer, family="flo.factories.formSLC"):
     """
 
     # inputs
-    raw = RAW.blueprint()
+    raw = RAW.input()
     # outputs
-    slc = SLC.product()
+    slc = SLC.output()
 
 
 # end of file

@@ -17,9 +17,9 @@ class FormSLC(flo.flow.factory, family="isce.factories.formSLC", implements=flo.
     """
 
     # inputs
-    raw = flo.model.raw.blueprint()
+    raw = flo.model.raw.input()
     # outputs
-    slc = flo.model.slc.product()
+    slc = flo.model.slc.output()
 
 
 # end of file
