@@ -21,5 +21,8 @@ class FormSLC(flo.flow.factory, family="isce.factories.formSLC", implements=flo.
     # outputs
     slc = flo.model.slc.output()
 
+    # configurable state
+    prf = flo.properties.float(default=1.0)
+
 
 # end of file
