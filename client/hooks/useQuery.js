@@ -15,19 +15,16 @@ export default (query, variables) => {
     const [error, setError] = useState(null)
 
     // we need to trigger the query when the variables change
-    useEffect(
-        () => {
-            // we are now loading
-            setLoading(true)
+    useEffect(() => {
+        // we are now loading
+        setLoading(true)
 
-            // fire the query
-            fetchQuery(environment, query, variables)
-                .then(setData)
-                .catch(setError)
-                .finally(() => setLoading(false))
-        },
-        [variables]
-    )
+        // fire the query
+        fetchQuery(environment, query, variables)
+            .then(setData)
+            .catch(setError)
+            .finally(() => setLoading(false))
+    }, [variables])
 
     return {
         loading,

@@ -4,18 +4,20 @@ import { css } from 'glamor'
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@reach/tabs'
 import { graphql } from 'react-relay'
 // local imports
-import Header from '../Header'
-import { darkGrey } from '~/design'
 import { Query } from '~/components'
 import { useQuery } from '~/hooks'
+import FactoryPrototypeEntry from './FactoryPrototypeEntry'
+import ProductEntry from './ProductEntry'
 
 const NoSelectionQuery = graphql`
     query NoSelectionSidebarQuery {
         products {
             id
+            ...ProductEntry_product
         }
         factories {
             id
+            ...FactoryPrototypeEntry_factory
         }
     }
 `
@@ -24,43 +26,48 @@ export default () => {
     // the current tab
     const [tabIndex, setTabIndex] = useState(0)
 
-    // fire the query
-    const { data, loading } = useQuery(NoSelectionQuery)
-
     return (
-        <Tabs
-            {...css({
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
-            })}
-            index={tabIndex}
-            onChange={setTabIndex}
-        >
-            <TabList
-                {...css({
-                    flexDirection: 'row',
-                    display: 'flex',
-                    borderBottom: `1px solid #dedede`,
-                    marginBottom: 9,
-                })}
-            >
-                <Tab as="div" {...css(styles.tab)} {...tabIndex !== 0 && css(styles.tabInactive)}>
-                    Products
-                </Tab>
-                <Tab as="div" {...css(styles.tab)} {...tabIndex !== 1 && css(styles.tabInactive)}>
-                    Factories
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel {...css({ outline: 'none' })}>
-                    {!loading && data.products.map(product => <div key={product.id}>{product.id}</div>)}
-                </TabPanel>
-                <TabPanel {...css({ outline: 'none' })}>
-                    {!loading && data.factories.map(factory => <div key={factory.id}>{factory.id}</div>)}
-                </TabPanel>
-            </TabPanels>
-        </Tabs>
+        <Query query={NoSelectionQuery} loadingState={'Loading...'}>
+            {data => (
+                <Tabs
+                    {...css({
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 1,
+                    })}
+                    index={tabIndex}
+                    onChange={setTabIndex}
+                >
+                    <TabList
+                        {...css({
+                            flexDirection: 'row',
+                            display: 'flex',
+                            borderBottom: `1px solid #dedede`,
+                            marginBottom: 9,
+                        })}
+                    >
+                        <Tab as="div" {...css(styles.tab)} {...tabIndex !== 0 && css(styles.tabInactive)}>
+                            Products
+                        </Tab>
+                        <Tab as="div" {...css(styles.tab)} {...tabIndex !== 1 && css(styles.tabInactive)}>
+                            Factories
+                        </Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel {...css({ outline: 'none' })}>
+                            {data.products.map(product => (
+                                <ProductEntry key={product.id} product={product} />
+                            ))}
+                        </TabPanel>
+                        <TabPanel {...css({ outline: 'none' })}>
+                            {data.factories.map(factory => (
+                                <FactoryPrototypeEntry key={factory.id} factory={factory} />
+                            ))}
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            )}
+        </Query>
     )
 }
 

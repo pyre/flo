@@ -31,10 +31,10 @@
         "react": "^16.8.0-alpha.1",
         "react-dom": "^16.8.0-alpha.1",
         "react-hot-loader": "4.8.4",
-        "react-relay": "^1.7.0",
+        "react-relay": "^3.0.0",
         "react-spring": "^8.0.19",
         "react-testing-library": "^5.2.3",
-        "relay-runtime": "^1.7.0",
+        "relay-runtime": "^3.0.0",
         "svg-matrix": "0.0.8"
     },
     "devDependencies": {
@@ -63,7 +63,7 @@
         "jest-dom": "^2.1.0",
         "prettier": "^1.14.3",
         "regenerator-runtime": "^0.12.1",
-        "relay-compiler": "^1.7.0",
+        "relay-compiler": "^3.0.0",
         "style-loader": "0.23.1",
         "subscriptions-transport-ws": "^0.9.16",
         "webpack": "4.30.0",
