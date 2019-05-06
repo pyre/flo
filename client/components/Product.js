@@ -17,12 +17,13 @@ const Product = ({ progress, x, y, style, ...unused }) => {
 
     return (
         <svg
-            {...css({
+            style={{
                 width: 2 * Radius,
                 height: 2 * Radius,
                 overflow: 'visible',
+                zIndex: 100,
                 ...style,
-            })}
+            }}
             x={x - Radius}
             y={y - Radius}
             {...unused}
