@@ -5,7 +5,7 @@ import { css, hover } from 'glamor'
 // local imports
 import { Product } from '~/components'
 import { useMouseDrag } from '~/hooks'
-import { lightGrey } from '~/design'
+import { lightGrey, darkGrey } from '~/design'
 
 const ProductEntry = ({ product }) => {
     // a ref to track mouse drag
@@ -21,7 +21,10 @@ const ProductEntry = ({ product }) => {
                 {...css({
                     display: 'flex',
                     flexDirection: 'row',
-                    padding: 10,
+                    paddingLeft: 10,
+                    paddingRight: 10,
+                    paddingTop: 7,
+                    paddingBottom: 7,
                     alignItems: 'center',
                     cursor: 'move',
                     userSelect: 'none',
@@ -30,8 +33,11 @@ const ProductEntry = ({ product }) => {
                     backgroundColor: lightGrey,
                 })}
             >
-                <Product progress={1} {...css({ marginRight: 10 })} />
-                <div {...css({})}>{product.name}</div>
+                <Product progress={1} {...css({ marginRight: 12 })} />
+                <div {...css({ display: 'flex', flexDirection: 'column' })}>
+                    <div {...css({ lineHeight: '16px' })}>{product.name}</div>
+                    <div {...css({ color: darkGrey })}>{product.description}</div>
+                </div>
             </div>
             {drag && (
                 <Product
@@ -52,6 +58,7 @@ export default createFragmentContainer(
     graphql`
         fragment ProductEntry_product on Product {
             name
+            description
         }
     `
 )

@@ -114,6 +114,7 @@ type Product implements Node {
     id: ID!
     source: Factory
     name: String!
+    description: String
     bindings: [Binding!]!
     position: Position!
     progress: Float!

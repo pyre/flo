@@ -153,6 +153,7 @@ const products = [
         [id]: {
             id,
             name: 'this.awesome.product',
+            description: 'an awesome description',
             position,
             progress,
             source: factories[source],
