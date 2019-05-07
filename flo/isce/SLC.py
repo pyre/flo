@@ -16,5 +16,9 @@ class SLC(flo.flow.product, family="isce.products.slc", implements=flo.model.slc
     The ISCE SLC data product
     """
 
+    # public data
+    uri = flo.properties.path()
+    uri.doc = "the name of the file with the RAW raster"
+
 
 # end of file
