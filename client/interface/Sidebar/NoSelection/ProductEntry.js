@@ -31,8 +31,11 @@ const ProductEntry = ({ product }) => {
         // the shadow should follow the mouse as closely as possible
         shadowLocation = drag.currentLocation
 
+        // the width of the diagram
+        const diagramWidth = window.innerWidth - dims.sidebarWidth
+
         // if we are dragging the shadow outside of the sidebar
-        if (drag.currentLocation.x < window.innerWidth - dims.sidebarWidth) {
+        if (drag.currentLocation.x < diagramWidth) {
             // grab the diagram info we need
             const { gridSize, pan } = diagram
 
@@ -40,6 +43,13 @@ const ProductEntry = ({ product }) => {
             const gridLeftX = pan.x < 0 ? gridSize + (pan.x % gridSize) : pan.x % gridSize
             // compute the difference between the left grid and the mouse
             const nGridsWide = round(drag.currentLocation.x - gridLeftX, gridSize)
+
+            let shadowX = gridLeftX + nGridsWide
+            // if the shadow is going to end up in the sidebar
+            if (shadowX > diagramWidth) {
+                // make sure the shadow stays in the diagram
+                shadowX -= gridSize
+            }
 
             // the y coordinate of the first horzintaol grid line visible
             const gridTopY = pan.y < 0 ? gridSize + (pan.y % gridSize) : pan.y % gridSize
@@ -49,7 +59,7 @@ const ProductEntry = ({ product }) => {
             // the y coordinate of the first horizontal grid line visible
             // we should snap the shadow to the grid
             shadowLocation = {
-                x: gridLeftX + nGridsWide,
+                x: shadowX,
                 y: gridTopY + nGridsTall,
             }
         }
