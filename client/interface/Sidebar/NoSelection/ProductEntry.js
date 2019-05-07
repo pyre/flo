@@ -17,6 +17,9 @@ const ProductEntry = ({ product }) => {
     const { diagram, selectElements } = useContext(Diagram)
     const { dims } = useContext(Interface)
 
+    // the width of the diagram
+    const diagramWidth = window.innerWidth - dims.sidebarWidth
+
     // we need to track mouse drags on the element
     const drag = useMouseDrag(rootElement)
     // the location to show the shadow
@@ -33,9 +36,6 @@ const ProductEntry = ({ product }) => {
 
         // the shadow should follow the mouse as closely as possible
         shadowLocation = currentLocation
-
-        // the width of the diagram
-        const diagramWidth = window.innerWidth - dims.sidebarWidth
 
         // if we are dragging the shadow outside of the sidebar
         if (currentLocation.x < diagramWidth) {
@@ -77,7 +77,7 @@ const ProductEntry = ({ product }) => {
     // when we let go, we need to set the mutation that creates the product
     useEffect(() => {
         // if we are no longer dragging but we just were
-        if (!drag && isDragging.current) {
+        if (!drag && isDragging.current && isDragging.current.x < diagramWidth) {
             mutate({
                 environment,
                 query: graphql`
