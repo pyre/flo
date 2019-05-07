@@ -27,22 +27,25 @@ const ProductEntry = ({ product }) => {
     const relativePosition = useRelativePosition(drag ? drag.currentLocation : null)
 
     // we only want to show the shadow if we are dragging
-    if (drag) {
+    if (drag && (drag.origin.x != drag.currentLocation.x || drag.origin.y != drag.currentLocation.y)) {
+        // save a reference to the current location
+        const { currentLocation } = drag
+
         // the shadow should follow the mouse as closely as possible
-        shadowLocation = drag.currentLocation
+        shadowLocation = currentLocation
 
         // the width of the diagram
         const diagramWidth = window.innerWidth - dims.sidebarWidth
 
         // if we are dragging the shadow outside of the sidebar
-        if (drag.currentLocation.x < diagramWidth) {
+        if (currentLocation.x < diagramWidth) {
             // grab the diagram info we need
             const { gridSize, pan } = diagram
 
             // the x coordinate of the first vertical grid line visible
             const gridLeftX = pan.x < 0 ? gridSize + (pan.x % gridSize) : pan.x % gridSize
             // compute the difference between the left grid and the mouse
-            const nGridsWide = round(drag.currentLocation.x - gridLeftX, gridSize)
+            const nGridsWide = round(currentLocation.x - gridLeftX, gridSize)
 
             let shadowX = gridLeftX + nGridsWide
             // if the shadow is going to end up in the sidebar
@@ -54,7 +57,7 @@ const ProductEntry = ({ product }) => {
             // the y coordinate of the first horzintaol grid line visible
             const gridTopY = pan.y < 0 ? gridSize + (pan.y % gridSize) : pan.y % gridSize
             // compute the difference between the left grid and the mouse
-            const nGridsTall = round(drag.currentLocation.y - gridTopY, gridSize)
+            const nGridsTall = round(currentLocation.y - gridTopY, gridSize)
 
             // the y coordinate of the first horizontal grid line visible
             // we should snap the shadow to the grid
