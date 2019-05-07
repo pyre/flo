@@ -5,7 +5,7 @@ import SvgMatrix from 'svg-matrix'
 // local imports
 import { Query } from '~/components'
 import { Flo } from '~/interface'
-import { Diagram } from '~/context'
+import { Diagram, Interface } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import Grid from './Grid'
 import SelectionRectangle from './SelectionRectangle'

@@ -5,7 +5,7 @@ import { css } from 'glamor'
 import { hot } from 'react-hot-loader/root'
 import { ReactRelayContext } from 'react-relay'
 // local imports
-import { DiagramProvider, EnvironmentProvider } from '~/context'
+import { DiagramProvider, EnvironmentProvider, InterfaceProvider } from '~/context'
 import { Diagram, Sidebar } from '~/interface'
 
 import './reset.css'

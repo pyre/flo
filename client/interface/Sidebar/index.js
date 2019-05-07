@@ -3,15 +3,17 @@ import React, { useContext } from 'react'
 import { css } from 'glamor'
 // local imports
 import * as styles from './styles'
-import { Diagram } from '~/context'
+import { Diagram, Interface } from '~/context'
 import NoSelection from './NoSelection'
 import WithSelection from './WithSelection'
 
 export default () => {
+    // grab the context values we care about
     const { diagram } = useContext(Diagram)
+    const { dims } = useContext(Interface)
 
     return (
-        <div {...css(styles.container)}>
+        <div {...css({ ...styles.container, width: dims.sidebarWidth })}>
             {diagram.selectedElements.length === 0 ? <NoSelection /> : <WithSelection />}
         </div>
     )

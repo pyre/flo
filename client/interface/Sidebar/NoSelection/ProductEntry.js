@@ -6,7 +6,7 @@ import { css, hover } from 'glamor'
 import { Product } from '~/components'
 import { useMouseDrag, useRelativePosition } from '~/hooks'
 import { lightGrey, darkGrey } from '~/design'
-import { Diagram } from '~/context'
+import { Diagram, Interface } from '~/context'
 import { round } from '~/utils'
 
 const ProductEntry = ({ product }) => {
@@ -15,6 +15,7 @@ const ProductEntry = ({ product }) => {
 
     // get the diagram info
     const { diagram } = useContext(Diagram)
+    const { dims } = useContext(Interface)
 
     // we need to track mouse drags on the element
     const drag = useMouseDrag(rootElement)
@@ -31,7 +32,7 @@ const ProductEntry = ({ product }) => {
         shadowLocation = drag.currentLocation
 
         // if we are dragging the shadow outside of the sidebar
-        if (drag.currentLocation.x < 954) {
+        if (drag.currentLocation.x < window.innerWidth - dims.sidebarWidth) {
             // grab the diagram info we need
             const { gridSize, pan } = diagram
 
