@@ -92,6 +92,7 @@ type MoveProductOutput {
 
 input AddProductInput {
     product: ID!
+    flo: ID!
     x: Int!
     y: Int!
 }
@@ -103,7 +104,7 @@ type AddProductOutput {
 type Mutation {
     moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
     moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
-    addProduct(input: AddProductInput!): AddProductOutput!
+    addProductToFlo(input: AddProductInput!): AddProductOutput!
 }
 
 """

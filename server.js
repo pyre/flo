@@ -107,10 +107,10 @@ const resolvers = {
 
             return { factory }
         },
-        addProduct(
+        addProductToFlo(
             _,
             {
-                input: { x, y },
+                input: { x, y, flo },
             },
             { flos, products }
         ) {
@@ -121,8 +121,11 @@ const resolvers = {
                 progress: 0,
             })
 
+            // figure out the id of the flo where we need to add the product
+            const { id: floID } = fromGlobalId(flo)
+
             // add it to the one flo
-            flos[0].products.push(product)
+            flos[floID].products.push(product)
             // add it to the global id registry
             products[product.id] = product
 
