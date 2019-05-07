@@ -14,7 +14,7 @@ const ProductEntry = ({ product }) => {
     const rootElement = useRef()
 
     // get the diagram info
-    const { diagram } = useContext(Diagram)
+    const { diagram, selectElements } = useContext(Diagram)
     const { dims } = useContext(Interface)
 
     // we need to track mouse drags on the element
@@ -96,6 +96,9 @@ const ProductEntry = ({ product }) => {
                         product: '1',
                     },
                 },
+            }).then(({ addProductToFlo: { product: { id } } }) => {
+                // select the product we just added
+                selectElements(id)
             })
 
             // make sure we only do this once
