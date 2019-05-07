@@ -1,13 +1,13 @@
 // external imports
-import React, { useRef, useContext } from 'react'
+import React, { useRef, useContext, useEffect } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 import { css, hover } from 'glamor'
 // local imports
 import { Product } from '~/components'
 import { useMouseDrag, useRelativePosition } from '~/hooks'
 import { lightGrey, darkGrey } from '~/design'
-import { Diagram, Interface } from '~/context'
-import { round } from '~/utils'
+import { Diagram, Environment, Interface } from '~/context'
+import { round, mutate } from '~/utils'
 
 const ProductEntry = ({ product }) => {
     // a ref to the root of the list item
@@ -21,6 +21,10 @@ const ProductEntry = ({ product }) => {
     const drag = useMouseDrag(rootElement)
     // the location to show the shadow
     let shadowLocation = null
+
+    // in order to handle when the user lets go we need a ref that designates
+    // if we are dragging
+    const isDragging = useRef(null)
 
     // we only want to show the shadow if we are dragging
     if (drag && (drag.origin.x != drag.currentLocation.x || drag.origin.y != drag.currentLocation.y)) {
@@ -62,7 +66,44 @@ const ProductEntry = ({ product }) => {
                 y: gridTopY + nGridsTall,
             }
         }
+
+        // make sure we track that we are dragging
+        isDragging.current = shadowLocation
     }
+
+    // grab the relay environment
+    const environment = useContext(Environment)
+
+    // when we let go, we need to set the mutation that creates the product
+    useEffect(() => {
+        // if we are no longer dragging but we just were
+        if (!drag && isDragging.current) {
+            mutate({
+                environment,
+                query: graphql`
+                    mutation ProductEntryAddProductMutation($input: AddProductInput!) {
+                        addProductToFlo(input: $input) {
+                            product {
+                                id
+                            }
+                        }
+                    }
+                `,
+                variables: {
+                    input: {
+                        ...isDragging.current,
+                        flo: 'RmxvOjA=',
+                        product: '1',
+                    },
+                },
+            })
+
+            // make sure we only do this once
+            isDragging.current = null
+        }
+
+        // this effect needs to fire any time we are dragging or just finishe dragging
+    }, [drag, isDragging.current])
 
     return (
         <>

@@ -124,6 +124,10 @@ const resolvers = {
             // figure out the id of the flo where we need to add the product
             const { id: floID } = fromGlobalId(flo)
 
+            if (!flos[floID]) {
+                throw new Error(`Could not find flo with id ${flo}`)
+            }
+
             // add it to the one flo
             flos[floID].products.push(product)
             // add it to the global id registry
