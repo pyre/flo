@@ -34,6 +34,7 @@ export default () => {
                         display: 'flex',
                         flexDirection: 'column',
                         flex: 1,
+                        overflowY: 'hidden',
                     })}
                     index={tabIndex}
                     onChange={setTabIndex}
@@ -53,7 +54,7 @@ export default () => {
                             Factories
                         </Tab>
                     </TabList>
-                    <TabPanels>
+                    <TabPanels {...css({ overflowY: 'auto' })}>
                         <TabPanel {...css({ outline: 'none' })}>
                             {data.products.map(product => (
                                 <ProductEntry key={product.id} product={product} />
