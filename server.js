@@ -107,6 +107,30 @@ const resolvers = {
 
             return { factory }
         },
+        addProduct(
+            _,
+            {
+                input: { x, y },
+            },
+            { flos, products }
+        ) {
+            // create the product we want to add
+            const product = productFactory({
+                id: Object.values(products).length,
+                position: { x, y },
+                progress: 0,
+            })
+
+            // add it to the one flo
+            flos[0].products.push(product)
+            // add it to the global id registry
+            products[product.id] = product
+
+            // register the reference to the product for query resovlers
+            return {
+                product,
+            }
+        },
     },
     Subscription: {
         node: {
@@ -139,6 +163,18 @@ const factories = [
     {}
 )
 
+const productFactory = ({ id, position, progress, source, inputs }) => ({
+    id,
+    name: 'this.awesome.product',
+    description: 'an awesome description',
+    position,
+    progress,
+    source: factories[source],
+    inputs,
+    attributes: [{ name: 'favoriteNumber', value: '5', kind: 'Int' }],
+    __typename: 'Product',
+})
+
 // create the products
 const products = [
     // position, progress, source, factory input bindings
@@ -150,17 +186,13 @@ const products = [
 ].reduce(
     (prev, [position, progress, source, inputs], id) => ({
         ...prev,
-        [id]: {
+        [id]: productFactory({
             id,
-            name: 'this.awesome.product',
-            description: 'an awesome description',
             position,
             progress,
-            source: factories[source],
+            source,
             inputs,
-            attributes: [{ name: 'favoriteNumber', value: '5', kind: 'Int' }],
-            __typename: 'Product',
-        },
+        }),
     }),
     {}
 )

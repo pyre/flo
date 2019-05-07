@@ -22,10 +22,6 @@ const ProductEntry = ({ product }) => {
     // the location to show the shadow
     let shadowLocation = null
 
-    // we need to compute the relative position but if we're not dragging just pass null
-    // NOTE: this is here and not in the `if (drag) { ... }` because of the Rule of Hooks
-    const relativePosition = useRelativePosition(drag ? drag.currentLocation : null)
-
     // we only want to show the shadow if we are dragging
     if (drag && (drag.origin.x != drag.currentLocation.x || drag.origin.y != drag.currentLocation.y)) {
         // save a reference to the current location

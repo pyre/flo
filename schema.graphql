@@ -79,20 +79,31 @@ input KVPairInput {
 """
 Move the location for a product to a specific x,y coordinate
 """
-type MoveFactory {
+type MoveFactoryOutput {
     factory: Factory
 }
 
 """
 Move the location for a product to a specific x,y coordinate
 """
-type MoveProduct {
+type MoveProductOutput {
+    product: Product
+}
+
+input AddProductInput {
+    product: ID!
+    x: Int!
+    y: Int!
+}
+
+type AddProductOutput {
     product: Product
 }
 
 type Mutation {
-    moveProduct(product: ID!, x: Int!, y: Int!): MoveProduct
-    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactory
+    moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
+    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
+    addProduct(input: AddProductInput!): AddProductOutput!
 }
 
 """
