@@ -11,9 +11,9 @@ import flo
 
 
 # the specification
-class SLC(flo.flow.specification, family="flo.products.slc"):
+class Interferogram(flo.flow.specification, family="flo.products.interferograms"):
     """
-    The SLC data product specification
+    The interferogram specification
     """
 
 
@@ -32,7 +32,7 @@ class SLC(flo.flow.specification, family="flo.products.slc"):
         Pick a default implementation
         """
         # use SLC from the isce data model
-        return flo.isce.slc()
+        return flo.isce.interferogram()
 
 
 # end of file

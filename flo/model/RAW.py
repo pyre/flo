@@ -17,6 +17,14 @@ class RAW(flo.flow.specification, family="flo.products.raw"):
     """
 
 
+    # product meta-data
+    samples = flo.properties.int()
+    samples.doc = "the number of samples in a line"
+
+    lines = flo.properties.int()
+    lines.doc = "the number of acquisition lines"
+
+
     # framework support
     @classmethod
     def pyre_default(cls, **kwds):

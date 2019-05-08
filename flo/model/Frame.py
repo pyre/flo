@@ -11,11 +11,10 @@ import flo
 
 
 # the specification
-class SLC(flo.flow.specification, family="flo.products.slc"):
+class Frame(flo.flow.specification, family="flo.products.frames"):
     """
-    The SLC data product specification
+    A frame of sensor specific data acquired along a track
     """
-
 
     # product meta-data
     samples = flo.properties.int()
@@ -23,16 +22,6 @@ class SLC(flo.flow.specification, family="flo.products.slc"):
 
     lines = flo.properties.int()
     lines.doc = "the number of acquisition lines"
-
-
-    # framework support
-    @classmethod
-    def pyre_default(cls, **kwds):
-        """
-        Pick a default implementation
-        """
-        # use SLC from the isce data model
-        return flo.isce.slc()
 
 
 # end of file
