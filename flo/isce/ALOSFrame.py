@@ -11,12 +11,18 @@ import flo
 
 
 # the specification
-class SLC(flo.flow.product, family="isce.products.slc", implements=flo.model.slc):
+class ALOSFrame(flo.flow.product, family="isce.products.frames.alos", implements=flo.model.frame):
     """
-    The ISCE SLC data product
+    An ALOS frame
     """
 
     # product meta-data
+    raster = flo.properties.path()
+    raster.doc = "the path to the image file"
+
+    leader = flo.properties.path()
+    leader.doc = "the path to the leader file"
+
     samples = flo.properties.int()
     samples.doc = "the number of samples in a line"
 

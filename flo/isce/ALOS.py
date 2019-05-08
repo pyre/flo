@@ -11,32 +11,29 @@ import flo
 
 
 # the specification
-class FormSLC(flo.flow.factory, family="isce.factories.formSLC", implements=flo.model.formSLC):
+class ALOS(flo.flow.factory, family="isce.factories.sensors.alos", implements=flo.model.sensor):
     """
-    The ISCE SLC factory
+    The parser of ALOS scenes
     """
 
     # inputs
-    raw = flo.model.raw.input()
+    frame = flo.model.frame.input()
     # outputs
-    slc = flo.model.slc.output()
-
-    # configurable state
-    prf = flo.properties.float(default=1.0)
+    raw = flo.model.raw.input()
 
 
     # flow hooks
     def pyre_run(self, requestor, stale, **kwds):
         """
-        Form an SLC given a RAW raster
+        Form an ISCE RAW raster given an ALOS frame
         """
-        # get my RAW raster
+        # get my frame
+        frame = self.frame
+        # and my RAW raster
         raw = self.raw
-        # and my SLC
-        slc = self.slc
         # for now, just transfer the size info to the SLC
-        slc.samples = raw.samples
-        slc.lines = raw.lines
+        raw.samples = frame.samples
+        raw.lines = frame.lines
         # all done
         return self
 

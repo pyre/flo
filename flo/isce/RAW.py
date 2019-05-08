@@ -16,9 +16,12 @@ class RAW(flo.flow.product, family="isce.products.raw", implements=flo.model.raw
     The ISCE RAW data product
     """
 
-    # public data
-    uri = flo.properties.path()
-    uri.doc = "the name of the file with the RAW raster"
+    # product meta-data
+    samples = flo.properties.int()
+    samples.doc = "the number of samples in a line"
+
+    lines = flo.properties.int()
+    lines.doc = "the number of acquisition lines"
 
 
 # end of file

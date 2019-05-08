@@ -11,7 +11,8 @@ import flo
 
 
 # the specification
-class SLC(flo.flow.product, family="isce.products.slc", implements=flo.model.slc):
+class Interferogram(flo.flow.product, family="isce.products.interferograms",
+                    implements=flo.model.interferogram):
     """
     The ISCE SLC data product
     """

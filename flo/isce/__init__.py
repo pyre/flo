@@ -12,6 +12,16 @@ import flo
 
 
 # products
+@flo.foundry(implements=flo.model.frame, tip="the ALOS frame product")
+def frameALOS():
+    # get the implementation
+    from .ALOSFrame import ALOSFrame
+    # borrow its docstring
+    __doc__ = ALOSFrame.__doc__
+    # and publish it
+    return ALOSFrame
+
+
 @flo.foundry(implements=flo.model.raw, tip="the ISCE RAW data product")
 def raw():
     # get the implementation
@@ -32,7 +42,27 @@ def slc():
     return SLC
 
 
+@flo.foundry(implements=flo.model.slc, tip="the interferogram product")
+def interferogram():
+    # get the implementation
+    from .Interferogram import Interferogram
+    # borrow its docstring
+    __doc__ = Interferogram.__doc__
+    # and publish it
+    return Interferogram
+
+
 # factories
+@flo.foundry(implements=flo.model.sensor, tip="the ALOS frame parser")
+def alos():
+    # get the implementation
+    from .ALOS import ALOS
+    # borrow its docstring
+    __doc__ = ALOS.__doc__
+    # and publish it
+    return ALOS
+
+
 @flo.foundry(implements=flo.model.formSLC, tip="the ISCE SLC factory")
 def formSLC():
     # get the implementation
@@ -43,7 +73,27 @@ def formSLC():
     return FormSLC
 
 
-# functions that create instances
+@flo.foundry(implements=flo.model.resamp, tip="the interferogram factory")
+def resamp():
+    # get the implementation
+    from .Resamp import Resamp
+    # borrow its docstring
+    __doc__ = Resamp.__doc__
+    # and publish it
+    return Resamp
+
+
+# functions that create instances of products and factories
+def newALOSFrame(**kwds):
+    """
+    Build a new instance of an ALOS frame
+    """
+    # get the class
+    from .ALOSFrame import ALOSFrame
+    # build one and return it
+    return ALOSFrame(**kwds)
+
+
 def newRAW(**kwds):
     """
     Build a new instance of a RAW product
@@ -64,6 +114,26 @@ def newSLC(**kwds):
     return SLC(**kwds)
 
 
+def newInterferogram(**kwds):
+    """
+    Build a new instance of an interferogram
+    """
+    # get the class
+    from .Interferogram import Interferogram
+    # build one and return it
+    return Interferogram(**kwds)
+
+
+def newALOS(**kwds):
+    """
+    Build a new instance of an ALOS frame parser
+    """
+    # get the class
+    from .ALOS import ALOS
+    # build one and return it
+    return ALOS(**kwds)
+
+
 def newFormSLC(**kwds):
     """
     Build a new instance of a FormSLC factory
@@ -72,6 +142,16 @@ def newFormSLC(**kwds):
     from .FormSLC import FormSLC
     # build one and return it
     return FormSLC(**kwds)
+
+
+def newResamp(**kwds):
+    """
+    Build a new instance of the interferogram fractory
+    """
+    # get the class
+    from .Resamp import Resamp
+    # build one and return it
+    return Resamp(**kwds)
 
 
 # end of file
