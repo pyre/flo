@@ -74,6 +74,9 @@ const ProductEntry = ({ product }) => {
     // grab the relay environment
     const environment = useContext(Environment)
 
+    // when we let go we need the position of the mouse in the  diagram coordinate system
+    const dragLocation = useRelativePosition(isDragging.current)
+
     // when we let go, we need to set the mutation that creates the product
     useEffect(() => {
         // if we are no longer dragging but we just were
@@ -91,7 +94,7 @@ const ProductEntry = ({ product }) => {
                 `,
                 variables: {
                     input: {
-                        ...isDragging.current,
+                        ...dragLocation,
                         flo: 'RmxvOjA=',
                         product: '1',
                     },
