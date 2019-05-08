@@ -4,13 +4,13 @@ import { requestSubscription } from 'react-relay'
 // local
 import { Environment } from '~/context'
 
-export default (subscription, variables) => {
+export default (subscription, variables, config) => {
     // grab the environment out of the context
     const environment = useContext(Environment)
 
     useEffect(() => {
         // grab the disposable to cancel the subscription
-        const { dispose } = requestSubscription(environment, { subscription, variables })
+        const { dispose } = requestSubscription(environment, { subscription, variables, ...config })
 
         // when we're done call the dispose function
         return dispose

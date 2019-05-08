@@ -8,7 +8,8 @@ import { round } from '~/utils'
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
 
 // an event broker for subscriptions
-const pubsub = new PubSub()
+const nodePubsub = new PubSub()
+const newProductPubSub = new PubSub()
 
 // schema resolvers
 const resolvers = {
@@ -91,7 +92,7 @@ const resolvers = {
             // update the position of the specified product
             product.position = { x, y }
 
-            pubsub.publish(productID, { node: product })
+            nodePubsub.publish(productID, { node: product })
 
             return { product }
         },
@@ -103,7 +104,7 @@ const resolvers = {
             // update the position of the specified factory
             factory.position = { x, y }
 
-            pubsub.publish(factoryID, { node: factory })
+            nodePubsub.publish(factoryID, { node: factory })
 
             return { factory }
         },
@@ -133,6 +134,9 @@ const resolvers = {
             // add it to the global id registry
             products[product.id] = product
 
+            // update the clients
+            newProductPubSub.publish(flo, { newProduct: product })
+
             // register the reference to the product for query resovlers
             return {
                 product,
@@ -141,7 +145,10 @@ const resolvers = {
     },
     Subscription: {
         node: {
-            subscribe: (_, { id }) => pubsub.asyncIterator([id]),
+            subscribe: (_, { id }) => nodePubsub.asyncIterator([id]),
+        },
+        newProduct: {
+            subscribe: (_, { flo }) => newProductPubSub.asyncIterator([flo]),
         },
     },
 }
@@ -274,7 +281,7 @@ server.listen(5000).then(({ url, subscriptionsUrl }) => {
             product.progress = product.progress === 1 ? 0 : Math.min(round(product.progress + 0.1, 0.1).toFixed(1), 1)
 
             // trigger an update for that product
-            pubsub.publish(toGlobalId('Product', product.id), { node: product })
+            nodePubsub.publish(toGlobalId('Product', product.id), { node: product })
         }
     }, 2000)
 })

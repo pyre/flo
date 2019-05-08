@@ -141,6 +141,7 @@ type Query {
 
 type Subscription {
     node(id: ID!): Node
+    newProduct(flo: ID!): Product
 }
 
 """
