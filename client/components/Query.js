@@ -4,7 +4,7 @@ import { QueryRenderer } from 'react-relay'
 // local imports
 import { Environment } from '~/context'
 
-export default ({ children, query, variables, loadingState, onError }) => {
+export default ({ children, query, variables, loadingState = 'loading', onError, passThroughLoading }) => {
     // pull the environment out of context
     const environment = React.useContext(Environment)
 
@@ -32,7 +32,7 @@ export default ({ children, query, variables, loadingState, onError }) => {
                     }
                 }
                 // if we are still loading
-                if (!props) {
+                if (!props && !passThroughLoading) {
                     // return the loading state
                     return loadingState
                 }

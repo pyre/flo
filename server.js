@@ -8,7 +8,8 @@ import { round } from '~/utils'
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
 
 // an event broker for subscriptions
-const pubsub = new PubSub()
+const nodePubsub = new PubSub()
+const newProductPubSub = new PubSub()
 
 // schema resolvers
 const resolvers = {
@@ -56,6 +57,8 @@ const resolvers = {
         __resolveType: obj => obj.__typename,
     },
     Query: {
+        products: (_, __, { products }) => Object.values(products),
+        factories: (_, __, { factories }) => Object.values(factories),
         node(_, { id: globalID }, context) {
             // grab the id from the argument
             const { id, type } = fromGlobalId(globalID)
@@ -89,7 +92,7 @@ const resolvers = {
             // update the position of the specified product
             product.position = { x, y }
 
-            pubsub.publish(productID, { node: product })
+            nodePubsub.publish(productID, { node: product })
 
             return { product }
         },
@@ -101,14 +104,51 @@ const resolvers = {
             // update the position of the specified factory
             factory.position = { x, y }
 
-            pubsub.publish(factoryID, { node: factory })
+            nodePubsub.publish(factoryID, { node: factory })
 
             return { factory }
+        },
+        addProductToFlo(
+            _,
+            {
+                input: { x, y, flo },
+            },
+            { flos, products }
+        ) {
+            // create the product we want to add
+            const product = productFactory({
+                id: Object.values(products).length,
+                position: { x, y },
+                progress: 0,
+            })
+
+            // figure out the id of the flo where we need to add the product
+            const { id: floID } = fromGlobalId(flo)
+
+            if (!flos[floID]) {
+                throw new Error(`Could not find flo with id ${flo}`)
+            }
+
+            // add it to the one flo
+            flos[floID].products.push(product)
+            // add it to the global id registry
+            products[product.id] = product
+
+            // update the clients
+            newProductPubSub.publish(flo, { newProduct: product })
+
+            // register the reference to the product for query resovlers
+            return {
+                product,
+            }
         },
     },
     Subscription: {
         node: {
-            subscribe: (_, { id }) => pubsub.asyncIterator([id]),
+            subscribe: (_, { id }) => nodePubsub.asyncIterator([id]),
+        },
+        newProduct: {
+            subscribe: (_, { flo }) => newProductPubSub.asyncIterator([flo]),
         },
     },
 }
@@ -137,6 +177,18 @@ const factories = [
     {}
 )
 
+const productFactory = ({ id, position, progress, source, inputs }) => ({
+    id,
+    name: 'this.awesome.product',
+    description: 'an awesome description',
+    position,
+    progress,
+    source: factories[source],
+    inputs,
+    attributes: [{ name: 'favoriteNumber', value: '5', kind: 'Int' }],
+    __typename: 'Product',
+})
+
 // create the products
 const products = [
     // position, progress, source, factory input bindings
@@ -148,16 +200,13 @@ const products = [
 ].reduce(
     (prev, [position, progress, source, inputs], id) => ({
         ...prev,
-        [id]: {
+        [id]: productFactory({
             id,
-            name: 'this.awesome.product',
             position,
             progress,
-            source: factories[source],
+            source,
             inputs,
-            attributes: [{ name: 'favoriteNumber', value: '5', kind: 'Int' }],
-            __typename: 'Product',
-        },
+        }),
     }),
     {}
 )
@@ -232,7 +281,7 @@ server.listen(5000).then(({ url, subscriptionsUrl }) => {
             product.progress = product.progress === 1 ? 0 : Math.min(round(product.progress + 0.1, 0.1).toFixed(1), 1)
 
             // trigger an update for that product
-            pubsub.publish(toGlobalId('Product', product.id), { node: product })
+            nodePubsub.publish(toGlobalId('Product', product.id), { node: product })
         }
     }, 2000)
 })

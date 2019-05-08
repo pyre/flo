@@ -8,7 +8,7 @@ import { Arc } from '~/components'
 
 export const Radius = 12
 
-const Product = ({ progress, x, y, style, ...unused }) => {
+const Product = ({ progress = 1, x, y, style, ...unused }) => {
     // if we weren't given an x or y
     if (!x || !y) {
         x = Radius
@@ -17,12 +17,13 @@ const Product = ({ progress, x, y, style, ...unused }) => {
 
     return (
         <svg
-            {...css({
+            style={{
                 width: 2 * Radius,
                 height: 2 * Radius,
                 overflow: 'visible',
+                zIndex: 100,
                 ...style,
-            })}
+            }}
             x={x - Radius}
             y={y - Radius}
             {...unused}

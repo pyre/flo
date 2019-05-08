@@ -89,7 +89,7 @@ const Product = ({ product }) => {
                         />
                     }
                     // there are only bindings
-                    else {
+                    else if (product.bindings.length > 0) {
                         // so render the arc tha leaves the gap on the left
                         ;<Arc
                             r={gutter + 1}

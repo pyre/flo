@@ -79,20 +79,32 @@ input KVPairInput {
 """
 Move the location for a product to a specific x,y coordinate
 """
-type MoveFactory {
+type MoveFactoryOutput {
     factory: Factory
 }
 
 """
 Move the location for a product to a specific x,y coordinate
 """
-type MoveProduct {
+type MoveProductOutput {
+    product: Product
+}
+
+input AddProductInput {
+    product: ID!
+    flo: ID!
+    x: Int!
+    y: Int!
+}
+
+type AddProductOutput {
     product: Product
 }
 
 type Mutation {
-    moveProduct(product: ID!, x: Int!, y: Int!): MoveProduct
-    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactory
+    moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
+    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
+    addProductToFlo(input: AddProductInput!): AddProductOutput!
 }
 
 """
@@ -114,6 +126,7 @@ type Product implements Node {
     id: ID!
     source: Factory
     name: String!
+    description: String
     bindings: [Binding!]!
     position: Position!
     progress: Float!
@@ -122,10 +135,13 @@ type Product implements Node {
 
 type Query {
     node(id: ID!): Node
+    products: [Product!]!
+    factories: [Factory!]!
 }
 
 type Subscription {
     node(id: ID!): Node
+    newProduct(flo: ID!): Product
 }
 
 """
