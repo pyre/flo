@@ -119,7 +119,7 @@ const resolvers = {
             const product = productFactory({
                 id: Object.values(products).length,
                 position: { x, y },
-                progress: 0,
+                progress: 1,
             })
 
             // figure out the id of the flo where we need to add the product
