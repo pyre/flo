@@ -29,50 +29,44 @@ class Stale(flo.flow.workflow, family="flo.applications.stale"):
 
         # make a new SLC factory
         f = flo.isce.newFormSLC()
+        channel.line("after construction:")
+        channel.line(f"  formSlc:")
+        f.pyre_dump(channel=channel, indent=' '*2)
+        channel.line(f"  raw:")
+        f.raw.pyre_dump(channel=channel, indent=' '*2)
+        channel.line(f"  slc:")
+        f.slc.pyre_dump(channel=channel, indent=' '*2)
 
-        # show me the state
-        channel.line("instantiation:")
-        channel.line(f"  raw: {f.raw.pyre_stale}")
-        channel.line(f"  slc: {f.slc.pyre_stale}")
+        # flush
         channel.log()
-
-        # get the {raw} observers
-        # rawObservers = tuple(f.raw.pyre_status.observers)
-        # show me
-        # print(f"f.raw observers: {rawObservers}")
-
-        # mark an input as stale explicitly
-        channel.log("explicit update:")
-        f.raw.uri = "home/mga/tmp/data/isce/raw.img"
-        channel.line("after explicit update:")
-        channel.line(f"  raw: {f.raw.pyre_stale}")
-        channel.line(f"  slc: {f.slc.pyre_stale}")
-        channel.log()
-
-        # check
-        assert f.raw.pyre_stale == True
-        assert f.slc.pyre_stale == True
-
-        # force a reset
-        f.raw.pyre_stale = True
-        f.slc.pyre_stale = False
 
         # make a RAW
         raw = flo.isce.newRAW()
-        # and an SLC
+        # configure it
+        raw.samples = 5000
+        raw.lines = 15000
+
+        # make an SLC
         slc = flo.isce.newSLC()
+
         # bind everything together
         f.raw = raw
         f.slc = slc
 
         # show me the state
-        channel.line("after binding: stale:")
-        channel.line(f"  raw: {raw.pyre_stale}")
-        channel.line(f"  slc: {slc.pyre_stale}")
+        channel.line("after binding:")
+        channel.line(f"  formSlc:")
+        f.pyre_dump(channel=channel, indent=' '*2)
+        channel.line(f"  raw:")
+        f.raw.pyre_dump(channel=channel, indent=' '*2)
+        channel.line(f"  slc:")
+        f.slc.pyre_dump(channel=channel, indent=' '*2)
+
+        # flush
         channel.log()
 
         # check
-        assert f.raw.pyre_stale == False
+        assert f.raw.pyre_stale == True
         assert f.slc.pyre_stale == True
 
         # force the remake
@@ -87,6 +81,8 @@ class Stale(flo.flow.workflow, family="flo.applications.stale"):
         # check
         assert f.raw.pyre_stale == False
         assert f.slc.pyre_stale == False
+        assert slc.lines == raw.lines
+        assert slc.samples == raw.samples
 
         # all done
         return 0
