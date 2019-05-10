@@ -14,7 +14,13 @@ export default () => {
     const { dims } = useContext(Interface)
 
     return (
-        <div {...css({ ...styles.container, width: dims.sidebarWidth, borderLeft: `solid 1px ${lightGrey}` })}>
+        <div
+            {...css({
+                ...styles.container,
+                width: dims.sidebarWidth,
+                borderLeft: `solid 1px ${lightGrey}`,
+            })}
+        >
             {diagram.selectedElements.length === 0 ? <NoSelection /> : <WithSelection />}
         </div>
     )

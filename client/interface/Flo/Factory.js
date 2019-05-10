@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
 import {
-    elementOutline,
+    connectorColor,
     factoryPrimary,
     selectedBorderWidth,
     selectedBorderGap,

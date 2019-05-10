@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Arc, Draggable, Product as ProductCircle } from '~/components'
-import { background, elementOutline, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
+import { background, connectorColor, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
 import { useSubscription } from '~/hooks'
 import { Diagram, Environment } from '~/context'
 import { mutate } from '~/utils'
@@ -14,7 +14,7 @@ const gutter = 15
 
 const Product = ({ product }) => {
     // grab the diagram selected state
-    const { diagram, selectElements } = useContext(Diagram)
+    const { diagram } = useContext(Diagram)
     const environment = useContext(Environment)
 
     // make sure we update this component when the product moves
@@ -74,7 +74,7 @@ const Product = ({ product }) => {
                 {do {
                     // render a full circle if there are both a source and at least one binding
                     if (product.source && product.bindings.length > 0) {
-                        ;<circle fill={elementOutline} cx={product.position.x} cy={product.position.y} r={gutter + 1} />
+                        ;<circle fill={connectorColor} cx={product.position.x} cy={product.position.y} r={gutter + 1} />
                     }
                     // if there is no source, then there is only bindings
                     else if (product.source) {
@@ -85,7 +85,7 @@ const Product = ({ product }) => {
                             y={product.position.y}
                             theta1={-230}
                             theta2={40}
-                            stroke={elementOutline}
+                            stroke={connectorColor}
                         />
                     }
                     // there are only bindings
@@ -97,7 +97,7 @@ const Product = ({ product }) => {
                             y={product.position.y}
                             theta1={-40}
                             theta2={230}
-                            stroke={elementOutline}
+                            stroke={connectorColor}
                         />
                     }
                 }}

@@ -2,7 +2,7 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
-import { elementOutline } from '~/design'
+import { connectorColor } from '~/design'
 
 // the primary length for the squares that define the in and out point
 const squareLength = 3
@@ -27,7 +27,7 @@ const Lines = ({ flo }) => (
                     // only show the input rectangle if there is more than one product
                     {factory.inputs.length !== 1 && (
                         <rect
-                            fill={elementOutline}
+                            fill={connectorColor}
                             x={leftSquareLocation.x - squareLength}
                             y={leftSquareLocation.y - squareLength}
                             width={2 * squareLength}
@@ -37,7 +37,7 @@ const Lines = ({ flo }) => (
                     // only show the output rectangle if there is more than one result
                     {factory.outputs.length !== 1 && (
                         <rect
-                            fill={elementOutline}
+                            fill={connectorColor}
                             x={rightSquareLocation.x - squareLength}
                             y={rightSquareLocation.y - squareLength}
                             width={2 * squareLength}
@@ -46,7 +46,7 @@ const Lines = ({ flo }) => (
                     )}
                     // there is a line going from one square to the other
                     <line
-                        stroke={elementOutline}
+                        stroke={connectorColor}
                         strokeWidth={1}
                         x1={factory.position.x + armLength}
                         y1={factory.position.y}
@@ -61,7 +61,7 @@ const Lines = ({ flo }) => (
                                 y1={leftSquareLocation.y}
                                 x2={leftSquareLocation.x}
                                 y2={binding.product.position.y}
-                                stroke={elementOutline}
+                                stroke={connectorColor}
                                 strokeWidth={1}
                             />
                             <line
@@ -69,7 +69,7 @@ const Lines = ({ flo }) => (
                                 y1={binding.product.position.y}
                                 x2={binding.product.position.x}
                                 y2={binding.product.position.y}
-                                stroke={elementOutline}
+                                stroke={connectorColor}
                                 strokeWidth={1}
                             />
                         </React.Fragment>
@@ -82,7 +82,7 @@ const Lines = ({ flo }) => (
                                 y1={rightSquareLocation.y}
                                 x2={rightSquareLocation.x}
                                 y2={result.product.position.y}
-                                stroke={elementOutline}
+                                stroke={connectorColor}
                                 strokeWidth={1}
                             />
                             <line
@@ -90,7 +90,7 @@ const Lines = ({ flo }) => (
                                 y1={result.product.position.y}
                                 x2={result.product.position.x}
                                 y2={result.product.position.y}
-                                stroke={elementOutline}
+                                stroke={connectorColor}
                                 strokeWidth={1}
                             />
                         </React.Fragment>
