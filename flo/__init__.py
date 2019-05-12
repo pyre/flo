@@ -15,6 +15,8 @@ from pyre import (
     export, provides,
     # the manager of the pyre runtime
     executive,
+    # hosting strategies
+    application, plexus,
     # support for work flows
     flow,
     # miscellaneous
