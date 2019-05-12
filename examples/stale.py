@@ -25,7 +25,7 @@ class Stale(flo.flow.workflow, family="flo.applications.stale"):
         The main entry point
         """
         # make a channel
-        channel = self.info
+        channel = self.debug
 
         # make a new SLC factory
         f = flo.isce.newFormSLC()
@@ -73,9 +73,9 @@ class Stale(flo.flow.workflow, family="flo.applications.stale"):
         f.slc.pyre_make()
 
         # show me the state
-        channel.line("after rebuilding: stale:")
-        channel.line(f"  raw: {raw.pyre_stale}")
-        channel.line(f"  slc: {slc.pyre_stale}")
+        channel.line("after rebuilding:")
+        channel.line(f"  raw.stale: {raw.pyre_stale}")
+        channel.line(f"  slc.stale: {slc.pyre_stale}")
         channel.log()
 
         # check
