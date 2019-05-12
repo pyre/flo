@@ -12,7 +12,7 @@
 import flo
 
 # my app
-class Stale(flo.flow.workflow, family="flo.applications.stale"):
+class Stale(flo.application, family="flo.applications.stale"):
     """
     Examine the flow node naming strategy
     """
