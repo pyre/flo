@@ -18,7 +18,7 @@ from pyre import (
     # support for work flows
     flow,
     # miscellaneous
-    tracking, units
+    tracking, units, weaver
     )
 
 
