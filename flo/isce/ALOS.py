@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class ALOS(flo.flow.factory, family="isce.factories.sensors.alos", implements=flo.model.sensor):
+class ALOS(flo.flow.factory, family="flo.isce.alos", implements=flo.model.sensor):
     """
     The parser of ALOS scenes
     """

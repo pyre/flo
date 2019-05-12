@@ -13,7 +13,7 @@ import flo
 
 # products
 @flo.foundry(implements=flo.model.frame, tip="the ALOS frame product")
-def frameALOS():
+def alosFrame():
     # get the implementation
     from .ALOSFrame import ALOSFrame
     # borrow its docstring
@@ -89,7 +89,7 @@ def newALOSFrame(**kwds):
     Build a new instance of an ALOS frame
     """
     # get the class
-    from .ALOSFrame import ALOSFrame
+    from .ALSFrame import ALOSFrame
     # build one and return it
     return ALOSFrame(**kwds)
 

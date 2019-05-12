@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class ALOSFrame(flo.flow.product, family="isce.products.frames.alos", implements=flo.model.frame):
+class ALOSFrame(flo.flow.product, family="flo.isce.alosFrame", implements=flo.model.frame):
     """
     An ALOS frame
     """

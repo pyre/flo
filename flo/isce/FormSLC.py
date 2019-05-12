@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class FormSLC(flo.flow.factory, family="isce.factories.formSLC", implements=flo.model.formSLC):
+class FormSLC(flo.flow.factory, family="flo.isce.formSLC", implements=flo.model.formSLC):
     """
     The ISCE SLC factory
     """

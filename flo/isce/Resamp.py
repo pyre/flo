@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class Resamp(flo.flow.factory, family="isce.factories.resamp", implements=flo.model.resamp):
+class Resamp(flo.flow.factory, family="flo.isce.resamp", implements=flo.model.resamp):
     """
     The ISCE SLC factory
     """

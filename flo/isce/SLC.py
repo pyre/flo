@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class SLC(flo.flow.product, family="isce.products.slc", implements=flo.model.slc):
+class SLC(flo.flow.product, family="flo.isce.slc", implements=flo.model.slc):
     """
     The ISCE SLC data product
     """

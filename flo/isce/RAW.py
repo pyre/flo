@@ -11,7 +11,7 @@ import flo
 
 
 # the specification
-class RAW(flo.flow.product, family="isce.products.raw", implements=flo.model.raw):
+class RAW(flo.flow.product, family="flo.isce.raw", implements=flo.model.raw):
     """
     The ISCE RAW data product
     """
