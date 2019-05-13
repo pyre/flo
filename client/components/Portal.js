@@ -22,7 +22,7 @@ export default function Portal({ children, as = 'div', id, ...props }) {
             // if the element doesn't exist
             if (!element) {
                 // create a new element
-                element = document.createElement('div')
+                element = document.createElement(as)
                 // make sure there's only one
                 element.id = portalID
                 // append the element to the DOM
