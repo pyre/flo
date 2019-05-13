@@ -13,7 +13,6 @@ export default function Portal({ children, as = 'div', id, ...props }) {
     // going to use for the portal
     useEffect(
         () => {
-            console.log('starting')
             // look for an element with the designated id
             let element = document.getElementById(portalID)
             // the style to apply to the portal container
@@ -39,7 +38,6 @@ export default function Portal({ children, as = 'div', id, ...props }) {
             return () => {
                 // if we have an element we created
                 if (element) {
-                    console.log('deleteing portals')
                     // delete the element from the dom
                     element.parentNode.removeChild(element)
                 }
