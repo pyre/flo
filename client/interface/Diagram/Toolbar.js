@@ -8,7 +8,7 @@ import { Diagram } from '~/context'
 
 const Toolbar = props => {
     // grab the diagram info from context
-    const { diagram } = useContext(Diagram)
+    const { toggleTooltips } = useContext(Diagram)
 
     return (
         <div
@@ -25,7 +25,7 @@ const Toolbar = props => {
                     padding: 10,
                     cursor: 'pointer',
                 })}
-                onClick={diagram.toggleTooltips}
+                onClick={toggleTooltips}
             />
         </div>
     )

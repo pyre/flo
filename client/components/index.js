@@ -7,5 +7,6 @@ export Input from './Input'
 export Label from './Label'
 export PrimaryButton from './PrimaryButton'
 export SecondaryButton from './SecondaryButton'
+export Portal from './Portal'
 
 export * from './icons'

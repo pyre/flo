@@ -59,6 +59,7 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
             }))
         },
         toggleTooltips() {
+            console.log('toggle')
             setState(state => ({
                 ...state,
                 showTooltips: !state.showTooltips,
