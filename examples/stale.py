@@ -25,7 +25,7 @@ class Stale(flo.application, family="flo.applications.stale"):
         The main entry point
         """
         # make a channel
-        channel = self.debug
+        channel = self.info
 
         # make a new SLC factory
         f = flo.isce.newFormSLC()
