@@ -12,10 +12,15 @@
 import flo
 
 # my app
-class Load(flo.flow.workflow, family="flo.applications.load"):
+class Load(flo.application, family="flo.applications.load"):
     """
     Examine the flow node naming strategy
     """
+
+
+    # configurable state
+    flow = flo.flow.flow()
+    flow.doc = "my flow node container"
 
 
     # interface
@@ -25,7 +30,7 @@ class Load(flo.flow.workflow, family="flo.applications.load"):
         The main entry point
         """
         # show me
-        self.pyre_dump(channel=self.info)
+        self.flow.pyre_dump(channel=self.info)
         # all done
         return 0
 
