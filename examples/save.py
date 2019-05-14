@@ -31,15 +31,6 @@ class Save(flo.application, family="flo.applications.save"):
         # make a channel
         channel = self.info
 
-        # sign on
-        channel.line(f"{self}")
-        channel.line(f"  flow: {self.flow}")
-        channel.log()
-        # print(f"  products: {self.products}")
-        # print(f"  factories: {self.factories}")
-        # all done
-        return 0
-
         # make a new SLC factory
         f = flo.isce.newFormSLC()
         channel.line("after construction:")
@@ -54,24 +45,13 @@ class Save(flo.application, family="flo.applications.save"):
         f.raw = raw
         f.slc = slc
 
-        # park them in my attributes
-        self.factories = {f}
-        self.products = {raw, slc}
-
-        # pick a format
-        fmt = 'pfg'
-        # make a weaver
-        weaver = flo.weaver.weaver()
-        # pick the language
-        weaver.language = fmt
-        # open a file
-        with open(f"{self.pyre_name}.{fmt}", mode="w") as stream:
-            # make the document
-            document = self.pyre_render(renderer=weaver.language)
-            # get the weaver to do its thing
-            for line in weaver.weave(document=document):
-                # place in the file
-                print(line, file=stream)
+        # get my flow
+        flow = self.flow
+        # add the products and factories
+        flow.factories = {f}
+        flow.products = {raw, slc}
+        # and ask it to render itself
+        flow.save()
 
         # all done
         return 0
