@@ -12,7 +12,7 @@
 import flo
 
 # my app
-class Names(flo.flow.workflow, family="flo.applications.names"):
+class Track(flo.application, family="flo.applications.track"):
     """
     Examine the flow node naming strategy
     """
@@ -41,23 +41,20 @@ class Names(flo.flow.workflow, family="flo.applications.names"):
         channel.line(f"    raw: {f.raw}")
         channel.line(f"    slc: {f.slc}")
         channel.line(f"    inputs:")
-        for input in f.pyre_inputs:
-            # get the actual product
-            product = f.pyre_inventory[input].value
+        for input, product in f.pyre_inputs:
             channel.line(f"       {product}")
         channel.line(f"    outputs:")
-        for output in f.pyre_outputs:
-            product = f.pyre_inventory[output].value
+        for output, product in f.pyre_outputs:
             channel.line(f"       {product}")
         channel.line(f"    history:")
 
         # grab the formSLC tracker
-        tracker = f.status
+        tracker = f.pyre_status
 
         # show me the history of {raw}
         channel.line(f"        raw:")
         # go through all the known values
-        for idx, rev in enumerate(tracker.playback(alias="raw")):
+        for idx, rev in enumerate(tracker.playback(node=f, alias="raw")):
             # get the name
             name = None if rev.value is None else rev.value.pyre_name
             # and print each one
@@ -69,7 +66,7 @@ class Names(flo.flow.workflow, family="flo.applications.names"):
         # show me the history of {slc}
         channel.line(f"        slc:")
         # go through all the known values
-        for idx, rev in enumerate(tracker.playback(alias="slc")):
+        for idx, rev in enumerate(tracker.playback(node=f, alias="slc")):
             # get the name
             name = None if rev.value is None else rev.value.pyre_name
             # and print each one
@@ -88,7 +85,7 @@ class Names(flo.flow.workflow, family="flo.applications.names"):
 # bootstrap
 if __name__ == "__main__":
     # instantiate
-    app = Names(name="names")
+    app = Track(name="names")
     # invoke
     status = app.run()
     # and share
