@@ -19,6 +19,7 @@ export default () => {
                 ...styles.container,
                 width: dims.sidebarWidth,
                 borderLeft: `solid 1px ${lightGrey}`,
+                zIndex: 100,
             })}
         >
             {diagram.selectedElements.length === 0 ? <NoSelection /> : <WithSelection />}

@@ -1,40 +1,65 @@
 // external imports
 import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
+import { css } from 'glamor'
 // local imports
 import { Arc, Draggable, Product as ProductCircle, Portal } from '~/components'
 import { background, connectorColor, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
-import { useSubscription } from '~/hooks'
-import { Diagram, Environment } from '~/context'
+import { useSubscription, useBrowserSize } from '~/hooks'
+import { Diagram, Environment, Interface } from '~/context'
 import { mutate } from '~/utils'
 import { Radius } from '~/components/Product'
 
 // the radius of the inner circle
 const gutter = 15
 
-const Tooltip = ({ product, ...props }) => (
-    <Portal
-        id={`tooltip-${product.id}`}
-        style={{
-            position: 'fixed',
-            left: product.position.x,
-            top: product.position.y - 40,
-            zIndex: 10,
-            transform: 'translate(-50%, -50%)',
-            height: 75,
-            width: 300,
-            backgroundColor: 'white',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            padding: 12,
-        }}
-    >
-        <ProductCircle progress={1} />
-        <div>hello</div>
-    </Portal>
-)
+const Tooltip = ({ product, ...props }) => {
+    // we need to know the current translation on the diagram to follow it
+    const { diagram } = useContext(Diagram)
+
+    // we need to render the portal outside of the immediate dom tree so we can render HTML
+    // without the annoyance of embedding the element in a foreignObject (and have to have a definite width)
+    return (
+        <Portal id={`tooltip-${product.id}`}>
+            <div
+                {...css({
+                    position: 'fixed',
+                    zIndex: 10,
+                    transform: 'translate(-50%, -50%)',
+                    height: 50,
+                    backgroundColor: 'white',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    padding: 12,
+                    borderRadius: 3,
+                    boxShadow: '0 3px 6px rgba(0,0,0,0.19), 0 3px 6px rgba(0,0,0,0.23)',
+                })}
+                style={{
+                    top: product.position.y - 50 + diagram.pan.y,
+                    left: product.position.x + diagram.pan.x,
+                }}
+            >
+                <ProductCircle
+                    progress={1}
+                    {...css({
+                        marginRight: 8,
+                    })}
+                />
+                <div
+                    {...css({
+                        display: 'flex',
+                        flexDirection: 'column',
+                    })}
+                >
+                    <div>{product.name}</div>
+                    <div>{product.description}</div>
+                </div>
+            </div>
+        </Portal>
+    )
+}
 
 const Product = ({ product }) => {
     // grab the diagram selected state
@@ -164,6 +189,8 @@ export default createFragmentContainer(
         fragment Product_product on Product {
             id
             progress
+            name
+            description
             position {
                 x
                 y
