@@ -12,13 +12,29 @@ import { Radius } from '~/components/Product'
 // the radius of the inner circle
 const gutter = 15
 
-const Tooltip = ({ product, ...props }) => {
-    return (
-        <Portal id={`tooltip-${product.id}`}>
-            <div>hello</div>
-        </Portal>
-    )
-}
+const Tooltip = ({ product, ...props }) => (
+    <Portal
+        id={`tooltip-${product.id}`}
+        style={{
+            position: 'fixed',
+            left: product.position.x,
+            top: product.position.y - 40,
+            zIndex: 10,
+            transform: 'translate(-50%, -50%)',
+            height: 75,
+            width: 300,
+            backgroundColor: 'white',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            padding: 12,
+        }}
+    >
+        <ProductCircle progress={1} />
+        <div>hello</div>
+    </Portal>
+)
 
 const Product = ({ product }) => {
     // grab the diagram selected state

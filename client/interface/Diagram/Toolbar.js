@@ -17,15 +17,15 @@ const Toolbar = props => {
                 backgroundColor: 'white',
                 boxShadow: '0 3px 6px rgba(0,0,0,0.19), 0 3px 6px rgba(0,0,0,0.23)',
                 borderRadius: 3,
+                padding: 10,
             })}
+            onClick={toggleTooltips}
         >
             <IconInfo
                 {...css({
                     color: iconColor,
-                    padding: 10,
                     cursor: 'pointer',
                 })}
-                onClick={toggleTooltips}
             />
         </div>
     )

@@ -181,3 +181,7 @@ pre {
     font-weight: 400;
     line-height: 18.5714px;
 }
+
+* {
+    box-sizing: border-box;
+}

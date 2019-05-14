@@ -29,7 +29,12 @@ export default function Portal({ children, as = 'div', id, ...props }) {
             }
 
             // apply any styles
-            Object.keys(elementStyle).forEach(style => element && element.style.setProperty(style, elementStyle[style]))
+            Object.keys(elementStyle).forEach(style => {
+                if (!element) {
+                    return
+                }
+                element.style[style] = elementStyle[style]
+            })
 
             // save the reference to the element
             setElement(element)
