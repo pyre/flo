@@ -26,7 +26,7 @@ class FormSLC(flo.flow.factory, family="flo.isce.formSLC", implements=flo.model.
 
 
     # flow hooks
-    def pyre_run(self, requestor, stale, **kwds):
+    def pyre_run(self, **kwds):
         """
         Form an SLC given a RAW raster
         """

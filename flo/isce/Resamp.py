@@ -25,7 +25,7 @@ class Resamp(flo.flow.factory, family="flo.isce.resamp", implements=flo.model.re
 
 
     # flow hooks
-    def pyre_run(self, requestor, stale, **kwds):
+    def pyre_run(self, **kwds):
         """
         Form an SLC given a RAW raster
         """
