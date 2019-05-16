@@ -156,7 +156,8 @@ const Tooltip = ({ product, ...props }) => {
                     alignItems: 'center',
                     padding: 12,
                     borderRadius: 3,
-                    boxShadow: '0 3px 6px rgba(0,0,0,0.19), 0 3px 6px rgba(0,0,0,0.23)',
+                    boxShadow:
+                        '0 3px 20px 0 rgba(0,0,0,0.05), 0 2px 4px 0 rgba(0,0,0,0.20), 0 0 1px 0 rgba(0,0,1,0.10)',
                 })}
                 style={{
                     top: product.position.y - 50 + diagram.pan.y,
