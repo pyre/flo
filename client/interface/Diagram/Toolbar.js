@@ -24,13 +24,13 @@ const Toolbar = props => {
                     position: 'fixed',
                     right: dims.sidebarWidth + 32,
                     bottom: 32,
+                    cursor: 'pointer',
                 })}
                 onClick={toggleTooltips}
             >
                 <IconInfo
                     {...css({
                         color: iconColor,
-                        cursor: 'pointer',
                     })}
                 />
             </div>
