@@ -138,7 +138,7 @@ const Product = ({ product }) => {
 const Tooltip = ({ product, ...props }) => {
     // we need to know the current translation on the diagram to follow it
     const { diagram } = useContext(Diagram)
-    const { colors } = useContext(Interface)
+    const { colors, shadows } = useContext(Interface)
 
     // we need to render the portal outside of the immediate dom tree so we can render HTML
     // without the annoyance of embedding the element in a foreignObject (and have to have a definite width)
@@ -157,8 +157,7 @@ const Tooltip = ({ product, ...props }) => {
                     alignItems: 'center',
                     padding: 12,
                     borderRadius: 3,
-                    boxShadow:
-                        '0 3px 20px 0 rgba(0,0,0,0.05), 0 2px 4px 0 rgba(0,0,0,0.20), 0 0 1px 0 rgba(0,0,1,0.10)',
+                    boxShadow: shadows[0],
                 })}
                 style={{
                     top: product.position.y - 50 + diagram.pan.y,
