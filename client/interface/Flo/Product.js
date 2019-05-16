@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 import { css } from 'glamor'
 // local imports
-import { Arc, Draggable, Product as ProductCircle, Portal } from '~/components'
+import { Arc, Draggable, Product as ProductCircle, Portal, Ellipsis } from '~/components'
 import { background, connectorColor, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
 import { useSubscription, useBrowserSize } from '~/hooks'
 import { Diagram, Environment, Interface } from '~/context'
@@ -158,6 +158,7 @@ const Tooltip = ({ product, ...props }) => {
                     padding: 12,
                     borderRadius: 3,
                     boxShadow: shadows[0],
+                    width: 250,
                 })}
                 style={{
                     top: product.position.y - 50 + diagram.pan.y,
@@ -174,16 +175,18 @@ const Tooltip = ({ product, ...props }) => {
                     {...css({
                         display: 'flex',
                         flexDirection: 'column',
+                        flexGrow: 1,
+                        width: 10,
                     })}
                 >
-                    <div
+                    <Ellipsis
                         {...css({
                             fontSize: 14,
                         })}
                     >
                         {product.name}
-                    </div>
-                    <div
+                    </Ellipsis>
+                    <Ellipsis
                         {...css({
                             color: colors.darkGrey,
                             fontSize: 12,
@@ -191,7 +194,7 @@ const Tooltip = ({ product, ...props }) => {
                         })}
                     >
                         {product.description}
-                    </div>
+                    </Ellipsis>
                 </div>
             </div>
         </Portal>
