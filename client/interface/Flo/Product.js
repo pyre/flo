@@ -138,6 +138,7 @@ const Product = ({ product }) => {
 const Tooltip = ({ product, ...props }) => {
     // we need to know the current translation on the diagram to follow it
     const { diagram } = useContext(Diagram)
+    const { colors } = useContext(Interface)
 
     // we need to render the portal outside of the immediate dom tree so we can render HTML
     // without the annoyance of embedding the element in a foreignObject (and have to have a definite width)
@@ -176,8 +177,22 @@ const Tooltip = ({ product, ...props }) => {
                         flexDirection: 'column',
                     })}
                 >
-                    <div>{product.name}</div>
-                    <div>{product.description}</div>
+                    <div
+                        {...css({
+                            fontSize: 14,
+                        })}
+                    >
+                        {product.name}
+                    </div>
+                    <div
+                        {...css({
+                            color: colors.darkGrey,
+                            fontSize: 12,
+                            lineHeight: 1,
+                        })}
+                    >
+                        {product.description}
+                    </div>
                 </div>
             </div>
         </Portal>
