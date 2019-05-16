@@ -13,7 +13,7 @@ const Toolbar = props => {
 
     return (
         <Portal id="toolbar">
-            <div
+            <button
                 {...props}
                 {...css({
                     backgroundColor: 'white',
@@ -25,6 +25,7 @@ const Toolbar = props => {
                     right: dims.sidebarWidth + 32,
                     bottom: 32,
                     cursor: 'pointer',
+                    border: 'none',
                 })}
                 onClick={toggleTooltips}
             >
@@ -33,7 +34,7 @@ const Toolbar = props => {
                         color: iconColor,
                     })}
                 />
-            </div>
+            </button>
         </Portal>
     )
 }
