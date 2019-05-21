@@ -1,6 +1,5 @@
 node_modules/
 dist/
 .cache/
-schema.graphql
 **/__generated__/**
 **/__pycache__/**
