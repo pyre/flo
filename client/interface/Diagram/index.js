@@ -82,9 +82,9 @@ const CenteredFlo = ({ flo }) => {
     // when this hook mounts
     useEffect(() => {
         // apply the correct transformation to position the top left point
-        // at 100,100
+        // at 150,150
         pan({
-            x: -originX + 100,
+            x: -originX + 150,
             y: -originY + 100,
         })
     }, [])
