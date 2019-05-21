@@ -42,10 +42,9 @@ const Diagram = () => {
             <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
                 <g transform={transformString}>
                     <Grid />
-
                     {/* make sure the diagram sits above the grid */}
                     <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
-                        {({ node }) => <Flo flo={node} />}
+                        {({ node }) => <CenteredFlo flo={node} />}
                     </Query>
                 </g>
             </svg>
@@ -59,11 +58,40 @@ const floQuery = graphql`
     query DiagramQuery($id: ID!) {
         node(id: $id) {
             ... on Flo {
+                products {
+                    position {
+                        x
+                        y
+                    }
+                }
                 ...Flo_flo
             }
         }
     }
 `
+
+// this component takes the elements in the flo and centers the diagram before mounting
+const CenteredFlo = ({ flo }) => {
+    // grab a reference to the diagram context
+    const { pan } = useContext(DiagramContext)
+
+    // compute the upper left region of the diagram
+    const originY = flo.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
+    const originX = flo.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
+
+    // when this hook mounts
+    useEffect(() => {
+        // apply the correct transformation to position the top left point
+        // at 100,100
+        pan({
+            x: -originX + 100,
+            y: -originY + 100,
+        })
+    }, [])
+
+    // visualize the flo
+    return <Flo flo={flo} />
+}
 
 const useDragBehavior = elementRef => {
     const { pan } = useContext(DiagramContext)
