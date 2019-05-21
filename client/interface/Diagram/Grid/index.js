@@ -7,7 +7,7 @@ import { range, round } from '~/utils'
 import styles from './styles'
 import { background } from '~/design'
 
-export default ({ style }) => {
+const Grid = ({ style }) => {
     // get the size of the browser
     const browser = useBrowserSize()
     // and the current state of the diagram
@@ -55,3 +55,5 @@ export default ({ style }) => {
         </g>
     )
 }
+
+export default Grid

@@ -6,6 +6,7 @@ import * as styles from './styles'
 import { Diagram, Interface } from '~/context'
 import NoSelection from './NoSelection'
 import WithSelection from './WithSelection'
+import { lightGrey } from '~/design'
 
 export default () => {
     // grab the context values we care about
@@ -13,7 +14,14 @@ export default () => {
     const { dims } = useContext(Interface)
 
     return (
-        <div {...css({ ...styles.container, width: dims.sidebarWidth })}>
+        <div
+            {...css({
+                ...styles.container,
+                width: dims.sidebarWidth,
+                borderLeft: `solid 1px ${lightGrey}`,
+                zIndex: 100,
+            })}
+        >
             {diagram.selectedElements.length === 0 ? <NoSelection /> : <WithSelection />}
         </div>
     )

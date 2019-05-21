@@ -1,27 +1,27 @@
 // external imports
 import { graphql } from 'react-relay'
-import React, { useRef, useEffect, useLayoutEffect, useContext } from 'react'
+import React, { useRef, useEffect, useContext } from 'react'
 import SvgMatrix from 'svg-matrix'
+import { css } from 'glamor'
 // local imports
 import { Query } from '~/components'
 import { Flo } from '~/interface'
-import { Diagram, Interface } from '~/context'
+import { Diagram as DiagramContext } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
 import Grid from './Grid'
-import SelectionRectangle from './SelectionRectangle'
-import * as styles from './styles'
+import Toolbar from './Toolbar'
 
-export default () => {
+const Diagram = () => {
     // we need a ref to track interactions with the diagram
-    const elementRef = useRef(null)
+    const diagramElement = useRef(null)
 
     // enable the mousewheel zoom behavior
-    // useZoomBehavior(elementRef)
+    // useZoomBehavior(diagram)
     // and the drag behavior
-    useDragBehavior(elementRef)
+    useDragBehavior(diagramElement)
 
     // grab the info and actions we need from the diagram
-    const { diagram } = useContext(Diagram)
+    const { diagram } = useContext(DiagramContext)
 
     // compute the transform string for the diagram
     const { transformString } = SvgMatrix()
@@ -29,16 +29,28 @@ export default () => {
         .scale(diagram.zoomLevel)
 
     return (
-        <svg style={styles.container} ref={elementRef}>
-            <g transform={transformString}>
-                <Grid />
+        // we want to wrap the diagram in a div so we can easily position the tools over it
+        <div
+            {...css({
+                display: 'flex',
+                flexGrow: 1,
+                cursor: 'default',
+                zIndex: 1,
+                position: 'relative',
+            })}
+        >
+            <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+                <g transform={transformString}>
+                    <Grid />
 
-                {/* make sure the diagram sits above the grid */}
-                <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
-                    {({ node }) => <Flo flo={node} />}
-                </Query>
-            </g>
-        </svg>
+                    {/* make sure the diagram sits above the grid */}
+                    <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
+                        {({ node }) => <Flo flo={node} />}
+                    </Query>
+                </g>
+            </svg>
+            <Toolbar />
+        </div>
     )
 }
 
@@ -54,7 +66,7 @@ const floQuery = graphql`
 `
 
 const useDragBehavior = elementRef => {
-    const { pan } = useContext(Diagram)
+    const { pan } = useContext(DiagramContext)
     // we care if the space bar is pressed
     const spacePressed = useKeyPress(' ')
 
@@ -102,3 +114,5 @@ const useZoomBehavior = elementRef => {
         }
     })
 }
+
+export default Diagram

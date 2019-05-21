@@ -11,8 +11,9 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
         showGrid: true,
         gridSize: 50,
         pan: { x: 0, y: 0 },
-        zoomLevel: 1,
         selectedElements: [],
+        showTooltips: false,
+        zoomLevel: 1,
         ...initialState,
     })
 
@@ -45,18 +46,6 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
                 zoomLevel,
             }))
         },
-        zoomIn() {
-            setState(state => ({
-                ...state,
-                zoomLevel: Math.min(state.zoomLevel + zoomStep, maxZoom),
-            }))
-        },
-        zoomOut() {
-            setState(state => ({
-                ...state,
-                zoomLevel: Math.max(state.zoomLevel - zoomStep, minZoom),
-            }))
-        },
         selectElements(...elements) {
             setState(state => ({
                 ...state,
@@ -67,6 +56,12 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
             setState(state => ({
                 ...state,
                 selectedElements: [],
+            }))
+        },
+        toggleTooltips() {
+            setState(state => ({
+                ...state,
+                showTooltips: !state.showTooltips,
             }))
         },
     }
