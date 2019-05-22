@@ -118,7 +118,16 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
                     <div {...css({ color: darkGrey })}>{description}</div>
                 </div>
             </div>
-            {shadow && shadowLocation && shadow(shadowLocation)}
+            {shadow &&
+                shadowLocation &&
+                React.cloneElement(shadow, {
+                    style: {
+                        position: 'fixed',
+                        top: shadowLocation.y,
+                        left: shadowLocation.x,
+                        transform: 'translateX(-50%) translateY(-50%)',
+                    },
+                })}
         </>
     )
 }

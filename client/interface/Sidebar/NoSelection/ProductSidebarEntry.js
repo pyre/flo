@@ -15,20 +15,10 @@ const ProductSidebarEntry = ({ product }) => {
 
     return (
         <SidebarEntry
-            icon={<Product progress={1} />}
+            icon={<Product progress={product.progress} />}
             title={product.name}
             description={product.description}
-            shadow={position => (
-                <Product
-                    progress={1}
-                    style={{
-                        position: 'fixed',
-                        top: position.y,
-                        left: position.x,
-                        transform: 'translateX(-50%) translateY(-50%)',
-                    }}
-                />
-            )}
+            shadow={<Product progress={product.progress} />}
             onDrop={async position => {
                 // add the product to the diagram and grab the id so we can select it
                 const {
@@ -68,6 +58,7 @@ export default createFragmentContainer(
         fragment ProductSidebarEntry_product on Product {
             name
             description
+            progress
         }
     `
 )

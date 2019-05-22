@@ -8,7 +8,17 @@ import { Factory, FactoryIO } from '~/components'
 import SidebarEntry from './SidebarEntry'
 
 const FactorySidebarEntry = ({ factory }) => (
-    <SidebarEntry icon={<Factory />} title={factory.name} description={<FactoryIO factory={factory} />} />
+    <SidebarEntry
+        icon={<Factory />}
+        title={factory.name}
+        description={<FactoryIO factory={factory} />}
+        shadow={<Factory />}
+        onDrop={async position => {
+            console.log(position)
+
+            return []
+        }}
+    />
 )
 
 export default createFragmentContainer(FactorySidebarEntry, {
