@@ -8,6 +8,7 @@ import { useMouseDrag, useRelativePosition } from '~/hooks'
 import { lightGrey, darkGrey } from '~/design'
 import { Diagram, Environment, Interface } from '~/context'
 import { round, mutate } from '~/utils'
+import SidebarEntry from './SidebarEntry'
 
 const ProductEntry = ({ product }) => {
     // a ref to the root of the list item
@@ -113,30 +114,13 @@ const ProductEntry = ({ product }) => {
 
     return (
         <>
-            <div
+            <SidebarEntry
+                icon={<Product progress={1} />}
                 ref={rootElement}
-                {...css({
-                    display: 'flex',
-                    flexDirection: 'row',
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    paddingTop: 7,
-                    paddingBottom: 7,
-                    alignItems: 'center',
-                    cursor: 'move',
-                    userSelect: 'none',
-                    backgroundColor: drag ? lightGrey : 'none',
-                })}
-                {...hover({
-                    backgroundColor: lightGrey,
-                })}
-            >
-                <Product progress={1} {...css({ marginRight: 12 })} />
-                <div {...css({ display: 'flex', flexDirection: 'column' })}>
-                    <div {...css({ lineHeight: '16px' })}>{product.name}</div>
-                    <div {...css({ color: darkGrey })}>{product.description}</div>
-                </div>
-            </div>
+                drag={drag}
+                title={product.name}
+                description={product.description}
+            />
             {shadowLocation && (
                 <Product
                     progress={1}
