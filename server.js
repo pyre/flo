@@ -58,7 +58,7 @@ const resolvers = {
     },
     Query: {
         products: (_, __, { products }) => Object.values(products).slice(0, 3),
-        factories: (_, __, { factories }) => Object.values(factories),
+        factories: (_, __, { factories }) => Object.values(factories).slice(0, 1),
         node(_, { id: globalID }, context) {
             // grab the id from the argument
             const { id, type } = fromGlobalId(globalID)
