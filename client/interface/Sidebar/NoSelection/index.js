@@ -6,18 +6,18 @@ import { graphql } from 'react-relay'
 // local imports
 import { Query } from '~/components'
 import { useQuery } from '~/hooks'
-import FactoryPrototypeEntry from './FactoryPrototypeEntry'
-import ProductEntry from './ProductEntry'
+import FactorySidebarEntry from './FactorySidebarEntry'
+import ProductSidebarEntry from './ProductSidebarEntry'
 
 const NoSelectionQuery = graphql`
     query NoSelectionSidebarQuery {
         products {
             id
-            ...ProductEntry_product
+            ...ProductSidebarEntry_product
         }
         factories {
             id
-            ...FactoryPrototypeEntry_factory
+            ...FactorySidebarEntry_factory
         }
     }
 `
@@ -56,12 +56,12 @@ export default () => {
                     <TabPanels>
                         <TabPanel {...css({ outline: 'none' })}>
                             {data.products.map(product => (
-                                <ProductEntry key={product.id} product={product} />
+                                <ProductSidebarEntry key={product.id} product={product} />
                             ))}
                         </TabPanel>
                         <TabPanel {...css({ outline: 'none' })}>
                             {data.factories.map(factory => (
-                                <FactoryPrototypeEntry key={factory.id} factory={factory} />
+                                <FactorySidebarEntry key={factory.id} factory={factory} />
                             ))}
                         </TabPanel>
                     </TabPanels>

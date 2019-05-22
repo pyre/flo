@@ -10,7 +10,7 @@ import { Diagram, Environment, Interface } from '~/context'
 import { round, mutate } from '~/utils'
 import SidebarEntry from './SidebarEntry'
 
-const ProductEntry = ({ product }) => {
+const ProductSidebarEntry = ({ product }) => {
     // a ref to the root of the list item
     const rootElement = useRef()
 
@@ -85,7 +85,7 @@ const ProductEntry = ({ product }) => {
             mutate({
                 environment,
                 query: graphql`
-                    mutation ProductEntryAddProductMutation($input: AddProductInput!) {
+                    mutation ProductSidebarEntryAddProductMutation($input: AddProductInput!) {
                         addProductToFlo(input: $input) {
                             product {
                                 id
@@ -137,9 +137,9 @@ const ProductEntry = ({ product }) => {
 }
 
 export default createFragmentContainer(
-    ProductEntry,
+    ProductSidebarEntry,
     graphql`
-        fragment ProductEntry_product on Product {
+        fragment ProductSidebarEntry_product on Product {
             name
             description
         }

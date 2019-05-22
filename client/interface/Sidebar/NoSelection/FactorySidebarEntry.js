@@ -7,13 +7,13 @@ import { css } from 'glamor'
 import { Factory, FactoryIO } from '~/components'
 import SidebarEntry from './SidebarEntry'
 
-const FactoryPrototypeEntry = ({ factory }) => (
+const FactorySidebarEntry = ({ factory }) => (
     <SidebarEntry icon={<Factory />} title={factory.name} description={<FactoryIO factory={factory} />} />
 )
 
-export default createFragmentContainer(FactoryPrototypeEntry, {
+export default createFragmentContainer(FactorySidebarEntry, {
     factory: graphql`
-        fragment FactoryPrototypeEntry_factory on Factory {
+        fragment FactorySidebarEntry_factory on Factory {
             name
             inputs {
                 id
