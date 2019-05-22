@@ -4,14 +4,14 @@ import { graphql, createFragmentContainer } from 'react-relay'
 import pluralize from 'pluralize'
 import { css } from 'glamor'
 // local imports
-import { Factory, FactoryIO } from '~/components'
+import { Factory, FactoryIOString } from '~/components'
 import SidebarEntry from './SidebarEntry'
 
 const FactorySidebarEntry = ({ factory }) => (
     <SidebarEntry
         icon={<Factory />}
         title={factory.name}
-        description={<FactoryIO factory={factory} />}
+        description={<FactoryIOString factory={factory} />}
         shadow={<Factory />}
         onDrop={async position => {
             console.log(position)
@@ -31,7 +31,7 @@ export default createFragmentContainer(FactorySidebarEntry, {
             outputs {
                 id
             }
-            ...FactoryIO_factory
+            ...FactoryIOString_factory
         }
     `,
 })

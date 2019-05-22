@@ -9,6 +9,6 @@ export PrimaryButton from './PrimaryButton'
 export SecondaryButton from './SecondaryButton'
 export Portal from './Portal'
 export Ellipsis from './Ellipsis'
-export FactoryIO from './FactoryIO'
+export FactoryIOString from './FactoryIOString'
 
 export * from './icons'

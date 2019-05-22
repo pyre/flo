@@ -4,7 +4,7 @@ import pluralize from 'pluralize'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 
-const FactoryIO = ({ factory }) => (
+const FactoryIOString = ({ factory }) => (
     <>
         {factory.inputs.length > 0 && `${factory.inputs.length} ${pluralize('input', factory.inputs.length)}`}
         {factory.inputs.length > 0 && factory.outputs.length > 0 && (
@@ -15,9 +15,9 @@ const FactoryIO = ({ factory }) => (
 )
 
 export default createFragmentContainer(
-    FactoryIO,
+    FactoryIOString,
     graphql`
-        fragment FactoryIO_factory on Factory {
+        fragment FactoryIOString_factory on Factory {
             inputs {
                 id
             }

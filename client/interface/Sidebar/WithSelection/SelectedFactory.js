@@ -3,7 +3,7 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { css } from 'glamor'
 // local imports
-import { Factory, Label, Input, SecondaryButton, PrimaryButton, FactoryIO } from '~/components'
+import { Factory, Label, Input, SecondaryButton, PrimaryButton, FactoryIOString } from '~/components'
 import Header from '../Header'
 
 const SelectedFactory = ({ factory }) => {
@@ -32,7 +32,7 @@ const SelectedFactory = ({ factory }) => {
                     overflowY: 'auto',
                 })}
             >
-                <Header icon={<Factory />} title={factory.name} subtitle={<FactoryIO factory={factory} />} />
+                <Header icon={<Factory />} title={factory.name} subtitle={<FactoryIOString factory={factory} />} />
                 {factory.config.map(({ key, value, kind }) => (
                     <React.Fragment key={key}>
                         <Label value={key}>{key}</Label>
@@ -117,7 +117,7 @@ export default createFragmentContainer(
                 value
                 kind
             }
-            ...FactoryIO_factory
+            ...FactoryIOString_factory
         }
     `
 )
