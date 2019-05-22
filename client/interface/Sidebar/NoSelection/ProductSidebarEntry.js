@@ -10,8 +10,6 @@ import SidebarEntry from './SidebarEntry'
 const ProductSidebarEntry = ({ product }) => {
     // grab the relay environment
     const environment = useContext(Environment)
-    // and diagram singleton
-    const { selectElements } = useContext(Diagram)
 
     return (
         <SidebarEntry
