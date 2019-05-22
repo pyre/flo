@@ -17,7 +17,7 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
     const rootElement = useRef()
 
     // get the diagram info
-    const { diagram } = useContext(Diagram)
+    const { diagram, selectElements } = useContext(Diagram)
     const { dims } = useContext(Interface)
 
     // the width of the diagram
@@ -82,7 +82,7 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
         // if we are no longer dragging but we just were
         if (!drag && isDragging.current && isDragging.current.x < diagramWidth) {
             // call the drop handler
-            onDrop(dragLocation)
+            onDrop && onDrop(dragLocation).then(ids => selectElements(...ids))
 
             // make sure we only do this once
             isDragging.current = null
@@ -118,7 +118,7 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
                     <div {...css({ color: darkGrey })}>{description}</div>
                 </div>
             </div>
-            {shadowLocation && shadow(shadowLocation)}
+            {shadow && shadowLocation && shadow(shadowLocation)}
         </>
     )
 }

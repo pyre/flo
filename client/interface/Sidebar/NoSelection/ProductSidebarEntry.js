@@ -29,8 +29,13 @@ const ProductSidebarEntry = ({ product }) => {
                     }}
                 />
             )}
-            onDrop={position =>
-                mutate({
+            onDrop={async position => {
+                // add the product to the diagram and grab the id so we can select it
+                const {
+                    addProductToFlo: {
+                        product: { id },
+                    },
+                } = await mutate({
                     environment,
                     query: graphql`
                         mutation ProductSidebarEntryAddProductMutation($input: AddProductInput!) {
@@ -48,11 +53,11 @@ const ProductSidebarEntry = ({ product }) => {
                             product: '1',
                         },
                     },
-                }).then(({ addProductToFlo: { product: { id } } }) => {
-                    // select the product we just added
-                    selectElements(id)
                 })
-            }
+
+                // return the ids to select
+                return [id]
+            }}
         />
     )
 }
