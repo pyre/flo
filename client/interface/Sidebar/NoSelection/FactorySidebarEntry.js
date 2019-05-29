@@ -14,6 +14,7 @@ const FactorySidebarEntry = ({ factory }) => (
         onDrop={async position => {
             console.log(position)
 
+            // return the 
             return []
         }}
     />

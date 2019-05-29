@@ -3,6 +3,7 @@ import path from 'path'
 import { ApolloServer, PubSub } from 'apollo-server'
 import { toGlobalId, fromGlobalId } from 'graphql-relay'
 import { round } from '~/utils'
+import { getServers } from 'dns'
 
 // load the schema from the local file
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
@@ -39,8 +40,10 @@ const resolvers = {
         ],
     },
     Factory: {
-        id: product => toGlobalId('Factory', product.id),
+        id: factory => toGlobalId('Factory', factory.id),
         name: () => 'foo.bar.baz',
+        products: factory => [...factory.inputs, ...factory.outputs],
+        factories: factory => [factory],
     },
     Result: {
         id: result => toGlobalId('Result', result.id),
@@ -52,6 +55,9 @@ const resolvers = {
     },
     Flo: {
         id: flo => toGlobalId('Flo', flo.id),
+    },
+    Producer: {
+        __resolveType: obj => obj.__typename,
     },
     Node: {
         __resolveType: obj => obj.__typename,
