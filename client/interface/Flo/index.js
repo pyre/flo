@@ -7,7 +7,10 @@ import Factory from './Factory'
 import Product from './Product'
 import Lines from './Lines'
 
-const Flo = ({ producer }) => {
+const Flo = ({ producer, ...unused }) => {
+    // clear up unused props
+    Reflect.deleteProperty(unused, 'relay')
+
     // we need to update when new products are added to this flo
     useSubscription(
         graphql`
