@@ -7,7 +7,7 @@ import Factory from './Factory'
 import Product from './Product'
 import Lines from './Lines'
 
-const Flo = ({ flo }) => {
+const Flo = ({ producer }) => {
     // we need to update when new products are added to this flo
     useSubscription(
         graphql`
@@ -18,11 +18,11 @@ const Flo = ({ flo }) => {
                 }
             }
         `,
-        { flo: flo.id },
+        { flo: producer.id },
         {
             updater(store, data) {
                 // find the right flo
-                const floRecord = store.get(flo.id)
+                const floRecord = store.get(producer.id)
 
                 // grab a reference to the connection
                 const connection = floRecord.getLinkedRecords('products')
@@ -38,12 +38,12 @@ const Flo = ({ flo }) => {
     return (
         <>
             // the lines have to go above so they render underneath
-            <Lines flo={flo} />
+            <Lines flo={producer} />
             // render the products and factories
-            {flo.factories.map(factory => (
+            {producer.factories.map(factory => (
                 <Factory key={factory.id} factory={factory} />
             ))}
-            {flo.products.map(product => (
+            {producer.products.map(product => (
                 <Product key={product.id} product={product} />
             ))}
         </>
@@ -53,8 +53,11 @@ const Flo = ({ flo }) => {
 export default createFragmentContainer(
     Flo,
     graphql`
-        fragment Flo_flo on Flo {
-            id
+        fragment Flo_producer on Producer {
+            ... on Node {
+                id
+            }
+
             products {
                 id
                 ...Product_product

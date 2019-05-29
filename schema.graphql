@@ -54,7 +54,7 @@ type Factory implements Node & Producer {
     factories: [Factory!]!
 }
 
-type Flo implements Node {
+type Flo implements Node & Producer {
     id: ID!
     fixed: Boolean
     factories: [Factory!]!

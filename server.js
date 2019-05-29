@@ -42,7 +42,10 @@ const resolvers = {
     Factory: {
         id: factory => toGlobalId('Factory', factory.id),
         name: () => 'foo.bar.baz',
-        products: factory => [...factory.inputs, ...factory.outputs],
+        products: factory => [
+            ...factory.inputs.map(({ product }) => product),
+            ...factory.outputs.map(({ product }) => product),
+        ],
         factories: factory => [factory],
     },
     Result: {

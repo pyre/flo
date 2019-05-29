@@ -44,7 +44,7 @@ const Diagram = () => {
                     <Grid />
                     {/* make sure the diagram sits above the grid */}
                     <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
-                        {({ node }) => <CenteredFlo flo={node} />}
+                        {({ node }) => <CenteredFlo producer={node} />}
                     </Query>
                 </g>
             </svg>
@@ -64,20 +64,20 @@ const floQuery = graphql`
                         y
                     }
                 }
-                ...Flo_flo
+                ...Flo_producer
             }
         }
     }
 `
 
 // this component takes the elements in the flo and centers the diagram before mounting
-const CenteredFlo = ({ flo }) => {
+const CenteredFlo = ({ producer }) => {
     // grab a reference to the diagram context
     const { pan } = useContext(DiagramContext)
 
     // compute the upper left region of the diagram
-    const originY = flo.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
-    const originX = flo.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
+    const originY = producer.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
+    const originX = producer.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
 
     // when this hook mounts
     useEffect(() => {
@@ -90,7 +90,7 @@ const CenteredFlo = ({ flo }) => {
     }, [])
 
     // visualize the flo
-    return <Flo flo={flo} />
+    return <Flo producer={producer} />
 }
 
 const useDragBehavior = elementRef => {
