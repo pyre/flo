@@ -1,13 +1,13 @@
 // external imports
-import { graphql } from 'react-relay'
 import React, { useRef, useEffect, useContext } from 'react'
+import { graphql, createFragmentContainer } from 'react-relay'
 import SvgMatrix from 'svg-matrix'
 import { css } from 'glamor'
 // local imports
 import { Query } from '~/components'
 import { Flo } from '~/interface'
 import { Diagram as DiagramContext } from '~/context'
-import { useKeyPress, useMouseDrag, useEvent } from '~/hooks'
+import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
 import Grid from './Grid'
 import Toolbar from './Toolbar'
 
@@ -57,7 +57,50 @@ const Diagram = () => {
 const floQuery = graphql`
     query DiagramQuery($id: ID!) {
         node(id: $id) {
+            ...DiagramCenteredFlo_producer
+        }
+    }
+`
+
+const subscription = graphql`
+    subscription DiagramSubscription($flo: ID!) {
+        node(id: $flo) {
+            ...Flo_producer
+        }
+    }
+`
+
+// this component takes the elements in the flo and centers the diagram before mounting
+const CenteredFlo = createFragmentContainer(
+    ({ producer }) => {
+        // grab a reference to the diagram context
+        const { pan } = useContext(DiagramContext)
+
+        // compute the upper left region of the diagram
+        const originY = producer.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
+        const originX = producer.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
+
+        // when this hook mounts
+        useEffect(() => {
+            // apply the correct transformation to position the top left point
+            // at 150,150
+            pan({
+                x: -originX + 150,
+                y: -originY + 100,
+            })
+        }, [])
+
+        useSubscription(subscription, {
+            flo: producer.id,
+        })
+
+        // visualize the flo
+        return <Flo producer={producer} />
+    },
+    graphql`
+        fragment DiagramCenteredFlo_producer on Flo {
             ... on Flo {
+                id
                 products {
                     position {
                         x
@@ -67,31 +110,8 @@ const floQuery = graphql`
                 ...Flo_producer
             }
         }
-    }
-`
-
-// this component takes the elements in the flo and centers the diagram before mounting
-const CenteredFlo = ({ producer }) => {
-    // grab a reference to the diagram context
-    const { pan } = useContext(DiagramContext)
-
-    // compute the upper left region of the diagram
-    const originY = producer.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
-    const originX = producer.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
-
-    // when this hook mounts
-    useEffect(() => {
-        // apply the correct transformation to position the top left point
-        // at 150,150
-        pan({
-            x: -originX + 150,
-            y: -originY + 100,
-        })
-    }, [])
-
-    // visualize the flo
-    return <Flo producer={producer} />
-}
+    `
+)
 
 const useDragBehavior = elementRef => {
     const { pan } = useContext(DiagramContext)
@@ -118,29 +138,6 @@ const useDragBehavior = elementRef => {
             point2: mouseDrag.currentLocation,
         }
     )
-}
-
-const useZoomBehavior = elementRef => {
-    // grab the info and actions we need from the diagram
-    const { zoomIn, zoomOut } = useContext(Diagram)
-
-    // when the wheel scrolls
-    useEvent('mousewheel', event => {
-        // make sure that the scrolling only happens on the diagram
-        if (event.target !== elementRef.current) {
-            return
-        }
-
-        // if the user scrolled up
-        if (event.wheelDelta / 120 > 0) {
-            // zoom in
-            zoomIn()
-            // otherwise we scrolled down
-        } else {
-            // zoom the diagram out
-            zoomOut()
-        }
-    })
 }
 
 export default Diagram

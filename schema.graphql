@@ -103,10 +103,23 @@ type AddProductOutput {
     product: Product
 }
 
+input AddFactoryToFloInput {
+    factory: ID!
+    flo: ID!
+    x: Int!
+    y: Int!
+}
+
+type AddFactoryToFloOutput {
+    factory: Factory!
+    flo: Flo!
+}
+
 type Mutation {
     moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
     moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
     addProductToFlo(input: AddProductInput!): AddProductOutput!
+    addFactoryToFlo(input: AddFactoryToFloInput!): AddFactoryToFloOutput!
 }
 
 """
@@ -152,6 +165,7 @@ type Query {
 type Subscription {
     node(id: ID!): Node
     newProduct(flo: ID!): Product
+    newFactory(flo: ID!): Factory
 }
 
 """

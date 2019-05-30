@@ -38,7 +38,7 @@ const ProductSidebarEntry = ({ product }) => {
                         input: {
                             ...position,
                             flo: 'RmxvOjA=',
-                            product: '1',
+                            product: product.id,
                         },
                     },
                 })
@@ -54,6 +54,7 @@ export default createFragmentContainer(
     ProductSidebarEntry,
     graphql`
         fragment ProductSidebarEntry_product on Product {
+            id
             name
             description
             progress

@@ -11,6 +11,7 @@ const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString(
 // an event broker for subscriptions
 const nodePubsub = new PubSub()
 const newProductPubSub = new PubSub()
+const newFactoryPubSub = new PubSub()
 
 // schema resolvers
 const resolvers = {
@@ -93,7 +94,7 @@ const resolvers = {
         },
     },
     Mutation: {
-        moveProduct(_, { product: productID, x, y }, context) {
+        moveProduct: (_, { product: productID, x, y }, context) => {
             // convert the global id into something we can use
             const { id } = fromGlobalId(productID)
             const product = context.products[id]
@@ -105,7 +106,7 @@ const resolvers = {
 
             return { product }
         },
-        moveFactory(_, { factory: factoryID, x, y }, context) {
+        moveFactory: (_, { factory: factoryID, x, y }, context) => {
             // convert the global id into something we can use
             const { id } = fromGlobalId(factoryID)
             const factory = context.factories[id]
@@ -117,13 +118,7 @@ const resolvers = {
 
             return { factory }
         },
-        addProductToFlo(
-            _,
-            {
-                input: { x, y, flo },
-            },
-            { flos, products }
-        ) {
+        addProductToFlo: (_, { input: { x, y, flo } }, { flos, products }) => {
             // create the product we want to add
             const product = productFactory({
                 id: Object.values(products).length,
@@ -145,10 +140,48 @@ const resolvers = {
 
             // update the clients
             newProductPubSub.publish(flo, { newProduct: product })
+            nodePubsub.publish(flo, { node: flos[floID] })
 
             // register the reference to the product for query resovlers
             return {
                 product,
+            }
+        },
+        addFactoryToFlo: (_, { input: { flo, factory, x, y } }, { flos, factories }) => {
+            // get the id of the flo and factory in question
+            const { id: floID } = fromGlobalId(flo)
+            const { id: factoryID } = fromGlobalId(factory)
+
+            if (!flos[floID]) {
+                throw new Error(`Could not find flo with id ${flo}`)
+            }
+
+            if (!factories[factoryID]) {
+                throw new Error(`Could not find factory with id ${factory}`)
+            }
+
+            // grab a reference to the flo
+            const floObj = flos[floID]
+
+            // create a new factory to add to the flo
+            const factoryObj = factoryFactory({
+                id: Object.values(factories).length + 1,
+                position: { x, y },
+            })
+
+            console.log(floObj)
+
+            // add the factory to the flo's list
+            floObj.factories.push(factoryObj)
+            factories[factoryObj.id] = factoryObj
+
+            // publish an event for the new factory
+            newFactoryPubSub.publish(flo, { newFactory: factoryObj })
+            nodePubsub.publish(flo, { node: floObj })
+
+            return {
+                factory: factoryObj,
+                flo: floObj,
             }
         },
     },
@@ -159,8 +192,25 @@ const resolvers = {
         newProduct: {
             subscribe: (_, { flo }) => newProductPubSub.asyncIterator([flo]),
         },
+        newFactory: {
+            subscribe: (_, { flo }) => newFactoryPubSub.asyncIterator([flo]),
+        },
     },
 }
+
+const factoryFactory = ({ id, position }) => ({
+    id,
+    position,
+    attributes: [{ name: 'favoriteNumber', value: 5, kind: 'Int' }],
+    config: [
+        { key: 'size', value: '1', kind: 'Int' },
+        { key: 'name', value: 'hello', kind: 'String' },
+        { key: 'hello', value: '1', kind: 'Int' },
+    ],
+    inputs: [],
+    outputs: [],
+    __typename: 'Factory',
+})
 
 // create the factories
 const factories = [
@@ -169,19 +219,7 @@ const factories = [
 ].reduce(
     (prev, position, id) => ({
         ...prev,
-        [id]: {
-            id,
-            position,
-            attributes: [{ name: 'favoriteNumber', value: 5, kind: 'Int' }],
-            config: [
-                { key: 'size', value: '1', kind: 'Int' },
-                { key: 'name', value: 'hello', kind: 'String' },
-                { key: 'hello', value: '1', kind: 'Int' },
-            ],
-            inputs: [],
-            outputs: [],
-            __typename: 'Factory',
-        },
+        [id]: factoryFactory({ id, position }),
     }),
     {}
 )
@@ -256,6 +294,7 @@ const flos = [
     (prev, [productIDs, factoryIDs], id) => ({
         ...prev,
         [id]: {
+            __typename: 'Flo',
             id,
             factories: factoryIDs.map(id => factories[id]),
             products: productIDs.map(id => products[id]),
