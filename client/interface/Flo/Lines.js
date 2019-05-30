@@ -54,26 +54,28 @@ const Lines = ({ flo }) => (
                         x2={factory.position.x - armLength}
                     />
                     // render the lines joining the left square to each of the inputs
-                    {factory.inputs.map(binding => (
-                        <React.Fragment key={binding.id}>
-                            <line
-                                x1={leftSquareLocation.x}
-                                y1={leftSquareLocation.y}
-                                x2={leftSquareLocation.x}
-                                y2={binding.product.position.y}
-                                stroke={connectorColor}
-                                strokeWidth={1}
-                            />
-                            <line
-                                x1={leftSquareLocation.x}
-                                y1={binding.product.position.y}
-                                x2={binding.product.position.x}
-                                y2={binding.product.position.y}
-                                stroke={connectorColor}
-                                strokeWidth={1}
-                            />
-                        </React.Fragment>
-                    ))}
+                    {factory.inputs
+                        .filter(({ product }) => product)
+                        .map(binding => (
+                            <React.Fragment key={binding.id}>
+                                <line
+                                    x1={leftSquareLocation.x}
+                                    y1={leftSquareLocation.y}
+                                    x2={leftSquareLocation.x}
+                                    y2={binding.product.position.y}
+                                    stroke={connectorColor}
+                                    strokeWidth={1}
+                                />
+                                <line
+                                    x1={leftSquareLocation.x}
+                                    y1={binding.product.position.y}
+                                    x2={binding.product.position.x}
+                                    y2={binding.product.position.y}
+                                    stroke={connectorColor}
+                                    strokeWidth={1}
+                                />
+                            </React.Fragment>
+                        ))}
                     // render the lines joining the right square to each of its results
                     {factory.outputs.map(result => (
                         <React.Fragment key={result.id}>

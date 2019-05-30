@@ -44,8 +44,8 @@ const resolvers = {
         id: factory => toGlobalId('Factory', factory.id),
         name: () => 'foo.bar.baz',
         products: factory => [
-            ...factory.inputs.map(({ product }) => product),
-            ...factory.outputs.map(({ product }) => product),
+            ...factory.inputs.filter(({ product }) => product).map(({ product }) => product),
+            ...factory.outputs.filter(({ product }) => product).map(({ product }) => product),
         ],
         factories: factory => [factory],
     },
@@ -147,7 +147,7 @@ const resolvers = {
                 product,
             }
         },
-        addFactoryToFlo: (_, { input: { flo, factory, x, y } }, { flos, factories }) => {
+        addFactoryToFlo: (_, { input: { flo, factory, x, y } }, { flos, factories, products }) => {
             // get the id of the flo and factory in question
             const { id: floID } = fromGlobalId(flo)
             const { id: factoryID } = fromGlobalId(factory)
@@ -169,7 +169,28 @@ const resolvers = {
                 position: { x, y },
             })
 
-            console.log(floObj)
+            // we have to add the appropriate amount of inputs and outputs to the new factory
+            for (let i = 0; i < factories[factoryID].inputs.length; i++) {
+                factoryObj.inputs = [...factoryObj.inputs, { id: Math.random() }]
+            }
+            for (let i = 0; i < factories[factoryID].outputs.length; i++) {
+                // create a new product
+                const product = productFactory({
+                    id: Object.values(products).length + 1,
+                    position: {
+                        x: 10,
+                        y: 10,
+                    },
+                    progress: 0,
+                })
+                // save the product
+                products[product.id] = product
+                // add the product to the flo
+                floObj.products.push(product)
+
+                // add the product to the factory output
+                factoryObj.outputs = [...factoryObj.outputs, { id: Math.random(), product }]
+            }
 
             // add the factory to the flo's list
             floObj.factories.push(factoryObj)
