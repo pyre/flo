@@ -3,7 +3,7 @@ import path from 'path'
 import { ApolloServer, PubSub } from 'apollo-server'
 import { toGlobalId, fromGlobalId } from 'graphql-relay'
 import { round } from '~/utils'
-import { getServers } from 'dns'
+import { center } from '~/utils'
 
 // load the schema from the local file
 const schema = fs.readFileSync(path.join(__dirname, 'schema.graphql')).toString()
@@ -173,16 +173,15 @@ const resolvers = {
             for (let i = 0; i < factories[factoryID].inputs.length; i++) {
                 factoryObj.inputs = [...factoryObj.inputs, { id: Math.random() }]
             }
-            for (let i = 0; i < factories[factoryID].outputs.length; i++) {
-                // create a new product
+
+            for (const point of center({ x: x + 150, y }, factories[factoryID].outputs.length)) {
+                // create a new product at the designated point
                 const product = productFactory({
                     id: Object.values(products).length + 1,
-                    position: {
-                        x: 10,
-                        y: 10,
-                    },
+                    position: point,
                     progress: 0,
                 })
+
                 // save the product
                 products[product.id] = product
                 // add the product to the flo
