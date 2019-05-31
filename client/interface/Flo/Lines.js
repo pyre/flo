@@ -3,6 +3,7 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
 import { connectorColor } from '~/design'
+import { center } from '~/utils'
 
 // the primary length for the squares that define the in and out point
 const squareLength = 3
@@ -21,6 +22,15 @@ const Lines = ({ flo }) => (
                 x: factory.position.x + armLength,
                 y: factory.position.y,
             }
+
+            // compute the locations for inputs which may not have products
+            const inputLocations = center(
+                {
+                    x: leftSquareLocation.x - 2 * armLength,
+                    y: leftSquareLocation.y,
+                },
+                factory.inputs.length
+            )
 
             return (
                 <React.Fragment key={factory.id}>
@@ -54,28 +64,31 @@ const Lines = ({ flo }) => (
                         x2={factory.position.x - armLength}
                     />
                     // render the lines joining the left square to each of the inputs
-                    {factory.inputs
-                        .filter(({ product }) => product)
-                        .map(binding => (
+                    {factory.inputs.map((binding, i) => {
+                        // the location for the input can be overwritten by the product
+                        const location = binding.product ? binding.product.position : inputLocations[i]
+
+                        return (
                             <React.Fragment key={binding.id}>
                                 <line
                                     x1={leftSquareLocation.x}
                                     y1={leftSquareLocation.y}
                                     x2={leftSquareLocation.x}
-                                    y2={binding.product.position.y}
+                                    y2={location.y}
                                     stroke={connectorColor}
                                     strokeWidth={1}
                                 />
                                 <line
                                     x1={leftSquareLocation.x}
-                                    y1={binding.product.position.y}
-                                    x2={binding.product.position.x}
-                                    y2={binding.product.position.y}
+                                    y1={location.y}
+                                    x2={location.x}
+                                    y2={location.y}
                                     stroke={connectorColor}
                                     strokeWidth={1}
                                 />
                             </React.Fragment>
-                        ))}
+                        )
+                    })}
                     // render the lines joining the right square to each of its results
                     {factory.outputs.map(result => (
                         <React.Fragment key={result.id}>
