@@ -42,7 +42,7 @@ input BindingAssignment {
 The primary actor of our flows. Responsible for taking data in that
 matches a particular protocol and results in a concrete product
 """
-type Factory implements Node {
+type Factory implements Node & Producer {
     id: ID!
     name: String!
     inputs: [Binding!]!
@@ -50,9 +50,11 @@ type Factory implements Node {
     config: [KVPair!]!
     position: Position!
     attributes: [Attribute!]!
+    products: [Product!]!
+    factories: [Factory!]!
 }
 
-type Flo implements Node {
+type Flo implements Node & Producer {
     id: ID!
     fixed: Boolean
     factories: [Factory!]!
@@ -101,10 +103,23 @@ type AddProductOutput {
     product: Product
 }
 
+input AddFactoryToFloInput {
+    factory: ID!
+    flo: ID!
+    x: Int!
+    y: Int!
+}
+
+type AddFactoryToFloOutput {
+    factory: Factory!
+    flo: Flo!
+}
+
 type Mutation {
     moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
     moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
     addProductToFlo(input: AddProductInput!): AddProductOutput!
+    addFactoryToFlo(input: AddFactoryToFloInput!): AddFactoryToFloOutput!
 }
 
 """
@@ -117,6 +132,14 @@ interface Node {
 type Position {
     x: Int
     y: Int
+}
+
+"""
+An interface for things that contain both products and factories.
+"""
+interface Producer {
+    products: [Product!]!
+    factories: [Factory!]!
 }
 
 """
@@ -142,6 +165,7 @@ type Query {
 type Subscription {
     node(id: ID!): Node
     newProduct(flo: ID!): Product
+    newFactory(flo: ID!): Factory
 }
 
 """

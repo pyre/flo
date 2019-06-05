@@ -72,44 +72,6 @@ const Product = ({ product }) => {
                 }
             >
                 <>
-                    // render the outer circle
-                    {do {
-                        // render a full circle if there are both a source and at least one binding
-                        if (product.source && product.bindings.length > 0) {
-                            ;<circle
-                                fill={connectorColor}
-                                cx={product.position.x}
-                                cy={product.position.y}
-                                r={gutter + 1}
-                            />
-                        }
-                        // if there is no source, then there is only bindings
-                        else if (product.source) {
-                            // so render the arc that leaves the gap on the right
-                            ;<Arc
-                                r={gutter + 1}
-                                x={product.position.x}
-                                y={product.position.y}
-                                theta1={-230}
-                                theta2={40}
-                                stroke={connectorColor}
-                            />
-                        }
-                        // there are only bindings
-                        else if (product.bindings.length > 0) {
-                            // so render the arc tha leaves the gap on the left
-                            ;<Arc
-                                r={gutter + 1}
-                                x={product.position.x}
-                                y={product.position.y}
-                                theta1={-40}
-                                theta2={230}
-                                stroke={connectorColor}
-                            />
-                        }
-                    }}
-                    // render some space between the fillter and the border
-                    <circle fill={background} cx={product.position.x} cy={product.position.y} r={gutter} />
                     // if this element is selected we should show a visual indicator
                     {diagram.selectedElements.includes(product.id) && (
                         <>

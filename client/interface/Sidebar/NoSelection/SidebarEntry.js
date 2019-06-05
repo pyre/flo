@@ -1,15 +1,18 @@
-// external imports
-import React, { useRef, useContext, useEffect } from 'react'
-import { graphql, createFragmentContainer } from 'react-relay'
+// externals
+import React, { useContext, useRef, useEffect } from 'react'
 import { css, hover } from 'glamor'
-// local imports
-import { Product } from '~/components'
+// locals
+import { Interface } from '~/context'
 import { useMouseDrag, useRelativePosition } from '~/hooks'
-import { lightGrey, darkGrey } from '~/design'
-import { Diagram, Environment, Interface } from '~/context'
-import { round, mutate } from '~/utils'
+import { Diagram } from '~/context'
+import { round } from '~/utils'
 
-const ProductEntry = ({ product }) => {
+function SidebarEntry({ icon, title, description, onDrop, shadow }) {
+    // grab the current colors
+    const {
+        colors: { lightGrey, darkGrey },
+    } = useContext(Interface)
+
     // a ref to the root of the list item
     const rootElement = useRef()
 
@@ -71,9 +74,6 @@ const ProductEntry = ({ product }) => {
         isDragging.current = shadowLocation
     }
 
-    // grab the relay environment
-    const environment = useContext(Environment)
-
     // when we let go we need the position of the mouse in the  diagram coordinate system
     const dragLocation = useRelativePosition(isDragging.current)
 
@@ -81,28 +81,8 @@ const ProductEntry = ({ product }) => {
     useEffect(() => {
         // if we are no longer dragging but we just were
         if (!drag && isDragging.current && isDragging.current.x < diagramWidth) {
-            mutate({
-                environment,
-                query: graphql`
-                    mutation ProductEntryAddProductMutation($input: AddProductInput!) {
-                        addProductToFlo(input: $input) {
-                            product {
-                                id
-                            }
-                        }
-                    }
-                `,
-                variables: {
-                    input: {
-                        ...dragLocation,
-                        flo: 'RmxvOjA=',
-                        product: '1',
-                    },
-                },
-            }).then(({ addProductToFlo: { product: { id } } }) => {
-                // select the product we just added
-                selectElements(id)
-            })
+            // call the drop handler
+            onDrop && onDrop(dragLocation).then(ids => selectElements(...ids))
 
             // make sure we only do this once
             isDragging.current = null
@@ -111,6 +91,7 @@ const ProductEntry = ({ product }) => {
         // this effect needs to fire any time we are dragging or just finishe dragging
     }, [drag, isDragging.current])
 
+    // return the entry
     return (
         <>
             <div
@@ -131,33 +112,24 @@ const ProductEntry = ({ product }) => {
                     backgroundColor: lightGrey,
                 })}
             >
-                <Product progress={1} {...css({ marginRight: 12 })} />
+                <div {...css({ marginRight: 12 })}>{icon}</div>
                 <div {...css({ display: 'flex', flexDirection: 'column' })}>
-                    <div {...css({ lineHeight: '16px' })}>{product.name}</div>
-                    <div {...css({ color: darkGrey })}>{product.description}</div>
+                    <div {...css({ lineHeight: '16px' })}>{title}</div>
+                    <div {...css({ color: darkGrey })}>{description}</div>
                 </div>
             </div>
-            {shadowLocation && (
-                <Product
-                    progress={1}
-                    style={{
+            {shadow &&
+                shadowLocation &&
+                React.cloneElement(shadow, {
+                    style: {
                         position: 'fixed',
                         top: shadowLocation.y,
                         left: shadowLocation.x,
                         transform: 'translateX(-50%) translateY(-50%)',
-                    }}
-                />
-            )}
+                    },
+                })}
         </>
     )
 }
 
-export default createFragmentContainer(
-    ProductEntry,
-    graphql`
-        fragment ProductEntry_product on Product {
-            name
-            description
-        }
-    `
-)
+export default SidebarEntry
