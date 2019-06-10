@@ -156,7 +156,7 @@ const Lines = ({ flo }) => {
 export default createFragmentContainer(
     Lines,
     graphql`
-        fragment Lines_flo on Producer {
+        fragment Lines2D_flo on Producer {
             factories {
                 id
                 position {

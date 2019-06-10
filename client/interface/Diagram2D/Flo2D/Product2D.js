@@ -21,7 +21,7 @@ const Product = ({ product }) => {
     // make sure we update this component when the product moves
     useSubscription(
         graphql`
-            subscription ProductSubscription($id: ID!) {
+            subscription Product2DSubscription($id: ID!) {
                 node(id: $id) {
                     ... on Product {
                         progress
@@ -47,7 +47,7 @@ const Product = ({ product }) => {
                     mutate({
                         environment,
                         query: graphql`
-                            mutation ProductMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
+                            mutation Product2DMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
                                 moveProduct(product: $product, x: $x, y: $y) {
                                     product {
                                         id
@@ -166,7 +166,7 @@ const Tooltip = ({ product, ...props }) => {
 export default createFragmentContainer(
     Product,
     graphql`
-        fragment Product_product on Product {
+        fragment Product2D_product on Product {
             id
             progress
             name

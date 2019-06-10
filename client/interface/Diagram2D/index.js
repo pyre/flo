@@ -5,7 +5,7 @@ import SvgMatrix from 'svg-matrix'
 import { css } from 'glamor'
 // local imports
 import { Query } from '~/components'
-import _Flo from './Flo'
+import _Flo from './Flo2D'
 import { Diagram as DiagramContext } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
 import Grid from './Grid'
@@ -47,17 +47,17 @@ const Diagram = () => {
 
 // the query for the flo we're looking at
 const floQuery = graphql`
-    query DiagramQuery($id: ID!) {
+    query Diagram2DQuery($id: ID!) {
         node(id: $id) {
-            ...DiagramCenteredFlo_producer
+            ...Diagram2DCenteredFlo_producer
         }
     }
 `
 
 const subscription = graphql`
-    subscription DiagramSubscription($flo: ID!) {
+    subscription Diagram2DSubscription($flo: ID!) {
         node(id: $flo) {
-            ...Flo_producer
+            ...Flo2D_producer
         }
     }
 `
@@ -94,7 +94,7 @@ const CenteredFlo = createFragmentContainer(
         return <Flo producer={producer} />
     },
     graphql`
-        fragment DiagramCenteredFlo_producer on Flo {
+        fragment Diagram2DCenteredFlo_producer on Flo {
             ... on Flo {
                 id
                 products {
@@ -103,7 +103,7 @@ const CenteredFlo = createFragmentContainer(
                         y
                     }
                 }
-                ...Flo_producer
+                ...Flo2D_producer
             }
         }
     `
