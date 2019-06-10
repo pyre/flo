@@ -23,6 +23,8 @@
     "dependencies": {
         "@hot-loader/react-dom": "16.8.6",
         "@reach/tabs": "0.1.3",
+        "@react-vertex/core": "2.9.0",
+        "@react-vertex/orbit-camera": "2.15.0",
         "apollo-link": "^1.2.11",
         "apollo-link-ws": "^1.0.17",
         "core-js": "3.0.1",

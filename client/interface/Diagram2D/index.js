@@ -37,7 +37,7 @@ const Diagram = () => {
             <g transform={transformString}>
                 <Grid />
                 {/* make sure the diagram sits above the grid */}
-                <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
+                <Query query={floQuery} variables={{ id: diagram.floID }} loadingState={null}>
                     {({ node }) => <CenteredFlo producer={node} />}
                 </Query>
             </g>

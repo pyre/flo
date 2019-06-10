@@ -15,6 +15,7 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
         showTooltips: false,
         zoomLevel: 1,
         view: '2D',
+        floID: 'RmxvOjA=',
         ...initialState,
     })
 
