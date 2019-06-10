@@ -8,7 +8,7 @@ import { Diagram, Interface } from '~/context'
 
 const Toolbar = props => {
     // grab the diagram info from context
-    const { toggleTooltips } = useContext(Diagram)
+    const { toggleView, toggleTooltips } = useContext(Diagram)
     const { dims } = useContext(Interface)
 
     return (
@@ -22,7 +22,7 @@ const Toolbar = props => {
                     zIndex: 100,
 
                 })}>
-                <ToolbarButton onClick={toggleTooltips} >
+                <ToolbarButton onClick={toggleView} >
                     <IconGlobe />
                 </ToolbarButton>
                 <ToolbarButton onClick={toggleTooltips} >

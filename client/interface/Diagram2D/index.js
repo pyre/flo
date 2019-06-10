@@ -9,9 +9,10 @@ import _Flo from './Flo'
 import { Diagram as DiagramContext } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
 import Grid from './Grid'
-import Toolbar from './Toolbar'
 
 export const Flo = _Flo
+
+let hasCentered = false
 
 const Diagram = () => {
     // we need a ref to track interactions with the diagram
@@ -32,26 +33,15 @@ const Diagram = () => {
 
     return (
         // we want to wrap the diagram in a div so we can easily position the tools over it
-        <div
-            {...css({
-                display: 'flex',
-                flexGrow: 1,
-                cursor: 'default',
-                zIndex: 1,
-                position: 'relative',
-            })}
-        >
-            <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
-                <g transform={transformString}>
-                    <Grid />
-                    {/* make sure the diagram sits above the grid */}
-                    <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
-                        {({ node }) => <CenteredFlo producer={node} />}
-                    </Query>
-                </g>
-            </svg>
-            <Toolbar />
-        </div>
+        <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+            <g transform={transformString}>
+                <Grid />
+                {/* make sure the diagram sits above the grid */}
+                <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
+                    {({ node }) => <CenteredFlo producer={node} />}
+                </Query>
+            </g>
+        </svg>
     )
 }
 
@@ -84,13 +74,17 @@ const CenteredFlo = createFragmentContainer(
 
         // when this hook mounts
         useEffect(() => {
-            // apply the correct transformation to position the top left point
-            // at 150,150
-            pan({
-                x: -originX + 150,
-                y: -originY + 100,
-            })
-        }, [])
+            if (!hasCentered) {
+                // apply the correct transformation to position the top left point
+                // at 150,150
+                pan({
+                    x: -originX + 150,
+                    y: -originY + 100,
+                })
+
+                hasCentered = true
+            }
+        }, [hasCentered])
 
         useSubscription(subscription, {
             flo: producer.id,
