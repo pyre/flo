@@ -4,7 +4,7 @@ import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Factory, FactoryIOString } from '~/components'
 import { Environment } from '~/context'
-import Flo from '~/interface/Flo'
+import { Flo } from '~/interface/Diagram2D'
 import SidebarEntry from './SidebarEntry'
 import { mutate } from '~/utils'
 

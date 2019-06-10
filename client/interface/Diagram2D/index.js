@@ -5,11 +5,13 @@ import SvgMatrix from 'svg-matrix'
 import { css } from 'glamor'
 // local imports
 import { Query } from '~/components'
-import { Flo } from '~/interface'
+import _Flo from './Flo'
 import { Diagram as DiagramContext } from '~/context'
 import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
 import Grid from './Grid'
 import Toolbar from './Toolbar'
+
+export const Flo = _Flo
 
 const Diagram = () => {
     // we need a ref to track interactions with the diagram

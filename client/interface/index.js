@@ -1,3 +1,2 @@
-export Diagram from './Diagram'
-export Flo from './Flo'
+export Diagram2D from './Diagram2D'
 export Sidebar from './Sidebar'

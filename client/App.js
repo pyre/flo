@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader/root'
 import { ReactRelayContext } from 'react-relay'
 // local imports
 import { DiagramProvider, EnvironmentProvider, InterfaceProvider } from '~/context'
-import { Diagram, Sidebar } from '~/interface'
+import { Diagram2D, Sidebar } from '~/interface'
 
 import './reset.css'
 
@@ -24,7 +24,7 @@ const App = () => (
                         width: '100vw',
                     })}
                 >
-                    <Diagram />
+                    <Diagram2D />
                     <Sidebar />
                 </div>
             </DiagramProvider>
