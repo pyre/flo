@@ -7,7 +7,7 @@ import { Environment } from '~/context'
 export default ({ children, query, variables, loadingState = 'loading', onError, passThroughLoading }) => {
     // pull the environment out of context
     const environment = React.useContext(Environment)
-
+    console.log({ environment })
     return (
         <QueryRenderer
             query={query}
