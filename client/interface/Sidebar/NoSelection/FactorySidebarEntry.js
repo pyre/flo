@@ -36,7 +36,12 @@ const FactorySidebarEntry = ({ factory }) => {
             title={factory.name}
             description={<FactoryIOString factory={factory} />}
             shadow={
-                <svg width={width} height={height} viewBox={`${leftX} ${leftY} ${width} ${height}`}>
+                <svg
+                    width={width}
+                    height={height}
+                    viewBox={`${leftX} ${leftY} ${width} ${height}`}
+                    transform="scale(1,-1)"
+                >
                     <Flo producer={factory} />
                 </svg>
             }
