@@ -4,18 +4,13 @@ import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
 import Product from './Product3D'
 
-const Flo = ({ producer, ...unused }) => {
-    // clear up unused props
-    Reflect.deleteProperty(unused, 'relay')
-
-    return (
-        <>
-            {producer.products.map(product => (
-                <Product key={product.id} product={product} />
-            ))}
-        </>
-    )
-}
+const Flo = ({ producer }) => (
+    <>
+        {producer.products.map(product => (
+            <Product key={product.id} product={product} />
+        ))}
+    </>
+)
 
 export default createFragmentContainer(
     Flo,
@@ -29,7 +24,6 @@ export default createFragmentContainer(
                 id
                 ...Product3D_product
             }
-
         }
     `
 )
