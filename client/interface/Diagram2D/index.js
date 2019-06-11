@@ -7,7 +7,7 @@ import { css } from 'glamor'
 import { Query } from '~/components'
 import _Flo from './Flo2D'
 import { Diagram as DiagramContext } from '~/context'
-import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
+import { useKeyPress, useMouseDrag, useEvent, useSubscription, useBrowserSize } from '~/hooks'
 import Grid from './Grid'
 
 export const Flo = _Flo
@@ -68,8 +68,11 @@ const CenteredFlo = createFragmentContainer(
         // grab a reference to the diagram context
         const { pan } = useContext(DiagramContext)
 
+        // get the height of the browser
+        const { height } = useBrowserSize()
+
         // compute the upper left region of the diagram
-        const originY = producer.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
+        const originY = producer.products.reduce((acc, product) => Math.max(product.position.y, acc), -Infinity)
         const originX = producer.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
 
         // when this hook mounts
@@ -78,8 +81,8 @@ const CenteredFlo = createFragmentContainer(
                 // apply the correct transformation to position the top left point
                 // at 150,150
                 pan({
-                    x: -originX + 150,
-                    y: -originY + 100,
+                    x: 150 - originX,
+                    y: height - 150 - originY,
                 })
 
                 hasCentered = true
