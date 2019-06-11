@@ -37,6 +37,7 @@ export default createFragmentContainer(
                 id
                 ...Product2D_product
             }
+
             factories {
                 id
                 ...Factory2D_factory
