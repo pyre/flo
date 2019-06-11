@@ -89,7 +89,12 @@ const Product = ({ product }) => {
                             />
                         </>
                     )}
-                    <ProductCircle flip x={product.position.x} y={product.position.y} progress={product.progress} />
+                    <ProductCircle
+                        flip={true}
+                        x={product.position.x}
+                        y={product.position.y}
+                        progress={product.progress}
+                    />
                 </>
             </Draggable>
             {diagram.showTooltips && <Tooltip product={product} x={product.position.x} y={product.position.y - 50} />}
