@@ -7,7 +7,6 @@ import { Environment } from '~/context'
 export default ({ children, query, variables, loadingState = 'loading', onError, passThroughLoading }) => {
     // pull the environment out of context
     const environment = React.useContext(Environment)
-    console.log({ environment })
     return (
         <QueryRenderer
             query={query}
@@ -21,12 +20,6 @@ export default ({ children, query, variables, loadingState = 'loading', onError,
                         // return the result of the error handler
                         return onError(error)
                     } else {
-                        // trigger an alert with the error
-                        console.log({
-                            message: error,
-                            type: 'warning',
-                        })
-
                         // dont render anything
                         return null
                     }

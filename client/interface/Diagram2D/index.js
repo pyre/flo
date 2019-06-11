@@ -33,7 +33,7 @@ const Diagram = () => {
 
     return (
         // we want to wrap the diagram in a div so we can easily position the tools over it
-        <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+        <svg {...css({ width: '100%', height: '100%' })} transform="scale(1,-1)" ref={diagramElement}>
             <g transform={transformString}>
                 <Grid />
                 {/* make sure the diagram sits above the grid */}
