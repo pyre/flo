@@ -3,7 +3,7 @@ import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { useSphereElements } from "@react-vertex/geometry-hooks"
 import { useHex } from '@react-vertex/color-hooks'
-import { usePhongSolid } from '@react-vertex/material-hooks'
+import { useBasicSolid } from '@react-vertex/material-hooks'
 
 const Product3D = ({ product }) => {
     // compute the geometry for a sphere with the right radius
@@ -11,7 +11,7 @@ const Product3D = ({ product }) => {
 
     // generate a material to apply to the sphere
     const diffuse = useHex('#29BDFA', true)
-    const program = usePhongSolid(diffuse, 0.15)
+    const program = useBasicSolid(diffuse, 0.15)
 
     return (
         <material program={program}>
