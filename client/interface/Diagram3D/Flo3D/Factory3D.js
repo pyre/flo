@@ -7,26 +7,31 @@ import { useBasicSolid } from '@react-vertex/material-hooks'
 // local imports
 import { Interface } from '~/context'
 
-const Product3D = ({ product }) => {
+const Factory3D = ({ factory }) => {
     // get the current theme
     const {
-        colors: { productColor },
+        colors: { factoryPrimary },
     } = useContext(Interface)
 
     // compute the geometry for a sphere with the right radius
-    const geometry = useSphereElements(0.5)
+    const sphere = useSphereElements(0.5)
+
+    // in 3D, we represent a factory as a daimond centered at factory.position
+    const points = []
 
     return (
-        <material program={useBasicSolid(useHex(productColor, true), 0.15)}>
-            <geometry {...geometry} position={[product.position.x / 50, product.position.y / 50, 0]} />
+        <material program={useBasicSolid(useHex(factoryPrimary, true), 0.15)}>
+            {points.map(point => (
+                <geometry {...sphere} position={[factory.position.x / 50, factory.position.y / 50, 0]} />
+            ))}
         </material>
     )
 }
 
 export default createFragmentContainer(
-    Product3D,
+    Factory3D,
     graphql`
-        fragment Product3D_product on Product {
+        fragment Factory3D_factory on Factory {
             position {
                 x
                 y

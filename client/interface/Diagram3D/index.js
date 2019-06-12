@@ -44,8 +44,9 @@ const Diagram3D = ({ node }) => {
     const centerX = node.products.reduce((prev, { position }) => prev + position.x, 0) / node.products.length
     const centerY = node.products.reduce((prev, { position }) => prev + position.y, 0) / node.products.length
 
+    // place the camera a fixex distance away from the center
     const view = useInvertedMatrix(centerX / 50, centerY / 50, 30)
-    const projection = usePerspectiveMatrix(40, canvas.width / canvas.height)
+    const projection = usePerspectiveMatrix(75, canvas.width / canvas.height)
 
     return (
         <camera view={view} projection={projection}>
