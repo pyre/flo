@@ -83,6 +83,13 @@ const CenteredFlo = createFragmentContainer(
         useEffect(() => {
             if (!hasCentered) {
                 hasCentered = true
+
+                // apply the correct transformation to position the top left point
+                // at 150,150
+                pan({
+                    x: 150 - originX,
+                    y: height - 150 - originY,
+                })
             }
         }, [hasCentered])
 
