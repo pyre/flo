@@ -9,7 +9,7 @@ export const Radius = 12
 
 const Product = ({ progress = 1, flip, x, y, style, ...unused }) => {
     // if we weren't given an x or y
-    if (!x || !y) {
+    if ((!x && x !== 0) || (!y && y !== 0)) {
         x = Radius
         y = Radius
     }

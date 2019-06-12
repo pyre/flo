@@ -18,6 +18,8 @@ const Product = ({ product }) => {
     const { diagram } = useContext(Diagram)
     const environment = useContext(Environment)
 
+    console.log(product.position)
+
     // make sure we update this component when the product moves
     useSubscription(
         graphql`
