@@ -17,6 +17,7 @@ let hasCentered = false
 const Diagram = () => {
     // we need a ref to track interactions with the diagram
     const diagramElement = useRef(null)
+    const { height } = useBrowserSize()
 
     // enable the mousewheel zoom behavior
     // useZoomBehavior(diagram)
@@ -33,13 +34,16 @@ const Diagram = () => {
 
     return (
         // we want to wrap the diagram in a div so we can easily position the tools over it
-        <svg {...css({ width: '100%', height: '100%' })} transform="scale(1,-1)" ref={diagramElement}>
-            <g transform={transformString}>
-                <Grid />
-                {/* make sure the diagram sits above the grid */}
-                <Query query={floQuery} variables={{ id: diagram.floID }} loadingState={null}>
-                    {({ node }) => <CenteredFlo producer={node} />}
-                </Query>
+        <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+            <g transform={`scale(1, -1) translate(0, -${height})`}>
+                <circle cx={0} cy={0} r={5} />
+                <g transform={transformString}>
+                    <Grid />
+                    {/* make sure the diagram sits above the grid */}
+                    <Query query={floQuery} variables={{ id: diagram.floID }} loadingState={null}>
+                        {({ node }) => <CenteredFlo producer={node} />}
+                    </Query>
+                </g>
             </g>
         </svg>
     )
@@ -78,13 +82,6 @@ const CenteredFlo = createFragmentContainer(
         // when this hook mounts
         useEffect(() => {
             if (!hasCentered) {
-                // apply the correct transformation to position the top left point
-                // at 150,150
-                pan({
-                    x: 150 - originX,
-                    y: height - 150 - originY,
-                })
-
                 hasCentered = true
             }
         }, [hasCentered])

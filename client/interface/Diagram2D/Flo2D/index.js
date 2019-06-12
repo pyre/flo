@@ -14,10 +14,11 @@ const Flo = ({ producer, ...unused }) => {
         <>
             // the lines have to go above so they render underneath
             <Lines flo={producer} />
-            // render the products and factories
+            // render the factories
             {producer.factories.map(factory => (
                 <Factory key={factory.id} factory={factory} />
             ))}
+            // render the products
             {producer.products.map(product => (
                 <Product key={product.id} product={product} />
             ))}
