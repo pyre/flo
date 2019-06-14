@@ -2,7 +2,7 @@
 import React, { useContext, useEffect } from 'react'
 import { Canvas } from '@react-vertex/core'
 import { useCanvasSize, useRender } from '@react-vertex/core'
-import { useInvertedMatrix, usePerspectiveMatrix } from '@react-vertex/math-hooks'
+import { useOrbitCamera, useOrbitControls } from '@react-vertex/orbit-camera'
 import { convertHex } from '@react-vertex/color-hooks'
 import { timer } from 'd3-timer'
 // locals
@@ -30,7 +30,7 @@ const query = graphql`
 
 const Diagram3D = ({ node }) => {
     // get the canvas dimensions
-    const canvas = useCanvasSize()
+    const { width, height } = useCanvasSize()
 
     // render the scene continually
     const renderScene = useRender()
@@ -40,16 +40,21 @@ const Diagram3D = ({ node }) => {
         return () => renderLoop.stop
     }, [renderScene])
 
-    // compute the center of the scene
+    // // compute the center of the scene
     const centerX = node.products.reduce((prev, { position }) => prev + position.x, 0) / node.products.length
     const centerY = node.products.reduce((prev, { position }) => prev + position.y, 0) / node.products.length
 
-    // place the camera a fixex distance away from the center
-    const view = useInvertedMatrix(centerX / 50, centerY / 50, 30)
-    const projection = usePerspectiveMatrix(75, canvas.width / canvas.height)
+    // // place the camera a fixex distance away from the center
+    // const view = useInvertedMatrix(centerX / 50, centerY / 50, 30)
+    // const projection = usePerspectiveMatrix(75, canvas.width / canvas.height)
+
+    const camera = useOrbitCamera(55, width / height, 1, 1000, c => {
+        c.setPosition([centerX / 50, centerY / 50, 40])
+    })
+    useOrbitControls(camera)
 
     return (
-        <camera view={view} projection={projection}>
+        <camera view={camera.view} projection={camera.projection}>
             <Flo producer={node} />
         </camera>
     )

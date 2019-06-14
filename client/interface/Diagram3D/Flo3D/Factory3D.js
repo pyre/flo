@@ -1,9 +1,10 @@
 // external imports
 import React, { useContext } from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { useSphereElements } from '@react-vertex/geometry-hooks'
+import { useBoxElements } from '@react-vertex/geometry-hooks'
 import { useHex } from '@react-vertex/color-hooks'
 import { useBasicSolid } from '@react-vertex/material-hooks'
+import { useVector3 } from '@react-vertex/math-hooks'
 // local imports
 import { Interface } from '~/context'
 
@@ -13,17 +14,17 @@ const Factory3D = ({ factory }) => {
         colors: { factoryPrimary },
     } = useContext(Interface)
 
-    // compute the geometry for a sphere with the right radius
-    const sphere = useSphereElements(0.5)
-
-    // in 3D, we represent a factory as a daimond centered at factory.position
-    const points = []
+    // we reprsent a factory as a diamond in 3d implemented as a rotated cube
+    const element = useBoxElements(1, 1, 1)
+    const rotation = useVector3(-Math.PI / 4, Math.PI / 4, 0)
 
     return (
         <material program={useBasicSolid(useHex(factoryPrimary, true), 0.15)}>
-            {points.map(point => (
-                <geometry {...sphere} position={[factory.position.x / 50, factory.position.y / 50, 0]} />
-            ))}
+            <geometry
+                {...element}
+                rotation={rotation}
+                position={[factory.position.x / 50, factory.position.y / 50, 0]}
+            />
         </material>
     )
 }
