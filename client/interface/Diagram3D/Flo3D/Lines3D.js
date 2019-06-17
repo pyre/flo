@@ -10,6 +10,86 @@ import { Interface } from '~/context'
 
 // lines in 3d are represented by rectangular pipes
 const tubeWidth = 0.1
+const boxWidth = 3 * tubeWidth
+
+const Lines3D = ({ producer }) => (
+    <>
+        {(producer.factories || []).map(factory => {
+            //  for each factory we have to show
+            //      a connector square on either side
+            //      the lines coming in and out
+
+            // the location of the right connector square
+            const rightSquareLocation = {
+                y: factory.position.y,
+                x: factory.position.x + 50,
+            }
+
+            // the location of the left connector square
+            const leftSquareLocation = {
+                y: factory.position.y,
+                x: factory.position.x - 50,
+            }
+
+            return (
+                <React.Fragment key={factory.id}>
+                    {/* a line connecting the two squares */}
+                    <Tube p1={leftSquareLocation} p2={rightSquareLocation} />
+
+                    {/* only show the box is there is more than one input */}
+                    {factory.inputs.length > 1 && <Box position={leftSquareLocation} />}
+
+                    {/* only show the box is there is more than one output */}
+                    {factory.outputs.length > 1 && <Box position={rightSquareLocation} />}
+
+                    {/* for each output we have to render the tube from the connection square to the product */}
+                    {factory.outputs.map(({ id, product }) => (
+                        <React.Fragment key={id}>
+                            {/* a horizontal line from the vertical line the product */}
+                            <Tube
+                                p1={{
+                                    x: rightSquareLocation.x,
+                                    y: product.position.y,
+                                }}
+                                p2={product.position}
+                            />
+                            {/* a vertical line from the square to the horizontal line */}
+                            <Tube
+                                p1={rightSquareLocation}
+                                p2={{
+                                    x: rightSquareLocation.x,
+                                    y: product.position.y,
+                                }}
+                            />
+                        </React.Fragment>
+                    ))}
+
+                    {/* for each input we have to render the tube from the connection square to the product */}
+                    {factory.inputs.map(({ id, product }) => (
+                        <React.Fragment key={id}>
+                            {/* a horizontal line from the vertical line the product */}
+                            <Tube
+                                p1={{
+                                    x: leftSquareLocation.x,
+                                    y: product.position.y,
+                                }}
+                                p2={product.position}
+                            />
+                            {/* a vertical line from the square to the horizontal line */}
+                            <Tube
+                                p1={leftSquareLocation}
+                                p2={{
+                                    x: leftSquareLocation.x,
+                                    y: product.position.y,
+                                }}
+                            />
+                        </React.Fragment>
+                    ))}
+                </React.Fragment>
+            )
+        })}
+    </>
+)
 
 // a tube from p1 to p2
 const Tube = ({ p1, p2 }) => {
@@ -28,11 +108,6 @@ const Tube = ({ p1, p2 }) => {
     // the position of the line is the center of the two points
     const center = useVector3((p1.x + p2.x) / 2 / 25, (p1.y + p2.y) / 2 / 25, 0)
 
-    // since the position of a the box element is its center, we need to translate it over a bit
-    const position = useVector3(p1.x / 25 + width / 2, p1.y / 25, 0)
-
-    console.log(p1, p2, center, position)
-
     // we have to rotate the line
     const rotation = useVector3(0, 0, Math.atan2(deltaY, deltaX))
 
@@ -43,18 +118,22 @@ const Tube = ({ p1, p2 }) => {
     )
 }
 
-const Lines3D = ({ producer }) => (
-    <>
-        {(producer.factories || []).map(factory => (
-            <React.Fragment key={factory.id}>
-                {factory.outputs.map(({ id, product }) => (
-                    // a horizontal line from
-                    <Tube key={id} p1={factory.position} p2={product.position} />
-                ))}
-            </React.Fragment>
-        ))}
-    </>
-)
+const Box = ({ position }) => {
+    // get the current theme
+    const {
+        colors: { connectorColor },
+    } = useContext(Interface)
+
+    // we reprsent a factory as a diamond in 3d implemented as a rotated cube
+    const element = useBoxElements(boxWidth, boxWidth, boxWidth)
+    const boxPosition = useVector3(position.x / 25, position.y / 25, 0)
+
+    return (
+        <material program={useBasicSolid(useHex(connectorColor, true), 0.15)}>
+            <geometry {...element} position={boxPosition} />
+        </material>
+    )
+}
 
 export default createFragmentContainer(
     Lines3D,
@@ -76,6 +155,7 @@ export default createFragmentContainer(
                     }
                 }
                 inputs {
+                    id
                     product {
                         position {
                             x
