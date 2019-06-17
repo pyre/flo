@@ -49,7 +49,7 @@ const Diagram3D = ({ node }) => {
     // const projection = usePerspectiveMatrix(75, canvas.width / canvas.height)
 
     const camera = useOrbitCamera(55, width / height, 1, 1000, c => {
-        c.setPosition([centerX / 50, centerY / 50, 40])
+        c.setPosition([centerX / 25, centerY / 25, 40])
     })
     useOrbitControls(camera)
 

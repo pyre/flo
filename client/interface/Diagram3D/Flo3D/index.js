@@ -4,6 +4,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
 import Product from './Product3D'
 import Factory from './Factory3D'
+import Lines from './Lines3D'
 
 const Flo = ({ producer }) => (
     <>
@@ -13,6 +14,7 @@ const Flo = ({ producer }) => (
         {producer.factories.map(factory => (
             <Factory key={factory.id} factory={factory} />
         ))}
+        <Lines producer={producer} />
     </>
 )
 
@@ -32,6 +34,7 @@ export default createFragmentContainer(
                 id
                 ...Factory3D_factory
             }
+            ...Lines3D_producer
         }
     `
 )

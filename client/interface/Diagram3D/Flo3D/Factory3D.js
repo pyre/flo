@@ -16,15 +16,16 @@ const Factory3D = ({ factory }) => {
 
     // we reprsent a factory as a diamond in 3d implemented as a rotated cube
     const element = useBoxElements(1, 1, 1)
-    const rotation = useVector3(-Math.PI / 4, Math.PI / 4, 0)
+
+    // the origin in local space
+    const position = useVector3(factory.position.x / 25, factory.position.y / 25, 0)
+
+    // we need to rotate the cube so that it looks like a diamond to the camera
+    const rotation = useVector3(0, 0, Math.PI / 4)
 
     return (
         <material program={useBasicSolid(useHex(factoryPrimary, true), 0.15)}>
-            <geometry
-                {...element}
-                rotation={rotation}
-                position={[factory.position.x / 50, factory.position.y / 50, 0]}
-            />
+            <geometry {...element} rotation={rotation} position={position} />
         </material>
     )
 }

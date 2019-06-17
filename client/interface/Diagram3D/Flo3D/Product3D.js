@@ -18,7 +18,7 @@ const Product3D = ({ product }) => {
 
     return (
         <material program={useBasicSolid(useHex(productColor, true), 0.15)}>
-            <geometry {...geometry} position={[product.position.x / 50, product.position.y / 50, 0]} />
+            <geometry {...geometry} position={[product.position.x / 25, product.position.y / 25, 0]} />
         </material>
     )
 }
