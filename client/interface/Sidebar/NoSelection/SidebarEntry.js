@@ -3,7 +3,7 @@ import React, { useContext, useRef, useEffect } from 'react'
 import { css, hover } from 'glamor'
 // locals
 import { Interface } from '~/context'
-import { useMouseDrag, useRelativePosition } from '~/hooks'
+import { useMouseDrag, useRelativePosition, useBrowserSize } from '~/hooks'
 import { Diagram } from '~/context'
 import { round } from '~/utils'
 
@@ -12,6 +12,8 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
     const {
         colors: { lightGrey, darkGrey },
     } = useContext(Interface)
+
+    const { height } = useBrowserSize()
 
     // a ref to the root of the list item
     const rootElement = useRef()
@@ -123,7 +125,7 @@ function SidebarEntry({ icon, title, description, onDrop, shadow }) {
                 React.cloneElement(shadow, {
                     style: {
                         position: 'fixed',
-                        top: shadowLocation.y,
+                        top: height - shadowLocation.y,
                         left: shadowLocation.x,
                         transform: 'translateX(-50%) translateY(-50%)',
                     },

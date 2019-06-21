@@ -3,8 +3,8 @@ import React, { useContext } from 'react'
 import { graphql, createFragmentContainer } from 'react-relay'
 import { css } from 'glamor'
 // local imports
-import { Arc, Draggable, Product as ProductCircle, Portal, Ellipsis } from '~/components'
-import { background, connectorColor, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
+import { Draggable, Product as ProductCircle, Portal, Ellipsis } from '~/components'
+import { background, productSelectedBorder, selectedBorderWidth, selectedBorderGap } from '~/design'
 import { useSubscription, useBrowserSize } from '~/hooks'
 import { Diagram, Environment, Interface } from '~/context'
 import { mutate } from '~/utils'
@@ -21,7 +21,7 @@ const Product = ({ product }) => {
     // make sure we update this component when the product moves
     useSubscription(
         graphql`
-            subscription ProductSubscription($id: ID!) {
+            subscription Product2DSubscription($id: ID!) {
                 node(id: $id) {
                     ... on Product {
                         progress
@@ -47,7 +47,7 @@ const Product = ({ product }) => {
                     mutate({
                         environment,
                         query: graphql`
-                            mutation ProductMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
+                            mutation Product2DMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
                                 moveProduct(product: $product, x: $x, y: $y) {
                                     product {
                                         id
@@ -89,7 +89,12 @@ const Product = ({ product }) => {
                             />
                         </>
                     )}
-                    <ProductCircle x={product.position.x} y={product.position.y} progress={product.progress} />
+                    <ProductCircle
+                        flip={true}
+                        x={product.position.x}
+                        y={product.position.y}
+                        progress={product.progress}
+                    />
                 </>
             </Draggable>
             {diagram.showTooltips && <Tooltip product={product} x={product.position.x} y={product.position.y - 50} />}
@@ -101,6 +106,7 @@ const Tooltip = ({ product, ...props }) => {
     // we need to know the current translation on the diagram to follow it
     const { diagram } = useContext(Diagram)
     const { colors, shadows } = useContext(Interface)
+    const { height } = useBrowserSize()
 
     // we need to render the portal outside of the immediate dom tree so we can render HTML
     // without the annoyance of embedding the element in a foreignObject (and have to have a definite width)
@@ -123,7 +129,7 @@ const Tooltip = ({ product, ...props }) => {
                     width: 250,
                 })}
                 style={{
-                    top: product.position.y - 50 + diagram.pan.y,
+                    top: height - (product.position.y + 50 + diagram.pan.y),
                     left: product.position.x + diagram.pan.x,
                 }}
             >
@@ -166,7 +172,7 @@ const Tooltip = ({ product, ...props }) => {
 export default createFragmentContainer(
     Product,
     graphql`
-        fragment Product_product on Product {
+        fragment Product2D_product on Product {
             id
             progress
             name

@@ -14,6 +14,9 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
         selectedElements: [],
         showTooltips: false,
         zoomLevel: 1,
+        view: '2D',
+        unit: 50,
+        floID: 'RmxvOjA=',
         ...initialState,
     })
 
@@ -23,6 +26,12 @@ export const DiagramProvider = ({ maxZoom = 2, minZoom = 0.5, zoomStep = 0.1, ch
             setState(state => ({
                 ...state,
                 showGrid: !state.showGrid,
+            }))
+        },
+        toggleView() {
+            setState(state => ({
+                ...state,
+                view: state.view === '2D' ? '3D' : '2D',
             }))
         },
         setGridSize(gridSize) {

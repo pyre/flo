@@ -39,7 +39,7 @@ const Factory = ({
     // make sure we update this component when the product moves
     useSubscription(
         graphql`
-            subscription FactorySubscription($id: ID!) {
+            subscription Factory2DSubscription($id: ID!) {
                 node(id: $id) {
                     ... on Factory {
                         position {
@@ -63,7 +63,7 @@ const Factory = ({
                 mutate({
                     environment,
                     query: graphql`
-                        mutation FactoryMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
+                        mutation Factory2DMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
                             moveFactory(factory: $factory, x: $x, y: $y) {
                                 factory {
                                     id
@@ -95,7 +95,7 @@ const Factory = ({
 export default createFragmentContainer(
     Factory,
     graphql`
-        fragment Factory_factory on Factory {
+        fragment Factory2D_factory on Factory {
             id
             position {
                 x

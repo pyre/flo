@@ -1,8 +1,10 @@
 // external imports
 import React from 'react'
+// local imports
+import { useBrowserSize } from '~/hooks'
 
 // a function to compute cartesian coordinates from polar coordinates
-function polarToCartesian({ x, y, r, angle }) {
+function polarToCartesian({ origin: { x, y }, r, angle }) {
     // transform the cartesian coordinates to polar
     const rad = ((angle - 90) * Math.PI) / 180.0
 
@@ -14,14 +16,16 @@ function polarToCartesian({ x, y, r, angle }) {
 }
 
 export default ({ x, y, r, theta1, theta2, fill = 'none', ...props }) => do {
+    const { height } = useBrowserSize()
+
     // if we are supposed to draw a circle
     if (theta2 === 360) {
         // do that instead
         ;<circle cx={x} cy={y} r={r} fill={fill} {...props} />
     } else {
         // compute the bounds of the arc
-        const start = polarToCartesian({ x, y, r, angle: theta2 })
-        const end = polarToCartesian({ x, y, r, angle: theta1 })
+        const start = polarToCartesian({ origin: { x, y }, r, angle: theta2 })
+        const end = polarToCartesian({ origin: { x, y }, r, angle: theta1 })
 
         // check if we need to go the "other way"
         const largeArcFlag = theta2 - theta1 <= 180 ? '0' : '1'

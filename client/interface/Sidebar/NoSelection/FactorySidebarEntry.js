@@ -4,7 +4,7 @@ import { graphql, createFragmentContainer } from 'react-relay'
 // local imports
 import { Factory, FactoryIOString } from '~/components'
 import { Environment } from '~/context'
-import Flo from '~/interface/Flo'
+import Flo from '~/interface/Diagram2D/Flo2D'
 import SidebarEntry from './SidebarEntry'
 import { mutate } from '~/utils'
 
@@ -36,7 +36,12 @@ const FactorySidebarEntry = ({ factory }) => {
             title={factory.name}
             description={<FactoryIOString factory={factory} />}
             shadow={
-                <svg width={width} height={height} viewBox={`${leftX} ${leftY} ${width} ${height}`}>
+                <svg
+                    width={width}
+                    height={height}
+                    viewBox={`${leftX} ${leftY} ${width} ${height}`}
+                    transform="scale(1,-1)"
+                >
                     <Flo producer={factory} />
                 </svg>
             }
@@ -87,7 +92,7 @@ export default createFragmentContainer(FactorySidebarEntry, {
             }
 
             ...FactoryIOString_factory
-            ...Flo_producer
+            ...Flo2D_producer
         }
     `,
 })

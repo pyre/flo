@@ -2,9 +2,9 @@
 import React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
-import Factory from './Factory'
-import Product from './Product'
-import Lines from './Lines'
+import Factory from './Factory2D'
+import Product from './Product2D'
+import Lines from './Lines2D'
 
 const Flo = ({ producer, ...unused }) => {
     // clear up unused props
@@ -14,10 +14,11 @@ const Flo = ({ producer, ...unused }) => {
         <>
             // the lines have to go above so they render underneath
             <Lines flo={producer} />
-            // render the products and factories
+            // render the factories
             {producer.factories.map(factory => (
                 <Factory key={factory.id} factory={factory} />
             ))}
+            // render the products
             {producer.products.map(product => (
                 <Product key={product.id} product={product} />
             ))}
@@ -28,20 +29,21 @@ const Flo = ({ producer, ...unused }) => {
 export default createFragmentContainer(
     Flo,
     graphql`
-        fragment Flo_producer on Producer {
+        fragment Flo2D_producer on Producer {
             ... on Node {
                 id
             }
 
             products {
                 id
-                ...Product_product
+                ...Product2D_product
             }
+
             factories {
                 id
-                ...Factory_factory
+                ...Factory2D_factory
             }
-            ...Lines_flo
+            ...Lines2D_flo
         }
     `
 )

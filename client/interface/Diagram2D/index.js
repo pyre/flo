@@ -5,15 +5,19 @@ import SvgMatrix from 'svg-matrix'
 import { css } from 'glamor'
 // local imports
 import { Query } from '~/components'
-import { Flo } from '~/interface'
+import _Flo from './Flo2D'
 import { Diagram as DiagramContext } from '~/context'
-import { useKeyPress, useMouseDrag, useEvent, useSubscription } from '~/hooks'
+import { useKeyPress, useMouseDrag, useEvent, useSubscription, useBrowserSize } from '~/hooks'
 import Grid from './Grid'
-import Toolbar from './Toolbar'
+
+export const Flo = _Flo
+
+let hasCentered = false
 
 const Diagram = () => {
     // we need a ref to track interactions with the diagram
     const diagramElement = useRef(null)
+    const { height } = useBrowserSize()
 
     // enable the mousewheel zoom behavior
     // useZoomBehavior(diagram)
@@ -30,42 +34,34 @@ const Diagram = () => {
 
     return (
         // we want to wrap the diagram in a div so we can easily position the tools over it
-        <div
-            {...css({
-                display: 'flex',
-                flexGrow: 1,
-                cursor: 'default',
-                zIndex: 1,
-                position: 'relative',
-            })}
-        >
-            <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+        <svg {...css({ width: '100%', height: '100%' })} ref={diagramElement}>
+            <g transform={`scale(1, -1) translate(0, -${height})`}>
+                <circle cx={0} cy={0} r={5} />
                 <g transform={transformString}>
                     <Grid />
                     {/* make sure the diagram sits above the grid */}
-                    <Query query={floQuery} variables={{ id: 'RmxvOjA=' }} loadingState={null}>
+                    <Query query={floQuery} variables={{ id: diagram.floID }} loadingState={null}>
                         {({ node }) => <CenteredFlo producer={node} />}
                     </Query>
                 </g>
-            </svg>
-            <Toolbar />
-        </div>
+            </g>
+        </svg>
     )
 }
 
 // the query for the flo we're looking at
 const floQuery = graphql`
-    query DiagramQuery($id: ID!) {
+    query Diagram2DQuery($id: ID!) {
         node(id: $id) {
-            ...DiagramCenteredFlo_producer
+            ...Diagram2DCenteredFlo_producer
         }
     }
 `
 
 const subscription = graphql`
-    subscription DiagramSubscription($flo: ID!) {
+    subscription Diagram2DSubscription($flo: ID!) {
         node(id: $flo) {
-            ...Flo_producer
+            ...Flo2D_producer
         }
     }
 `
@@ -76,19 +72,26 @@ const CenteredFlo = createFragmentContainer(
         // grab a reference to the diagram context
         const { pan } = useContext(DiagramContext)
 
+        // get the height of the browser
+        const { height } = useBrowserSize()
+
         // compute the upper left region of the diagram
-        const originY = producer.products.reduce((acc, product) => Math.min(product.position.y, acc), Infinity)
+        const originY = producer.products.reduce((acc, product) => Math.max(product.position.y, acc), -Infinity)
         const originX = producer.products.reduce((acc, product) => Math.min(product.position.x, acc), Infinity)
 
         // when this hook mounts
         useEffect(() => {
-            // apply the correct transformation to position the top left point
-            // at 150,150
-            pan({
-                x: -originX + 150,
-                y: -originY + 100,
-            })
-        }, [])
+            if (!hasCentered) {
+                hasCentered = true
+
+                // apply the correct transformation to position the top left point
+                // at 150,150
+                pan({
+                    x: 150 - originX,
+                    y: height - 150 - originY,
+                })
+            }
+        }, [hasCentered])
 
         useSubscription(subscription, {
             flo: producer.id,
@@ -98,7 +101,7 @@ const CenteredFlo = createFragmentContainer(
         return <Flo producer={producer} />
     },
     graphql`
-        fragment DiagramCenteredFlo_producer on Flo {
+        fragment Diagram2DCenteredFlo_producer on Flo {
             ... on Flo {
                 id
                 products {
@@ -107,7 +110,7 @@ const CenteredFlo = createFragmentContainer(
                         y
                     }
                 }
-                ...Flo_producer
+                ...Flo2D_producer
             }
         }
     `
