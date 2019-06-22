@@ -33,6 +33,8 @@ class Incompatible(flo.application, family="flo.applications.incompatible"):
 
         # make a new SLC factory
         f = flo.isce.newFormSLC()
+        # save the current value of its {raw} product
+        raw = f.raw
         # show me
         channel.log(f"good value: {f.raw}")
 
@@ -44,8 +46,8 @@ class Incompatible(flo.application, family="flo.applications.incompatible"):
             assert False
         # if it got detected correctly
         except self.ProtocolCompatibilityError as error:
-            # all good
-            channel.log(f"bad explicit instance: still {f.raw}")
+            # verify the value is unchanged
+            assert f.raw is raw
 
         # attempt to
         try:
@@ -55,8 +57,8 @@ class Incompatible(flo.application, family="flo.applications.incompatible"):
             assert False
         # if it got detected correctly
         except self.ProtocolCompatibilityError as error:
-            # all good
-            channel.log(f"bad foundry: still {f.raw}")
+            # verify the value is unchanged
+            assert f.raw is raw
 
         # attempt to
         try:
@@ -66,8 +68,8 @@ class Incompatible(flo.application, family="flo.applications.incompatible"):
             assert False
         # if it got detected correctly
         except self.ResolutionError as error:
-            # all good
-            channel.log(f"bad uri: still {f.raw}")
+            # verify the value is unchanged
+            assert f.raw is raw
 
         # all done
         return 0
