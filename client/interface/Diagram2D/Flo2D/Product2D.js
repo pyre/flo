@@ -47,24 +47,46 @@ const Product = ({ product }) => {
                     mutate({
                         environment,
                         query: graphql`
-                            mutation Product2DMoveProductMutation($product: ID!, $x: Int!, $y: Int!) {
-                                moveProduct(product: $product, x: $x, y: $y) {
+                            mutation Product2DMoveProductMutation($input: MoveProductInput!) {
+                                moveProduct(input: $input) {
                                     product {
                                         id
                                         position {
                                             x
                                             y
                                         }
+                                        bindings {
+                                            id
+                                            position {
+                                                x
+                                                y
+                                            }
+                                        }
+                                        source {
+                                            id
+                                            position {
+                                                x
+                                                y
+                                            }
+                                        }
                                     }
                                 }
                             }
                         `,
-                        variables: { product: product.id, ...position },
+                        variables: { input: { product: product.id, ...position } },
                         optimisticResponse: {
                             moveProduct: {
                                 product: {
                                     id: product.id,
                                     position,
+                                    bindings: product.bindings.map(({ id }) => ({
+                                        id,
+                                        position,
+                                    })),
+                                    source: product.source && {
+                                        id: product.source.id,
+                                        position,
+                                    },
                                 },
                             },
                         },

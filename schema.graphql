@@ -27,6 +27,7 @@ type Binding implements Node {
     protocol: String!
     product: Product
     factory: Factory!
+    position: Position!
 }
 
 """
@@ -40,13 +41,13 @@ input BindingAssignment {
 
 """
 The primary actor of our flows. Responsible for taking data in that
-matches a particular protocol and results in a concrete product
+matches a particular protocol and Bindings in a concrete product
 """
 type Factory implements Node & Producer {
     id: ID!
     name: String!
     inputs: [Binding!]!
-    outputs: [Result!]!
+    outputs: [Binding!]!
     config: [KVPair!]!
     position: Position!
     attributes: [Attribute!]!
@@ -78,6 +79,12 @@ input KVPairInput {
     value: String!
 }
 
+input MoveFactoryInput {
+    factory: ID!
+    x: Int!
+    y: Int!
+}
+
 """
 Move the location for a product to a specific x,y coordinate
 """
@@ -85,9 +92,24 @@ type MoveFactoryOutput {
     factory: Factory
 }
 
-"""
-Move the location for a product to a specific x,y coordinate
-"""
+input MoveBindingInput {
+    binding: ID!
+    x: Int!
+    y: Int!
+}
+
+type MoveBindingOutput {
+    binding: Binding
+    x: Int!
+    y: Int!
+}
+
+input MoveProductInput {
+    product: ID!
+    x: Int!
+    y: Int!
+}
+
 type MoveProductOutput {
     product: Product
 }
@@ -116,8 +138,9 @@ type AddFactoryToFloOutput {
 }
 
 type Mutation {
-    moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
-    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
+    moveProduct(input: MoveProductInput!): MoveProductOutput!
+    moveFactory(input: MoveFactoryInput!): MoveFactoryOutput!
+    moveBinding(input: MoveBindingInput!): MoveBindingOutput!
     addProductToFlo(input: AddProductInput!): AddProductOutput!
     addFactoryToFlo(input: AddFactoryToFloInput!): AddFactoryToFloOutput!
 }
@@ -143,11 +166,11 @@ interface Producer {
 }
 
 """
-A concrete result of running a specific factory
+A concrete Binding of running a specific factory
 """
 type Product implements Node {
     id: ID!
-    source: Factory
+    source: Binding
     name: String!
     description: String
     bindings: [Binding!]!
@@ -166,15 +189,6 @@ type Subscription {
     node(id: ID!): Node
     newProduct(flo: ID!): Product
     newFactory(flo: ID!): Factory
-}
-
-"""
-A named result that was created from a factory
-"""
-type Result {
-    name: String!
-    product: Product!
-    id: ID!
 }
 
 """

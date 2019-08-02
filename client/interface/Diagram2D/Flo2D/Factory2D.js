@@ -63,8 +63,8 @@ const Factory = ({
                 mutate({
                     environment,
                     query: graphql`
-                        mutation Factory2DMovefactoryMutation($factory: ID!, $x: Int!, $y: Int!) {
-                            moveFactory(factory: $factory, x: $x, y: $y) {
+                        mutation Factory2DMovefactoryMutation($input: MoveFactoryInput!) {
+                            moveFactory(input: $input) {
                                 factory {
                                     id
                                     position {
@@ -75,7 +75,7 @@ const Factory = ({
                             }
                         }
                     `,
-                    variables: { factory: factory.id, ...position },
+                    variables: { input: { factory: factory.id, ...position } },
                     optimisticResponse: {
                         moveFactory: {
                             factory: {
