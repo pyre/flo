@@ -43,44 +43,44 @@ const Lines3D = ({ producer }) => (
                     {factory.outputs.length > 1 && <Box position={rightSquareLocation} />}
 
                     {/* for each output we have to render the tube from the connection square to the product */}
-                    {factory.outputs.map(({ id, product }) => (
+                    {factory.outputs.map(({ id, position }) => (
                         <React.Fragment key={id}>
                             {/* a horizontal line from the vertical line the product */}
                             <Tube
                                 p1={{
                                     x: rightSquareLocation.x,
-                                    y: product.position.y,
+                                    y: position.y,
                                 }}
-                                p2={product.position}
+                                p2={position}
                             />
                             {/* a vertical line from the square to the horizontal line */}
                             <Tube
                                 p1={rightSquareLocation}
                                 p2={{
                                     x: rightSquareLocation.x,
-                                    y: product.position.y,
+                                    y: position.y,
                                 }}
                             />
                         </React.Fragment>
                     ))}
 
                     {/* for each input we have to render the tube from the connection square to the product */}
-                    {factory.inputs.map(({ id, product }) => (
+                    {factory.inputs.map(({ id, position }) => (
                         <React.Fragment key={id}>
                             {/* a horizontal line from the vertical line the product */}
                             <Tube
                                 p1={{
                                     x: leftSquareLocation.x,
-                                    y: product.position.y,
+                                    y: position.y,
                                 }}
-                                p2={product.position}
+                                p2={position}
                             />
                             {/* a vertical line from the square to the horizontal line */}
                             <Tube
                                 p1={leftSquareLocation}
                                 p2={{
                                     x: leftSquareLocation.x,
-                                    y: product.position.y,
+                                    y: position.y,
                                 }}
                             />
                         </React.Fragment>
