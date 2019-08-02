@@ -38,6 +38,9 @@ const Product = ({ product }) => {
         }
     )
 
+    if (diagram.selectedElements.includes(product.id)) {
+        console.log(product.source && product.source.id)
+    }
     return (
         <>
             <Draggable
@@ -62,6 +65,13 @@ const Product = ({ product }) => {
                                                 y
                                             }
                                         }
+                                        source {
+                                            id
+                                            position {
+                                                x
+                                                y
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -76,6 +86,10 @@ const Product = ({ product }) => {
                                         id,
                                         position,
                                     })),
+                                    source: product.source && {
+                                        id: product.source.id,
+                                        position,
+                                    },
                                 },
                             },
                         },

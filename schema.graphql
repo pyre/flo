@@ -41,13 +41,13 @@ input BindingAssignment {
 
 """
 The primary actor of our flows. Responsible for taking data in that
-matches a particular protocol and results in a concrete product
+matches a particular protocol and Bindings in a concrete product
 """
 type Factory implements Node & Producer {
     id: ID!
     name: String!
     inputs: [Binding!]!
-    outputs: [Result!]!
+    outputs: [Binding!]!
     config: [KVPair!]!
     position: Position!
     attributes: [Attribute!]!
@@ -166,11 +166,11 @@ interface Producer {
 }
 
 """
-A concrete result of running a specific factory
+A concrete Binding of running a specific factory
 """
 type Product implements Node {
     id: ID!
-    source: Factory
+    source: Binding
     name: String!
     description: String
     bindings: [Binding!]!
@@ -189,16 +189,6 @@ type Subscription {
     node(id: ID!): Node
     newProduct(flo: ID!): Product
     newFactory(flo: ID!): Factory
-}
-
-"""
-A named result that was created from a factory
-"""
-type Result {
-    name: String!
-    product: Product!
-    position: Position!
-    id: ID!
 }
 
 """

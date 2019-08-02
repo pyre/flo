@@ -6,7 +6,7 @@
     "scripts": {
         "build": "webpack --mode=production",
         "dev": "webpack-dev-server",
-        "relay": "relay-compiler --src ./client --schema ./schema.graphql",
+        "relay": "relay-compiler --src ./client --schema ./schema.graphql --no-watchman",
         "server": "babel-node server.js",
         "test": "jest"
     },

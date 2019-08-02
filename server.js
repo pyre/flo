@@ -17,12 +17,6 @@ const newFactoryPubSub = new PubSub()
 const resolvers = {
     Product: {
         id: product => toGlobalId('Product', product.id),
-        // the source of a product is the factory that created it
-        source: (product, _, context) =>
-            Object.values(context.factories).filter(
-                factory =>
-                    factory.outputs.filter(output => output.product && output.product.id === product.id).length > 0
-            )[0],
         // the bindings of a product are the list of factory inputs that this product is bound to
         bindings: (product, _, context) =>
             Object.values(context.factories).reduce(
@@ -48,10 +42,6 @@ const resolvers = {
             ...factory.outputs.filter(({ product }) => product).map(({ product }) => product),
         ],
         factories: factory => [factory],
-    },
-    Result: {
-        id: result => toGlobalId('Result', result.id),
-        name: () => 'result name',
     },
     Binding: {
         id: binding => toGlobalId('Binding', binding.id),
@@ -108,7 +98,7 @@ const resolvers = {
             // look for any bindings that the point to the product
             for (const factory of flo.factories) {
                 // look through each binding
-                for (const binding of [...(factory.inputs || []), ...(factory.ouputs || [])]) {
+                for (const binding of [...Object.values(factory.inputs), ...Object.values(factory.outputs)]) {
                     // if the binding points to this product
                     if (binding.product && binding.product.id == product.id) {
                         // update the position of the binding
@@ -281,7 +271,7 @@ const productFactory = ({ id, position, progress, source, inputs }) => ({
     description: 'an awesome description',
     position,
     progress,
-    source: factories[source],
+    source,
     inputs,
     attributes: [{ name: 'favoriteNumber', value: '5', kind: 'Int' }],
     __typename: 'Product',
@@ -324,6 +314,7 @@ for (const product of Object.values(products)) {
                 product,
                 id: `${product.id}-${id++}`,
                 position: product.position,
+                factory,
             },
         ]
     }
@@ -332,27 +323,23 @@ for (const product of Object.values(products)) {
 // now that we've built up a list of each input lets link up the outputs to the same bindings
 for (const product of Object.values(products)) {
     // each product can also specify a source which adds an output to the factory
-    if (product.source) {
-        // see if this product is also the input of another factory
-        const inputs = Object.values(factories)
-            .map(factory => factory.inputs.map(binding => [binding.product.id, binding]))
-            .find(([productID]) => productID == product.id)
+    if (product.source !== null) {
+        // hold onto the provided factoryID
+        const sourceID = product.source
 
         // if this is a duplicate binding use the existing reference
-        const binding = inputs
-            ? inputs[1]
-            : // otherwise add a new output
-              {
-                  product,
-                  id: `${product.id}-source`,
-                  position: product.position,
-              }
-
-        // grab the factory
-        const factory = product.source
+        product.source = {
+            product,
+            id: `${product.id}-source`,
+            position: product.position,
+            factory: factories[sourceID],
+        }
 
         // add the product as a Result to the list of product outputs
-        factory.outputs = [...factory.outputs, binding]
+        const factory = factories[sourceID]
+
+        // add the source (whatever binding that is) to the list of outputs
+        factory.outputs = [...factory.outputs, product.source]
     }
 }
 
