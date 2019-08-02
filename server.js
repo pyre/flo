@@ -134,6 +134,14 @@ const resolvers = {
             // update the position of the specified binding
             binding.position = { x, y }
 
+            // check if any products are in the same location
+            for (const product of Object.values(context.products)) {
+                if (product.position.x === x && product.position.y === y) {
+                    // bind the product to the binding
+                    binding.product = product
+                }
+            }
+
             nodePubsub.publish(bindingID, { node: binding })
             nodePubsub.publish(toGlobalId('Flo', 0), { node: flos[0] })
 
