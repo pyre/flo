@@ -191,25 +191,40 @@ const resolvers = {
             })
 
             // we have to add the appropriate amount of inputs and outputs to the new factory
-            for (let i = 0; i < factories[factoryID].inputs.length; i++) {
-                factoryObj.inputs = [...factoryObj.inputs, { id: Math.random() }]
+            for (const position of center({ x: x - 150, y }, factories[factoryID].inputs.length)) {
+                factoryObj.inputs = [
+                    ...factoryObj.inputs,
+                    {
+                        id: Math.random(),
+                        position,
+                    },
+                ]
             }
 
-            for (const point of center({ x: x + 150, y }, factories[factoryID].outputs.length)) {
-                // create a new product at the designated point
+            for (const position of center({ x: x + 150, y }, factories[factoryID].outputs.length)) {
+                // create a new product at the designated position
                 const product = productFactory({
                     id: Object.values(products).length + 1,
-                    position: point,
+                    position,
                     progress: 0,
                 })
 
+                // the source binding
+                const source = {
+                    id: Math.random(),
+                    position: product.position,
+                    product,
+                }
+
                 // save the product
                 products[product.id] = product
+                product.source = source
+
                 // add the product to the flo
                 floObj.products.push(product)
 
                 // add the product to the factory output
-                factoryObj.outputs = [...factoryObj.outputs, { id: Math.random(), product }]
+                factoryObj.outputs = [...factoryObj.outputs, source]
             }
 
             // add the factory to the flo's list

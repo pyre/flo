@@ -89,6 +89,9 @@ export default createFragmentContainer(FactorySidebarEntry, {
                     x
                     y
                 }
+                source {
+                    id
+                }
             }
 
             ...FactoryIOString_factory
