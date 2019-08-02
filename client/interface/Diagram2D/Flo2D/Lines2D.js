@@ -5,6 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import { center } from '~/utils'
 import { Arc } from '~/components'
 import { Interface } from '~/context'
+import { useSubscription } from '~/hooks'
 
 // the primary length for the squares that define the in and out point
 const squareLength = 3
@@ -17,6 +18,20 @@ const Lines = ({ flo }) => {
     const {
         colors: { connectorColor, background },
     } = useContext(Interface)
+
+    // the position of bindings can change
+    useSubscription(
+        graphql`
+            subscription Lines2DSubscription($id: ID!) {
+                node(id: $id) {
+                    ...Lines2D_flo
+                }
+            }
+        `,
+        {
+            id: flo.id,
+        }
+    )
 
     return (
         <g>
@@ -157,6 +172,9 @@ export default createFragmentContainer(
     Lines,
     graphql`
         fragment Lines2D_flo on Producer {
+            ... on Node {
+                id
+            }
             factories {
                 id
                 position {

@@ -79,6 +79,12 @@ input KVPairInput {
     value: String!
 }
 
+input MoveFactoryInput {
+    factory: ID!
+    x: Int!
+    y: Int!
+}
+
 """
 Move the location for a product to a specific x,y coordinate
 """
@@ -86,9 +92,24 @@ type MoveFactoryOutput {
     factory: Factory
 }
 
-"""
-Move the location for a product to a specific x,y coordinate
-"""
+input MoveBindingInput {
+    binding: ID!
+    x: Int!
+    y: Int!
+}
+
+type MoveBindingOutput {
+    binding: Binding
+    x: Int!
+    y: Int!
+}
+
+input MoveProductInput {
+    product: ID!
+    x: Int!
+    y: Int!
+}
+
 type MoveProductOutput {
     product: Product
 }
@@ -117,8 +138,9 @@ type AddFactoryToFloOutput {
 }
 
 type Mutation {
-    moveProduct(product: ID!, x: Int!, y: Int!): MoveProductOutput
-    moveFactory(factory: ID!, x: Int!, y: Int!): MoveFactoryOutput
+    moveProduct(input: MoveProductInput!): MoveProductOutput!
+    moveFactory(input: MoveFactoryInput!): MoveFactoryOutput!
+    moveBinding(input: MoveBindingInput!): MoveBindingOutput!
     addProductToFlo(input: AddProductInput!): AddProductOutput!
     addFactoryToFlo(input: AddFactoryToFloInput!): AddFactoryToFloOutput!
 }

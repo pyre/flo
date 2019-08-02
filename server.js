@@ -94,7 +94,7 @@ const resolvers = {
         },
     },
     Mutation: {
-        moveProduct: (_, { product: productID, x, y }, context) => {
+        moveProduct: (_, { input: { product: productID, x, y } }, context) => {
             // convert the global id into something we can use
             const { id } = fromGlobalId(productID)
             const product = context.products[id]
@@ -102,11 +102,29 @@ const resolvers = {
             // update the position of the specified product
             product.position = { x, y }
 
+            // find the flo associated with this product
+            const flo = context.flos[0]
+
+            // look for any bindings that the point to the product
+            for (const factory of flo.factories) {
+                // look through each binding
+                for (const binding of [...(factory.inputs || []), ...(factory.ouputs || [])]) {
+                    // if the binding points to this product
+                    if (binding.product && binding.product.id == product.id) {
+                        // update the position of the binding
+                        binding.position = product.position
+                    }
+                }
+            }
+
+            // we updated the product
             nodePubsub.publish(productID, { node: product })
+            // and the flo
+            nodePubsub.publish(toGlobalId('Flo', flo.id), { node: flo })
 
             return { product }
         },
-        moveFactory: (_, { factory: factoryID, x, y }, context) => {
+        moveFactory: (_, { input: { factory: factoryID, x, y } }, context) => {
             // convert the global id into something we can use
             const { id } = fromGlobalId(factoryID)
             const factory = context.factories[id]
@@ -115,6 +133,19 @@ const resolvers = {
             factory.position = { x, y }
 
             nodePubsub.publish(factoryID, { node: factory })
+
+            return { factory }
+        },
+        moveBinding: (_, { input: { binding: bindingID, x, y } }, context) => {
+            // convert the global id into something we can use
+            const { id } = fromGlobalId(bindingID)
+            const binding = context.bindings[id]
+
+            // update the position of the specified binding
+            binding.position = { x, y }
+
+            nodePubsub.publish(bindingID, { node: binding })
+            nodePubsub.publish(toGlobalId('Flo', 0), { node: flos[0] })
 
             return { factory }
         },
@@ -296,21 +327,32 @@ for (const product of Object.values(products)) {
             },
         ]
     }
+}
 
+// now that we've built up a list of each input lets link up the outputs to the same bindings
+for (const product of Object.values(products)) {
     // each product can also specify a source which adds an output to the factory
     if (product.source) {
+        // see if this product is also the input of another factory
+        const inputs = Object.values(factories)
+            .map(factory => factory.inputs.map(binding => [binding.product.id, binding]))
+            .find(([productID]) => productID == product.id)
+
+        // if this is a duplicate binding use the existing reference
+        const binding = inputs
+            ? inputs[1]
+            : // otherwise add a new output
+              {
+                  product,
+                  id: `${product.id}-source`,
+                  position: product.position,
+              }
+
         // grab the factory
         const factory = product.source
 
         // add the product as a Result to the list of product outputs
-        factory.outputs = [
-            ...factory.outputs,
-            {
-                product,
-                id: `${product.id}-source`,
-                position: product.position,
-            },
-        ]
+        factory.outputs = [...factory.outputs, binding]
     }
 }
 
@@ -318,18 +360,35 @@ for (const product of Object.values(products)) {
 const flos = [
     // produccts, factories
     [Object.keys(products), Object.keys(factories)],
-].reduce(
-    (prev, [productIDs, factoryIDs], id) => ({
+].reduce((prev, [productIDs, factoryIDs], id) => {
+    // the list of factories and products in the flo
+    const allFactories = factoryIDs.map(id => factories[id])
+    const allProducts = productIDs.map(id => products[id])
+
+    // the list of bindings is made up of all the inputs and outputs from each factory
+    const bindings = [...allFactories.map(({ inputs }) => inputs), ...allFactories.map(({ outputs }) => outputs)]
+        // flatten the list of lists
+        .reduce((acc, next) => acc.concat(next), [])
+        // grab the unique keys
+        .reduce(
+            (prev, binding) => ({
+                ...prev,
+                [binding.id]: binding,
+            }),
+            {}
+        )
+
+    return {
         ...prev,
         [id]: {
             __typename: 'Flo',
             id,
-            factories: factoryIDs.map(id => factories[id]),
-            products: productIDs.map(id => products[id]),
+            factories: allFactories,
+            products: allProducts,
+            bindings: Object.values(bindings),
         },
-    }),
-    {}
-)
+    }
+}, {})
 
 // define the server
 const server = new ApolloServer({
