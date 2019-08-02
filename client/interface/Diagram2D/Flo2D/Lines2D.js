@@ -74,7 +74,7 @@ const Lines = ({ flo }) => {
                         // render the lines joining the left square to each of the inputs
                         {factory.inputs.map((binding, i) => {
                             // the location for the input can be overwritten by the product
-                            const location = binding.product ? binding.product.position : inputLocations[i]
+                            const location = binding.position
 
                             return (
                                 <React.Fragment key={binding.id}>
@@ -115,31 +115,31 @@ const Lines = ({ flo }) => {
                                     x1={rightSquareLocation.x}
                                     y1={rightSquareLocation.y}
                                     x2={rightSquareLocation.x}
-                                    y2={result.product.position.y}
+                                    y2={result.position.y}
                                     stroke={connectorColor}
                                     strokeWidth={1}
                                 />
                                 // a horizontal line from the corner to the product
                                 <line
                                     x1={rightSquareLocation.x}
-                                    y1={result.product.position.y}
-                                    x2={result.product.position.x}
-                                    y2={result.product.position.y}
+                                    y1={result.position.y}
+                                    x2={result.position.x}
+                                    y2={result.position.y}
                                     stroke={connectorColor}
                                     strokeWidth={1}
                                 />
                                 // some space between the fillter and the border
                                 <circle
                                     fill={background}
-                                    cx={result.product.position.x}
-                                    cy={result.product.position.y}
+                                    cx={result.position.x}
+                                    cy={result.position.y}
                                     r={productGutter}
                                 />
                                 // the arc that leaves the gap on the right
                                 <Arc
                                     r={productGutter + 1}
-                                    x={result.product.position.x}
-                                    y={result.product.position.y}
+                                    x={result.position.x}
+                                    y={result.position.y}
                                     theta1={-230}
                                     theta2={40}
                                     stroke={connectorColor}
@@ -171,22 +171,16 @@ export default createFragmentContainer(
                 }
                 outputs {
                     id
-                    product {
-                        id
-                        position {
-                            x
-                            y
-                        }
+                    position {
+                        x
+                        y
                     }
                 }
                 inputs {
                     id
-                    product {
-                        id
-                        position {
-                            x
-                            y
-                        }
+                    position {
+                        x
+                        y
                     }
                 }
             }

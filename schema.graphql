@@ -27,6 +27,7 @@ type Binding implements Node {
     protocol: String!
     product: Product
     factory: Factory!
+    position: Position!
 }
 
 """
@@ -174,6 +175,7 @@ A named result that was created from a factory
 type Result {
     name: String!
     product: Product!
+    position: Position!
     id: ID!
 }
 

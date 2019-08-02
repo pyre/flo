@@ -147,20 +147,16 @@ export default createFragmentContainer(
                 }
                 outputs {
                     id
-                    product {
-                        position {
-                            x
-                            y
-                        }
+                    position {
+                        x
+                        y
                     }
                 }
                 inputs {
                     id
-                    product {
-                        position {
-                            x
-                            y
-                        }
+                    position {
+                        x
+                        y
                     }
                 }
             }

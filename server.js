@@ -292,6 +292,7 @@ for (const product of Object.values(products)) {
             {
                 product,
                 id: `${product.id}-${id++}`,
+                position: product.position,
             },
         ]
     }
@@ -302,7 +303,14 @@ for (const product of Object.values(products)) {
         const factory = product.source
 
         // add the product as a Result to the list of product outputs
-        factory.outputs = [...factory.outputs, { product, id: `${product.id}-source` }]
+        factory.outputs = [
+            ...factory.outputs,
+            {
+                product,
+                id: `${product.id}-source`,
+                position: product.position,
+            },
+        ]
     }
 }
 
