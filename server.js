@@ -137,7 +137,7 @@ const resolvers = {
             nodePubsub.publish(bindingID, { node: binding })
             nodePubsub.publish(toGlobalId('Flo', 0), { node: flos[0] })
 
-            return { factory }
+            return { binding }
         },
         addProductToFlo: (_, { input: { x, y, flo } }, { flos, products }) => {
             // create the product we want to add
@@ -168,7 +168,7 @@ const resolvers = {
                 product,
             }
         },
-        addFactoryToFlo: (_, { input: { flo, factory, x, y } }, { flos, factories, products }) => {
+        addFactoryToFlo: (_, { input: { flo, factory, x, y } }, { flos, factories, products, bindings }) => {
             // get the id of the flo and factory in question
             const { id: floID } = fromGlobalId(flo)
             const { id: factoryID } = fromGlobalId(factory)
@@ -192,13 +192,18 @@ const resolvers = {
 
             // we have to add the appropriate amount of inputs and outputs to the new factory
             for (const position of center({ x: x - 150, y }, factories[factoryID].inputs.length)) {
-                factoryObj.inputs = [
-                    ...factoryObj.inputs,
-                    {
-                        id: Math.random(),
-                        position,
-                    },
-                ]
+                // the new binding
+                const binding = {
+                    id: Math.random()
+                        .toString()
+                        .substr(2, 4),
+                    position,
+                }
+
+                // add the binding to the global store
+                bindings[binding.id] = binding
+
+                factoryObj.inputs = [...factoryObj.inputs, binding]
             }
 
             for (const position of center({ x: x + 150, y }, factories[factoryID].outputs.length)) {
@@ -209,12 +214,17 @@ const resolvers = {
                     progress: 0,
                 })
 
-                // the source binding
+                // the new binding
                 const source = {
-                    id: Math.random(),
+                    id: Math.random()
+                        .toString()
+                        .substr(2, 4),
                     position: product.position,
                     product,
                 }
+
+                // add the binding to the global store
+                bindings[source.id] = source
 
                 // save the product
                 products[product.id] = product
@@ -392,6 +402,20 @@ const flos = [
     }
 }, {})
 
+let bindings = Object.values(flos).reduce(
+    (prev, flo) => ({
+        ...prev,
+        ...flo.bindings.reduce(
+            (acc, binding) => ({
+                ...acc,
+                [binding.id]: binding,
+            }),
+            {}
+        ),
+    }),
+    {}
+)
+
 // define the server
 const server = new ApolloServer({
     typeDefs: schema,
@@ -399,6 +423,7 @@ const server = new ApolloServer({
     context: {
         factories,
         products,
+        bindings,
         flos,
     },
 })

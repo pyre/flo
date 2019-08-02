@@ -2,10 +2,11 @@
 import React, { useContext } from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 // local imports
-import { center } from '~/utils'
 import { Arc } from '~/components'
 import { Interface } from '~/context'
-import { useSubscription } from '~/hooks'
+import { useSubscription, useEnvironment } from '~/hooks'
+import { Draggable } from '~/components'
+import { mutate } from '~/utils'
 
 // the primary length for the squares that define the in and out point
 const squareLength = 3
@@ -16,7 +17,7 @@ const productGutter = 15
 
 const Lines = ({ flo }) => {
     const {
-        colors: { connectorColor, background },
+        colors: { connectorColor },
     } = useContext(Interface)
 
     // the position of bindings can change
@@ -45,15 +46,6 @@ const Lines = ({ flo }) => {
                     x: factory.position.x + armLength,
                     y: factory.position.y,
                 }
-
-                // compute the locations for inputs which may not have products
-                const inputLocations = center(
-                    {
-                        x: leftSquareLocation.x - 2 * armLength,
-                        y: leftSquareLocation.y,
-                    },
-                    factory.inputs.length
-                )
 
                 return (
                     <React.Fragment key={factory.id}>
@@ -109,8 +101,8 @@ const Lines = ({ flo }) => {
                                         stroke={connectorColor}
                                         strokeWidth={1}
                                     />
-                                    // some space between the fillter and the border
-                                    <circle fill={background} cx={location.x} cy={location.y} r={productGutter} />
+                                    // some space between the filler and the border
+                                    <Binding binding={binding} />
                                     <Arc
                                         r={productGutter + 1}
                                         x={location.x}
@@ -144,12 +136,7 @@ const Lines = ({ flo }) => {
                                     strokeWidth={1}
                                 />
                                 // some space between the fillter and the border
-                                <circle
-                                    fill={background}
-                                    cx={result.position.x}
-                                    cy={result.position.y}
-                                    r={productGutter}
-                                />
+                                <Binding binding={result} />
                                 // the arc that leaves the gap on the right
                                 <Arc
                                     r={productGutter + 1}
@@ -165,6 +152,50 @@ const Lines = ({ flo }) => {
                 )
             })}
         </g>
+    )
+}
+
+function Binding({ binding }) {
+    const {
+        colors: { background },
+    } = useContext(Interface)
+
+    const environment = useEnvironment()
+
+    return (
+        <Draggable
+            id={binding.id}
+            origin={binding.position}
+            onMove={position =>
+                mutate({
+                    environment,
+                    query: graphql`
+                        mutation Lines2DMoveBindingMutation($input: MoveBindingInput!) {
+                            moveBinding(input: $input) {
+                                binding {
+                                    id
+                                    position {
+                                        x
+                                        y
+                                    }
+                                }
+                            }
+                        }
+                    `,
+                    variables: { input: { binding: binding.id, ...position } },
+                    optimisticResponse: {
+                        moveBinding: {
+                            binding: {
+                                id: binding.id,
+                                position,
+                            },
+                        },
+                    },
+                })
+            }
+        >
+            <circle fill={background} cx={binding.position.x} cy={binding.position.y} r={productGutter} />
+        </Draggable>
     )
 }
 
