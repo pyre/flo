@@ -7,8 +7,10 @@
 
 
 # project meta-data
-flo.major := 1
-flo.minor := 0
+flo.major := $(repo.major)
+flo.minor := $(repo.minor)
+flo.micro := $(repo.micro)
+flo.revision := $(repo.revision)
 
 # flo consists of a python package
 flo.packages := flo.pkg
