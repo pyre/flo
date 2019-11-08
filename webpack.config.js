@@ -22,6 +22,8 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         hot: true,
+        host: "0.0.0.0",
+        public: "cygnus.orthologue.com",
         port: 1234,
     },
     resolve: {

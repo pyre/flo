@@ -14,7 +14,7 @@ const store = new Store(source)
 
 // this function is called to retrieve the value of a query
 const fetchQuery = (operation, variables, cacheConfig, uploadables) =>
-    fetch('http://localhost:5000/graphql', {
+    fetch('http://cygnus.orthologue.com:5000/graphql', {
         method: 'POST',
         headers: {
             'content-type': 'application/json',
@@ -33,7 +33,7 @@ const fetchQuery = (operation, variables, cacheConfig, uploadables) =>
 
 // the client responsible for managing websocket requests
 const wsClient = new WebSocketLink(
-    new SubscriptionClient('ws://localhost:5000/graphql', {
+    new SubscriptionClient('ws://cygnus.orthologue.com:5000/graphql', {
         reconnect: true,
     })
 )
