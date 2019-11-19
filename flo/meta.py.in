@@ -21,7 +21,7 @@ version = (major, minor, micro, revision)
 copyright = "copyright (c) 1998-2019 all rights reserved"
 
 banner = f"""
-    flo {major}.{minor} revision {revision}
+    flo {major}.{minor}.{micro} revision {revision}
     {copyright}
 """
 
