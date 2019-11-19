@@ -11,7 +11,7 @@ import pyre
 
 
 # protocol declaration
-class Action(pyre.action, family='flo.actions'):
+class Action(pyre.action, family='flo.cli'):
     """
     Protocol declaration for flo commands
     """

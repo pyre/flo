@@ -10,8 +10,6 @@
 import pyre
 # and my package
 import flo
-# my action protocol
-from .Action import Action
 
 
 # declaration

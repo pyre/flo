@@ -34,6 +34,10 @@ from . import (
     meta,   # meta-data
     model,  # product and factory specifications
     isce,   # product and factory implementations
+
+    # user interface
+    shells, # application support
+    cli,    # the command panels
     )
 
 # administrivia
@@ -74,10 +78,6 @@ def version():
     """
     # pull and return the meta-data
     return meta.version
-
-
-# plexus support
-from .shells import plexus, action, command
 
 
 # end of file

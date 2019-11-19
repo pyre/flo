@@ -12,7 +12,7 @@
 import flo
 
 # build an instance of the plexus
-app = flo.plexus(name='flo.plexus')
+app = flo.shells.plexus(name='flo.plexus')
 # and run it
 status = app.run()
 # pass the status on to the shell

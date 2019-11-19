@@ -6,16 +6,19 @@
 #
 
 
-# pull in the command decorators
-from .. import foundry, action
+# get the package
+import flo
+
 
 # help
-@foundry(implements=action, tip="display information about this application")
+@flo.foundry(implements=flo.shells.action, tip="display information about this application")
 def about():
     """
     Display information about this application
     """
+    # get the panel
     from .About import About
+    # publish it
     return About
 
 

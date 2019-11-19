@@ -11,7 +11,7 @@ import flo
 
 
 # declaration
-class About(flo.command, family='flo.actions.about'):
+class About(flo.shells.command, family='flo.actions.about'):
     """
     Display information about this application
     """
