@@ -17,6 +17,8 @@ from pyre import (
     executive,
     # hosting strategies
     application, plexus,
+    # support for persistence
+    db, records, tabular,
     # support for work flows
     flow,
     # miscellaneous
@@ -34,6 +36,7 @@ from . import (
     meta,   # meta-data
     model,  # product and factory specifications
     isce,   # product and factory implementations
+    schema, # persistence support
 
     # user interface
     shells, # application support

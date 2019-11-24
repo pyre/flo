@@ -45,10 +45,8 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
         # show me
         plexus.info.log(f"creating '{name}', a new workspace")
 
-        # get the low level package
-        import pyre.db
         # build a database component
-        db = pyre.db.postgres()
+        db = flo.db.postgres()
         # verify it's going to attach to the administrative database
         assert db.database == "postgres"
         # attach
@@ -87,10 +85,8 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
         # show me
         plexus.info.log(f"deleting the workspace '{name}'")
 
-        # get the low level package
-        import pyre.db
         # build a database component
-        db = pyre.db.postgres()
+        db = flo.db.postgres()
         # verify it's going to attach to the administrative database
         assert db.database == "postgres"
         # attach
@@ -132,10 +128,8 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
         # show me
         plexus.info.log(f"initializing the workspace '{name}'")
 
-        # get the low level package
-        import pyre.db
         # get the datastore
-        db = pyre.db.postgres()
+        db = flo.db.postgres()
         # point it to the workspace database
         db.database = name
 
@@ -151,6 +145,91 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
             channel.log(f"workspace '{name}' doesn't exist")
             # indicate failure
             return 1
+
+        # get the schema
+        schema = flo.schema
+        # get the set of tables to build
+        tables = self.tables
+        # if the user didn't restrict to a specific subset, build them all
+        tables = tables if tables else {table.pyre_name for table in schema.tables}
+
+        # go through the schema, in dependency order
+        for table in reversed(schema.tables):
+            # if this on is on the pile
+            if table.pyre_name in tables:
+                # attempt to
+                try:
+                    # build it
+                    db.createTable(table)
+                # if something goes wrong
+                except db.exceptions.ProgrammingError as error:
+                    # grab a channel
+                    channel = plexus.warning
+                    # complain
+                    channel.log(f"table '{table.pyre_name}' already exists")
+
+        # all done
+        return 0
+
+
+    @flo.export(tip='clear an existing workspace')
+    def clear(self, plexus, **kwds):
+        """
+        Drop a subset of the tables that capture my schema
+        """
+        # get the name
+        name = self.name
+        # if no name was given
+        if not name:
+            # grab a channel
+            channel = plexus.error
+            # complain
+            channel.log("please provide the name of the workspace")
+            # and show the help screen
+            return self.help(plexus=plexus)
+
+        # show me
+        plexus.info.log(f"clearing the workspace '{name}'")
+
+        # get the datastore
+        db = flo.db.postgres()
+        # point it to the workspace database
+        db.database = name
+
+        # attempt to
+        try:
+            # attach
+            db.attach()
+        # if this fails
+        except db.exceptions.OperationalError as error:
+            # grab a channel
+            channel = plexus.error
+            # show me
+            channel.log(f"workspace '{name}' doesn't exist")
+            # indicate failure
+            return 1
+
+        # get the schema
+        schema = flo.schema
+        # get the set of tables to build
+        tables = self.tables
+        # if the user didn't restrict to a specific subset, build them all
+        tables = tables if tables else {table.pyre_name for table in schema.tables}
+
+        # go through the schema, in dependency order
+        for table in reversed(schema.tables):
+            # if this on is on the pile
+            if table.pyre_name in tables:
+                # attempt to
+                try:
+                    # drop it
+                    db.dropTable(table)
+                # if something goes wrong
+                except db.exceptions.ProgrammingError as error:
+                    # grab a channel
+                    channel = plexus.warning
+                    # complain
+                    channel.log(f"table '{table.pyre_name}' does not exist")
 
         # all done
         return 0
