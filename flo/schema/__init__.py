@@ -17,10 +17,10 @@ default = db.default
 
 # get the tables
 from .Flow import Flow as flows
-
+from .Config import Config as config
 
 # sort them in dependency order
-tables = [ flows ]
+tables = [ config, flows ]
 
 
 # end of file

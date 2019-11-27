@@ -19,7 +19,7 @@ class Flow(flo.db.table, id="flows"):
 
 
     # flow instance names are globally unique
-    name = flo.db.str().primary()
+    flow = flo.db.str().primary()
 
 
 # end of file
