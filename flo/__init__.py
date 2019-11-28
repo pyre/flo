@@ -35,13 +35,17 @@ home, prefix, defaults = package.layout()
 from . import (
     meta,   # meta-data
     model,  # product and factory specifications
-    isce,   # product and factory implementations
+    isce3,  # product and factory implementations
     schema, # persistence support
 
     # user interface
     shells, # application support
     cli,    # the command panels
     )
+
+# singletons
+wgs84 = isce3.newEllipsoid(name="wgs84")
+
 
 # administrivia
 def copyright():
