@@ -217,7 +217,7 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
         tables = tables if tables else {table.pyre_name for table in schema.tables}
 
         # go through the schema, in dependency order
-        for table in reversed(schema.tables):
+        for table in schema.tables:
             # if this on is on the pile
             if table.pyre_name in tables:
                 # attempt to
@@ -230,6 +230,57 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
                     channel = plexus.warning
                     # complain
                     channel.log(f"table '{table.pyre_name}' does not exist")
+
+        # all done
+        return 0
+
+
+    @flo.export(tip='clear an existing workspace')
+    def flows(self, plexus, **kwds):
+        """
+        Drop a subset of the tables that capture my schema
+        """
+        # get the name
+        name = self.name
+        # if no name was given
+        if not name:
+            # grab a channel
+            channel = plexus.error
+            # complain
+            channel.log("please provide the name of the workspace")
+            # and show the help screen
+            return self.help(plexus=plexus)
+
+        # get the datastore
+        db = flo.db.postgres()
+        # point it to the workspace database
+        db.database = name
+
+        # attempt to
+        try:
+            # attach
+            db.attach()
+        # if this fails
+        except db.exceptions.OperationalError as error:
+            # grab a channel
+            channel = plexus.error
+            # show me
+            channel.log(f"workspace '{name}' doesn't exist")
+            # indicate failure
+            return 1
+
+        # grab a channel
+        channel = plexus.info
+        # sign on
+        channel.line("flows:")
+        # get the known flows
+        flows = db.select(flo.schema.flows)
+        # go through each one
+        for flow in flows:
+            # show me
+            channel.line(f"    {flow.flow}: {flow.type}")
+        # flush
+        channel.log()
 
         # all done
         return 0
