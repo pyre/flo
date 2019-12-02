@@ -33,14 +33,15 @@ home, prefix, defaults = package.layout()
 
 # publish local modules
 from . import (
-    meta,   # meta-data
-    model,  # product and factory specifications
-    isce3,  # product and factory implementations
-    schema, # persistence support
+    meta,     # meta-data
+    model,    # product and factory specifications
+    isce3,    # product and factory implementations
+    schema,   # the layout of the information in the persistence support
+    queries,  # access to the data store
 
     # user interface
-    shells, # application support
-    cli,    # the command panels
+    shells,   # application support
+    cli,      # the command panels
     )
 
 # singletons
