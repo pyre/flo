@@ -7,7 +7,7 @@
 
 
 # my declaration
-class Config:
+class Renderer:
     """
     Renderer of a component hierarchy as a flat sequence of trait/value pairs
     """
