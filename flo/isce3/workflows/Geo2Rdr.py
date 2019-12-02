@@ -37,10 +37,6 @@ class Geo2Rdr(flo.flow.workflow, family="isce3.workflows.geo2rdr"):
         self.topoReader.pyre_run(**kwds)
         # get geo2rdr to build the transformation
         self.geo2rdr.pyre_run(**kwds)
-
-        # persist
-        self.pyre_save()
-
         # all done
         return
 

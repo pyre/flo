@@ -34,10 +34,6 @@ class Resamp(flo.flow.workflow, family="isce3.workflows.resamp"):
         self.slcReader.pyre_run(**kwds)
         # and resample it
         self.resamp.pyre_run(**kwds)
-
-        # persist
-        self.pyre_save()
-
         # all done
         return
 

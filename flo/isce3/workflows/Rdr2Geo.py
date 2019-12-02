@@ -37,10 +37,6 @@ class Rdr2Geo(flo.flow.workflow, family="isce3.workflows.rdr2geo"):
         self.demReader.pyre_run(**kwds)
         # get Rdr2Geo to build the transformation
         self.rdr2geo.pyre_run(**kwds)
-
-        # persist
-        self.pyre_save()
-
         # all done
         return
 
