@@ -133,12 +133,80 @@ class Workflow(flo.shells.command, family="flo.cli.workflow"):
             # nothing to do
             return 0
 
+        # get the workspace the user requested
+        ws = self.ws
+        # if there wasn't one
+        if ws is None:
+            # run the flow
+            flow.pyre_make()
+            # save it in a local configuration file
+            flow.pyre_save()
+            # all done
+            return 0
+
+        # get the datastore
+        db = flo.db.postgres()
+        # point it to the workspace
+        db.database = ws
+
+        # attempt to
+        try:
+            # connect to the workspace
+            db.attach()
+        # if this fails
+        except db.exceptions.OperationalError as error:
+            # grab a channel
+            channel = plexus.error
+            # complain
+            channel.log(f"workspace '{ws}' doesn't exist")
+            # and bail
+            return 1
+
+        # get the name server
+        ns = plexus.pyre_nameserver
+        # build a query that retrieves configuration settings associated with my flow
+        query = flo.queries.config(flow=flow.pyre_name)
+        # run it
+        for key, value in db.select(query):
+            # load each assignment into the configuration store
+            ns[key] = value
+
         # otherwise, grab a channel
         channel = plexus.info
         # show me
         channel.log(f"executing '{flow.pyre_spec}'")
         # run the flow
         flow.pyre_make()
+
+        # clear the configuration table
+        db.delete(flo.schema.config, condition=(flo.schema.config.flow == flow.pyre_name))
+        # make a pile for the new configuration
+        assignments = []
+        # go through the flow parts and build configuration settings
+        for trait, value in flow.pyre_renderTraitValues(renderer=Renderer()):
+            # make a new configuration assignment
+            assignment = flo.schema.config.pyre_immutable(
+                flow = flow.pyre_name,
+                name = trait,
+                value = value
+                )
+            # add it to the pile
+            assignments.append(assignment)
+        # attempt to
+        try:
+            # add them to the workspace
+            db.insert(*assignments)
+        # if this fails
+        except db.exceptions.ProgrammingError as error:
+            # grab a channel
+            channel = plexus.error
+            # complain
+            channel.line(f"failed to  configure flow '{flow.pyre_spec}'")
+            # and say why
+            channel.log(f"  error: {error}")
+            # and bail
+            return 1
+
         # all done
         return 0
 
@@ -155,6 +223,42 @@ class Workflow(flo.shells.command, family="flo.cli.workflow"):
         if flow is None:
             # nothing to do
             return 0
+
+        # get the workspace the user requested
+        ws = self.ws
+        # if there wasn't one
+        if ws is None:
+            # save the new flow in a local configuration file
+            flow.pyre_save()
+            # all done
+            return 0
+
+        # get the datastore
+        db = flo.db.postgres()
+        # point it to the workspace
+        db.database = ws
+
+        # attempt to
+        try:
+            # connect to the workspace
+            db.attach()
+        # if this fails
+        except db.exceptions.OperationalError as error:
+            # grab a channel
+            channel = plexus.error
+            # complain
+            channel.log(f"workspace '{ws}' doesn't exist")
+            # and bail
+            return 1
+
+        # get the name server
+        ns = plexus.pyre_nameserver
+        # build a query that retrieves configuration settings associated with my flow
+        query = flo.queries.config(flow=flow.pyre_name)
+        # run it
+        for key, value in db.select(query):
+            # load each assignment into the configuration store
+            ns[key] = value
 
         # otherwise, grab a channel
         channel = plexus.info
