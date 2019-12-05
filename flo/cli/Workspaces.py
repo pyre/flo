@@ -235,10 +235,10 @@ class Workspaces(flo.shells.command, family='flo.actions.ws'):
         return 0
 
 
-    @flo.export(tip='clear an existing workspace')
+    @flo.export(tip='list the existing flows in a workspace')
     def flows(self, plexus, **kwds):
         """
-        Drop a subset of the tables that capture my schema
+        List the existing flows
         """
         # get the name
         name = self.name
