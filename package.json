@@ -52,7 +52,7 @@
         "@babel/plugin-transform-runtime": "7.4.4",
         "@babel/preset-env": "7.4.4",
         "@babel/preset-react": "^7.0.0",
-        "apollo-server": "^2.14.2",
+        "apollo-server": "^2.25.4",
         "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^24.7.1",
         "babel-loader": "8.0.5",
